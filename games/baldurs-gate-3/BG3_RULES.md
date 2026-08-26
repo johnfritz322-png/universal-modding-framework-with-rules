@@ -326,3 +326,11 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
 45. **Boosts can be scoped to a single spell** with `IF(SpellId('<SpellName>')):<boost>` —
     26 vanilla Boosts do this. That is how to give one ability its own to-hit or crit
     behaviour without altering everything else the character does.
+
+46. **Pinning a creature in place: `ActionResourceBlock(Movement)`** — 72 vanilla uses,
+    and it is what `WEB` uses. Combined with an aura (finding 37) it makes a zone
+    genuinely inescapable rather than merely damaging.
+47. **Gating a spell behind a state: `RequirementConditions "HasStatus('<X>',
+    context.Source)"`** — 237 vanilla spells do this. The ability appears on the hotbar
+    but is uncastable until the condition holds, which is how to make abilities that only
+    work inside a zone, stance or transformation.
