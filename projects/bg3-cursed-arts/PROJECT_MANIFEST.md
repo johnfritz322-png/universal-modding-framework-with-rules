@@ -26,7 +26,12 @@
 - Project root: `C:\Users\johnf\Documents\BG3Mods\CursedArts` (local git repo, not yet on GitHub)
 - Default branch: `master`
 - Current work branch: `master`
-- Last known-good commit/build: `27d1873`; tags `blue-works`, `working-ds-dialect`, `working-blue-pending`, `v1.2.0.0-working`
+- Last known-good commit/build: **`df83fd7`, tagged `v1.10.0.0-verified`** — the last
+  state actually confirmed in game (Worg loop end to end, level tiering). Everything
+  after it is unplayed: the eleven generated shikigami, the revised difficulty curve,
+  and the Worg's own rewritten branches.
+- Earlier rollback tags: `blue-works`, `working-ds-dialect`, `working-blue-pending`,
+  `v1.2.0.0-working`
 - Current milestone: test the 11 generated shikigami; only the Worg has been played
 - Next milestone: balance pass on the difficulty curve once the roster has been played
 
