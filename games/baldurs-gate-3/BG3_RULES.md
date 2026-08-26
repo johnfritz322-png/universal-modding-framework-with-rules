@@ -195,31 +195,42 @@ Added 2026-08-25. **VERIFIED — Primary** (corpus counts plus in-game observati
 perfectly and the reward never fired. Every other check passed, because every field was
 real and every value was attested — just on the wrong type of entry.*
 
-## Summon patterns that work — verified in-game
+## Summon patterns — confirmed and not-yet-confirmed
 
-Added 2026-08-25. All confirmed by direct in-game observation on Patch 8.
+Added 2026-08-25. **The header on this section previously read "verified in-game" and
+covered five findings. That was an overstatement: two of them were deployed but untested
+and one was an inference never observed.** Corrected below; the untested material is held
+out of this repo until a test result exists.
 
-29. **One spell, several behaviours.** `SpellProperties` accepts multiple
-    `GROUND:IF(<condition>):Summon(...)` branches, and the first matching branch wins.
-    Vanilla template: `Target_MageHand` summons a different creature depending on
-    `HasPassive(...)`. This is how to make a single hotbar button change what it does
-    without granting a second spell — **and it is more reliable than `UnlockSpell` on a
-    status boost, which did not surface a new button when tested.**
-30. **`CharacterLevelGreaterThan(n)`** (29 uses) works inside those branches, so a summon
-    can be tiered to the summoner's level. Combining a state condition with two level
-    bounds — `not CharacterLevelGreaterThan(2)`, `CharacterLevelGreaterThan(2) and not
-    CharacterLevelGreaterThan(5)`, `CharacterLevelGreaterThan(5)` — gives clean tiers.
-    A summoned creature is fixed strength, so without this it is either lethal at level 1
-    or irrelevant at level 12.
-31. **The tier is chosen at summon time**, not continuously. A creature already on the
-    field does not upgrade when its summoner levels up.
-32. **Negative `DamageBonus` appears nowhere in the corpus.** `IncreaseMaxHP(-n)` and
-    `AC(-n)` are attested negatives; `DamageBonus` is only ever positive. To weaken a
-    creature, reduce HP and AC rather than inventing a negative damage form — an invented
-    form is ignored silently, which is the same failure as findings 26-28.
-33. **The full defeat-to-tame loop is confirmed working in pure stats.** Summon carrying a
-    status with `FactionOverride` + `LoseControl` arrives hostile; that status grants a
-    passive whose `OnDamaged` context fires
-    `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())` and applies a permanent
-    status to `SWAP` — the killer. A later cast reads that status and summons the same
-    creature as an ally instead. **No Script Extender at any point.**
+### Confirmed
+
+29. **The defeat-to-tame summon loop works in pure stats, no Script Extender.**
+    *Evidence: direct in-game observation.* A summon carrying a status with
+    `FactionOverride(<hostile faction>)` and `StatusPropertyFlags "LoseControl"` arrives
+    hostile and attacks its summoner. That status grants a passive via `Passives`, and the
+    passive's `OnDamaged` context with
+    `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())` fires
+    `ApplyStatus(SWAP, <status>, 100, -1)`, permanently marking whoever landed the killing
+    blow. Both halves observed working.
+30. **A single `SpellProperties` may hold several `GROUND:IF(<condition>):Summon(...)`
+    branches.** *Evidence: shipped game data.* `Target_MageHand` summons a different
+    creature depending on `HasPassive(...)`, in one spell. This is vanilla's own shape for
+    one button doing different things.
+31. **Negative `DamageBonus` appears nowhere in the corpus.** *Evidence: shipped game
+    data.* `IncreaseMaxHP(-n)` and `AC(-n)` are attested negatives; `DamageBonus` is only
+    ever positive. Weaken a creature through HP and AC. An invented form is ignored
+    silently — the same failure as findings 26-28.
+32. **`UnlockSpell` on a status boost did not surface a new hotbar button.** *Evidence:
+    in-game observation.* The status applied and no castable spell appeared. Recorded as
+    an observation of one attempt rather than a general rule; the branch approach in
+    finding 30 was used instead and is the better shape regardless.
+
+### Not yet confirmed — deliberately not recorded as fact
+
+- Whether `CharacterLevelGreaterThan(n)` behaves as expected **inside a
+  `GROUND:IF(...):Summon(...)` branch** to tier a summon by the summoner's level. It is
+  attested in `Conditions` (29 uses) but our use of it is built and untested.
+- Whether a summon's tier is fixed at summon time rather than updating continuously.
+  This is an inference from how statuses are applied, **not an observation.**
+
+These will be written up once a test result exists.

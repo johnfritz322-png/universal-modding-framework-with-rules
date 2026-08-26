@@ -27,13 +27,18 @@
   a mechanic whose hostile half worked and whose reward never fired.
 
 ### Added (third pass)
-- BG3 findings 29-33: one spell can carry several `GROUND:IF(...):Summon(...)` branches,
-  so a single button changes behaviour by state and by `CharacterLevelGreaterThan(n)`
-  tier. More reliable than `UnlockSpell` on a status boost, which did not surface a new
-  button in testing. Negative `DamageBonus` is not attested; weaken through HP and AC.
-- **The full defeat-to-tame summon loop is confirmed working in pure stats, no Script
-  Extender**: hostile summon, killing blow detected, permanent reward status, and a later
-  cast reading that status to summon the same creature as an ally.
+- BG3 findings 29-32, confirmed only: **the defeat-to-tame summon loop works in pure
+  stats with no Script Extender** (hostile summon, killing blow detected, permanent
+  reward status — both halves observed in game); a single `SpellProperties` may hold
+  several `GROUND:IF(...):Summon(...)` branches, per `Target_MageHand`; negative
+  `DamageBonus` is not attested anywhere; and `UnlockSpell` on a status boost did not
+  surface a new hotbar button in one observed attempt.
+
+### Corrected
+- The summon-patterns section was first published claiming five findings were "verified
+  in-game". Two were deployed but untested and one was an inference never observed. The
+  section now separates confirmed from not-yet-confirmed, and the untested material is
+  held out of the repo until a test result exists.
 
 ### Notes
 - BG3 findings are labelled individually. Most are VERIFIED against shipped data or
