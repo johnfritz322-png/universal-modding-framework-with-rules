@@ -6,7 +6,7 @@
 - Exact game version/build: Patch 8
 - Platform: Windows 11 (26200), Steam
 - Engine: Divinity 4.0
-- Mod version: **1.10.0.0**
+- Mod version: **1.10.0.0** (loop confirmed end to end)
 
 ## Toolchain
 - Mod loader/framework: native `modsettings.lsx` (no mod manager in the loop)
@@ -27,7 +27,7 @@
 - Default branch: `master`
 - Current work branch: `master`
 - Last known-good commit/build: `27d1873`; tags `blue-works`, `working-ds-dialect`, `working-blue-pending`, `v1.2.0.0-working`
-- Current milestone: balance the level tiers, then replicate the loop for the remaining 11 shikigami
+- Current milestone: replicate the confirmed loop for the remaining 11 shikigami
 - Next milestone: if it holds, build the remaining 11 shikigami; if not, redesign first
 
 ## Owned files

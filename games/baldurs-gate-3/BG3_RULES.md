@@ -224,12 +224,20 @@ out of this repo until a test result exists.
     in-game observation.* The status applied and no castable spell appeared. Recorded as
     an observation of one attempt rather than a general rule; the branch approach in
     finding 30 was used instead and is the better shape regardless.
+33. **`CharacterLevelGreaterThan(n)` works inside a `GROUND:IF(...):Summon(...)` branch**,
+    so a fixed-strength creature can be tiered to the summoner. *Evidence: in-game
+    observation.* A summoned worg carrying a tier status of `IncreaseMaxHP(-13);AC(-2)`
+    at levels 1-2 is a winnable fight for a level 1 character; the same creature
+    unmodified is not. Combine one state condition with two level bounds
+    (`not CharacterLevelGreaterThan(2)` / `CharacterLevelGreaterThan(2) and not
+    CharacterLevelGreaterThan(5)` / `CharacterLevelGreaterThan(5)`) for clean tiers.
+
+    **This is what makes summoning real game creatures viable as a player mechanic.**
+    Shipped creatures are balanced for the encounter they appear in, so without tiering
+    a summon is lethal early and irrelevant late.
 
 ### Not yet confirmed — deliberately not recorded as fact
 
-- Whether `CharacterLevelGreaterThan(n)` behaves as expected **inside a
-  `GROUND:IF(...):Summon(...)` branch** to tier a summon by the summoner's level. It is
-  attested in `Conditions` (29 uses) but our use of it is built and untested.
 - Whether a summon's tier is fixed at summon time rather than updating continuously.
   This is an inference from how statuses are applied, **not an observation.**
 

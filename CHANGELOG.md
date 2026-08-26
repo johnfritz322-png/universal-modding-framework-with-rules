@@ -34,6 +34,13 @@
   `DamageBonus` is not attested anywhere; and `UnlockSpell` on a status boost did not
   surface a new hotbar button in one observed attempt.
 
+### Confirmed since
+- BG3 finding 33: `CharacterLevelGreaterThan(n)` works inside a summon branch, so a
+  shipped creature can be tiered to the summoner's level. Observed in game: a worg
+  weakened by `IncreaseMaxHP(-13);AC(-2)` is a winnable level 1 fight where the
+  unmodified creature is not. This is the piece that makes summoning real game creatures
+  viable as a player mechanic at all.
+
 ### Corrected
 - The summon-patterns section was first published claiming five findings were "verified
   in-game". Two were deployed but untested and one was an inference never observed. The
