@@ -26,6 +26,15 @@
   PassiveData-only; a status attaches logic by granting a passive. Found the hard way, by
   a mechanic whose hostile half worked and whose reward never fired.
 
+### Added (third pass)
+- BG3 findings 29-33: one spell can carry several `GROUND:IF(...):Summon(...)` branches,
+  so a single button changes behaviour by state and by `CharacterLevelGreaterThan(n)`
+  tier. More reliable than `UnlockSpell` on a status boost, which did not surface a new
+  button in testing. Negative `DamageBonus` is not attested; weaken through HP and AC.
+- **The full defeat-to-tame summon loop is confirmed working in pure stats, no Script
+  Extender**: hostile summon, killing blow detected, permanent reward status, and a later
+  cast reading that status to summon the same creature as an ally.
+
 ### Notes
 - BG3 findings are labelled individually. Most are VERIFIED against shipped data or
   in-game observation; `SharedDev` template addressability remains HIGH CONFIDENCE.

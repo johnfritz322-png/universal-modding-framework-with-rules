@@ -194,3 +194,32 @@ Added 2026-08-25. **VERIFIED — Primary** (corpus counts plus in-game observati
 *How this was found: a summon-and-tame mechanic where the hostile summon worked
 perfectly and the reward never fired. Every other check passed, because every field was
 real and every value was attested — just on the wrong type of entry.*
+
+## Summon patterns that work — verified in-game
+
+Added 2026-08-25. All confirmed by direct in-game observation on Patch 8.
+
+29. **One spell, several behaviours.** `SpellProperties` accepts multiple
+    `GROUND:IF(<condition>):Summon(...)` branches, and the first matching branch wins.
+    Vanilla template: `Target_MageHand` summons a different creature depending on
+    `HasPassive(...)`. This is how to make a single hotbar button change what it does
+    without granting a second spell — **and it is more reliable than `UnlockSpell` on a
+    status boost, which did not surface a new button when tested.**
+30. **`CharacterLevelGreaterThan(n)`** (29 uses) works inside those branches, so a summon
+    can be tiered to the summoner's level. Combining a state condition with two level
+    bounds — `not CharacterLevelGreaterThan(2)`, `CharacterLevelGreaterThan(2) and not
+    CharacterLevelGreaterThan(5)`, `CharacterLevelGreaterThan(5)` — gives clean tiers.
+    A summoned creature is fixed strength, so without this it is either lethal at level 1
+    or irrelevant at level 12.
+31. **The tier is chosen at summon time**, not continuously. A creature already on the
+    field does not upgrade when its summoner levels up.
+32. **Negative `DamageBonus` appears nowhere in the corpus.** `IncreaseMaxHP(-n)` and
+    `AC(-n)` are attested negatives; `DamageBonus` is only ever positive. To weaken a
+    creature, reduce HP and AC rather than inventing a negative damage form — an invented
+    form is ignored silently, which is the same failure as findings 26-28.
+33. **The full defeat-to-tame loop is confirmed working in pure stats.** Summon carrying a
+    status with `FactionOverride` + `LoseControl` arrives hostile; that status grants a
+    passive whose `OnDamaged` context fires
+    `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())` and applies a permanent
+    status to `SWAP` — the killer. A later cast reads that status and summons the same
+    creature as an ally instead. **No Script Extender at any point.**

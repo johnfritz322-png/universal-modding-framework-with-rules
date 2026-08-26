@@ -6,7 +6,7 @@
 - Exact game version/build: Patch 8
 - Platform: Windows 11 (26200), Steam
 - Engine: Divinity 4.0
-- Mod version: **1.8.0.0**
+- Mod version: **1.10.0.0**
 
 ## Toolchain
 - Mod loader/framework: native `modsettings.lsx` (no mod manager in the loop)
@@ -27,7 +27,7 @@
 - Default branch: `master`
 - Current work branch: `master`
 - Last known-good commit/build: `27d1873`; tags `blue-works`, `working-ds-dialect`, `working-blue-pending`, `v1.2.0.0-working`
-- Current milestone: confirm the tame trigger fires on the killing blow (hostile summon already confirmed)
+- Current milestone: balance the level tiers, then replicate the loop for the remaining 11 shikigami
 - Next milestone: if it holds, build the remaining 11 shikigami; if not, redesign first
 
 ## Owned files
@@ -100,7 +100,7 @@ in no spell list and unreachable any other way.
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Ten Shadows — Worg trial (1 of 12) | **Partly tested in-game** | Hostile summon CONFIRMED. Tame trigger tested and FAILED — the functor fields were on a StatusData, where BG3 ignores them. Rewired onto a passive; retest pending | Kill the worg, look for a permanent Bound status and an unlocked summon |
+| Ten Shadows — Worg trial (1 of 12) | **Tested in-game** | Full loop works: hostile summon, defeat, permanent Bound: Worg. One button now branches bound/unbound and by level tier | Balance pass on the level tiers |
 | Ten Shadows — remaining 11 shikigami | Designed only | Blocked on the tame trigger only; the hostile half is proven | Build after one full loop completes |
 | Purple as a purple beam | Loads | Visual only | Cast and observe |
 | Reversal Bloom, Divergent Fist, Melting Strike, Iron Body, King's Cleave, RCT | Implemented, validates | Untested behaviour | Cast each in combat |
