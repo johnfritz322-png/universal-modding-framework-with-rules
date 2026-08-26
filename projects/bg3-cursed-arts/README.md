@@ -20,7 +20,7 @@ abilities cost the custom **Cursed Energy** action resource, which recharges on 
 |---|---|---|---|
 | Limitless Adept | CHA | Infinity, Blue, Red, Purple | Playable; Blue and Infinity confirmed in-game |
 | Blackfist Vessel | DEX | Divergent Fist, Melting Strike, Black Flash, King's Cleave | Playable; abilities validated, mostly uncast |
-| Ten Shadows | WIS | Defeat-to-tame shikigami | 1 of 12 built; hostile summon confirmed in-game |
+| Ten Shadows | WIS | Defeat-to-tame shikigami | 12 of 12 implemented; only the Worg has been played |
 
 ## Ten Shadows: the Ritual of Subjugation
 
@@ -45,8 +45,9 @@ One shikigami per level, 1 through 12, ending on Ansur.
 | 11 | Bulette | `Bulette` | Shared |
 | 12 | **Ansur** | `Dragon_Skeletal` | Shared |
 
-Every UUID above is **VERIFIED to exist** — mined from `RootTemplates/_merged.lsf`. None
-has been summoned in-game. Full UUIDs are in `PROJECT_MANIFEST.md`.
+Every UUID above is **VERIFIED to exist** — mined from `RootTemplates/_merged.lsf`. Only
+the Worg has been summoned in game; the other eleven are implemented and unplayed. Full
+UUIDs are in `PROJECT_MANIFEST.md`.
 
 ### Implementation — VERIFIED primitives, UNVERIFIED assembly
 

@@ -6,7 +6,7 @@
 - Exact game version/build: Patch 8
 - Platform: Windows 11 (26200), Steam
 - Engine: Divinity 4.0
-- Mod version: **1.10.0.0** (loop confirmed end to end)
+- Mod version: **1.12.0.0** (Worg loop confirmed end to end; roster built, untested)
 
 ## Toolchain
 - Mod loader/framework: native `modsettings.lsx` (no mod manager in the loop)
@@ -27,8 +27,8 @@
 - Default branch: `master`
 - Current work branch: `master`
 - Last known-good commit/build: `27d1873`; tags `blue-works`, `working-ds-dialect`, `working-blue-pending`, `v1.2.0.0-working`
-- Current milestone: replicate the confirmed loop for the remaining 11 shikigami
-- Next milestone: if it holds, build the remaining 11 shikigami; if not, redesign first
+- Current milestone: test the 11 generated shikigami; only the Worg has been played
+- Next milestone: balance pass on the difficulty curve once the roster has been played
 
 ## Owned files
 ```
@@ -74,7 +74,7 @@ All abilities are fuelled by a custom **Cursed Energy** action resource.
 
 - **Limitless Adept** (CHA) — Infinity, Blue, Red, Purple
 - **Blackfist Vessel** (DEX) — Divergent Fist, Melting Strike, Black Flash, King's Cleave
-- **Ten Shadows** (WIS) — defeat-to-tame shikigami; 1 of 12 built
+- **Ten Shadows** (WIS) — defeat-to-tame shikigami; 12 of 12 implemented, 1 tested
 
 Ten Shadows loop: a trial spell summons a creature carrying a status with
 `FactionOverride` + `LoseControl` so it fights the player. That status also carries an
@@ -100,8 +100,8 @@ in no spell list and unreachable any other way.
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Ten Shadows — Worg trial (1 of 12) | **Tested in-game, complete** | Whole cycle confirmed: hostile summon, defeat, Bound: Worg, and the same button then summons it as an ally. Level tiering confirmed | None; this is the template for the other 11 |
-| Ten Shadows — remaining 11 shikigami | Designed only | Nothing mechanical left unproven; it is replication plus per-creature tuning | Build and test as one pass |
+| Ten Shadows — Worg trial (1 of 12, the reference) | **Tested in-game, complete** | Whole cycle confirmed: hostile summon, defeat, Bound: Worg, and the same button then summons it as an ally. Level tiering confirmed | None; this is the template for the other 11 |
+| Ten Shadows — remaining 11 shikigami | **Implemented, validates, NOT tested in game** | Generated from a data table in the Worg's confirmed shape; whether the generator reproduced it faithfully is unproven | Play the Meenlock at level 2 — same button behaviour, different creature |
 | Purple as a purple beam | Loads | Visual only | Cast and observe |
 | Reversal Bloom, Divergent Fist, Melting Strike, Iron Body, King's Cleave, RCT | Implemented, validates | Untested behaviour | Cast each in combat |
 | Black Flash guaranteed critical | **Not possible as designed** | `AlwaysSucceed` exists nowhere; see KNOWN_LIMITATIONS | Redesign around a different mechanic |
@@ -150,7 +150,7 @@ in no spell list and unreachable any other way.
 ## Build and release
 - Build command/process: `powershell tools/build.ps1` — validate, stage, pack, deploy,
   then verify size, hash **and internal archive paths**
-- Validation command/process: `python tools/validate.py` — 23 checks, exits nonzero;
+- Validation command/process: `python tools/validate.py` — 24 checks, exits nonzero;
   `build.ps1` refuses to pack on failure
 - Icon/asset regeneration: `python tools/build_icons.py` (atlas, TextureBank, class
   icons, metadata.lsf); `python tools/index_templates.py` to rebuild the

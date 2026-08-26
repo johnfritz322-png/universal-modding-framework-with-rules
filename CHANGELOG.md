@@ -41,6 +41,13 @@
   unmodified creature is not. This is the piece that makes summoning real game creatures
   viable as a player mechanic at all.
 
+### Added (fourth pass)
+- BG3 findings 34-35, both verified against shipped data: the `Level` field on creature
+  stats is not the encounter level and reads `1` for almost everything (Ansur at 400 HP
+  included), so it cannot be used to judge creature strength; and `Vitality` is often
+  inherited and must be resolved through `using` or real creatures silently read as
+  having no HP.
+
 ### Corrected
 - The summon-patterns section was first published claiming five findings were "verified
   in-game". Two were deployed but untested and one was an inference never observed. The

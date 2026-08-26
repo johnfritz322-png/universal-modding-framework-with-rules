@@ -245,3 +245,18 @@ out of this repo until a test result exists.
   This is an inference from how statuses are applied, **not an observation.**
 
 These will be written up once a test result exists.
+
+## Reading creature stats — two things that will mislead you
+
+Added 2026-08-25. **VERIFIED — Primary** (shipped game data).
+
+34. **The `Level` field on creature stats is not the encounter level and is usually
+    meaningless.** Across the twelve creatures checked, eleven read `Level 1` — including
+    Ansur at 400 HP and a Bulette. Only Giant Eagle carried a real value. Encounter
+    difficulty lives in the level/area files, not in `Character.txt`. **Do not use it to
+    judge how strong a creature is or when a player meets it.** `Vitality` is the usable
+    signal.
+35. **`Vitality` is frequently inherited and must be resolved through `using`.** A direct
+    read of a creature's stats entry often returns nothing — Meenlock has no `Vitality`
+    line of its own, but resolves to 49 by walking its `using` chain. A lookup that does
+    not follow `using` will report "no HP" for real creatures and quietly skip them.
