@@ -138,7 +138,7 @@ entry, nothing to unlock.
   NEEDS TESTING.
 
 ## Known bugs and limitations
-- Ten Shadows has 1 of 12 shikigami; the subclass is otherwise near-empty.
+- Ten Shadows has 12 of 12 shikigami implemented, but only the Worg has been tested in game.
 - Black Flash's guaranteed critical is not implementable as designed.
 - **Art is copyrighted anime/fan art. This blocks any public release** (universal rule 31).
 - Several abilities are implemented and validated but never cast in combat.
