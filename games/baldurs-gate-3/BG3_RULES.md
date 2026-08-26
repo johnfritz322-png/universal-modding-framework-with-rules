@@ -172,3 +172,25 @@ universal rule 40, **prove each one fails on the broken input before trusting it
   **Watch the token filter:** a check that skips arguments beginning with a digit never
   validates about 62% of UUIDs, since 10 of the 16 possible hex first-characters are
   numerals.
+
+## Fields are type-scoped, and BG3 ignores the ones it does not recognise
+
+Added 2026-08-25. **VERIFIED — Primary** (corpus counts plus in-game observation).
+
+26. **`StatsFunctorContext`, `Conditions` and `StatsFunctors` work on `PassiveData`
+    only** — 272 occurrences on PassiveData, **0 on StatusData**. Put them on a status
+    and BG3 does not complain; it **silently ignores them**. The status applies, its
+    boosts work, and the logic it was supposed to carry never exists.
+27. **A status attaches logic by granting a passive:** `data "Passives" "<PassiveName>"`
+    on the StatusData (147 StatusData entries do this), with the functor context on the
+    passive. Working template: the `UND_AdamantineGolem` taunt — `OnDamaged` plus
+    `ApplyStatus(SWAP, ...)`.
+28. **This generalises: an unrecognised field for an entry type is inert, not an error.**
+    A build gate should verify that every field is attested **for the entry type it sits
+    on**, not merely that the field exists somewhere. Flag a field vanilla clearly uses
+    on *other* types — that is the signature of a shape copied from the wrong entry type,
+    and it is invisible at runtime.
+
+*How this was found: a summon-and-tame mechanic where the hostile summon worked
+perfectly and the reward never fired. Every other check passed, because every field was
+real and every value was attested — just on the wrong type of entry.*

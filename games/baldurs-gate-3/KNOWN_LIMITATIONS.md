@@ -52,6 +52,9 @@ expensive to diagnose.
 - **A DDS whose header disagrees with its payload renders blank.** Pillow produces these.
 - **Missing `CharacterCreationPose`/`SoundClassType` removes the subclass picker** at
   level 1 without any error; the first subclass is assigned silently.
+- **A field on the wrong entry type is ignored, not rejected.** `StatsFunctorContext`,
+  `Conditions` and `StatsFunctors` are PassiveData-only; on a StatusData they do
+  nothing at all and produce no error. Verify fields against the entry **type**.
 - **A mis-staged pak makes BG3 delete the mod from `modsettings.lsx`** rather than report
   a problem. Verify internal archive paths after packing, not just that a file exists.
 

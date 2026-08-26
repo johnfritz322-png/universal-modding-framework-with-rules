@@ -20,6 +20,12 @@
   normally inherit the caster's faction; a status carrying `FactionOverride` plus
   `LoseControl` overrides it. Hostile-summon mechanics need no Script Extender.
 
+### Added (second pass)
+- BG3 findings 26-28: fields are **type-scoped**, and a field on the wrong entry type is
+  **ignored rather than rejected**. `StatsFunctorContext`/`Conditions`/`StatsFunctors` are
+  PassiveData-only; a status attaches logic by granting a passive. Found the hard way, by
+  a mechanic whose hostile half worked and whose reward never fired.
+
 ### Notes
 - BG3 findings are labelled individually. Most are VERIFIED against shipped data or
   in-game observation; `SharedDev` template addressability remains HIGH CONFIDENCE.

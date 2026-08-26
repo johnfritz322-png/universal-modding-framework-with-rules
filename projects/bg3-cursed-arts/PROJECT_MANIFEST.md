@@ -6,7 +6,7 @@
 - Exact game version/build: Patch 8
 - Platform: Windows 11 (26200), Steam
 - Engine: Divinity 4.0
-- Mod version: **1.6.0.0**
+- Mod version: **1.8.0.0**
 
 ## Toolchain
 - Mod loader/framework: native `modsettings.lsx` (no mod manager in the loop)
@@ -95,12 +95,12 @@ in no spell list and unreachable any other way.
 | Per-subclass class icons | Tested in-game | Distinct art on all three subclasses | 2026-08-25 |
 | `metadata.lsf` registration | Tested in-game | Missing MetaData popup gone | 2026-08-25 |
 | Spell icon atlas via `TextureBank` | Tested in-game | Spell icons render on the hotbar | 2026-08-25 |
-| Build gate | Validates | 23 checks, each proven to fail on its broken input | 2026-08-25 |
+| Build gate | Validates | 24 checks, each proven to fail on its broken input | 2026-08-25 |
 
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Ten Shadows — Worg trial (1 of 12) | **Partly tested in-game** | Hostile summon CONFIRMED. The *tame* trigger (`ApplyStatus(SWAP, ...)` on killing blow) is still unconfirmed — the worg has not yet been beaten | Kill the worg and check the permanent status + unlocked summon |
+| Ten Shadows — Worg trial (1 of 12) | **Partly tested in-game** | Hostile summon CONFIRMED. Tame trigger tested and FAILED — the functor fields were on a StatusData, where BG3 ignores them. Rewired onto a passive; retest pending | Kill the worg, look for a permanent Bound status and an unlocked summon |
 | Ten Shadows — remaining 11 shikigami | Designed only | Blocked on the tame trigger only; the hostile half is proven | Build after one full loop completes |
 | Purple as a purple beam | Loads | Visual only | Cast and observe |
 | Reversal Bloom, Divergent Fist, Melting Strike, Iron Body, King's Cleave, RCT | Implemented, validates | Untested behaviour | Cast each in combat |

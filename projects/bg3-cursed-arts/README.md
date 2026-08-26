@@ -67,9 +67,11 @@ so whether `FactionOverride` could override that was the whole risk. **Confirmed
 2026-08-25: the worg arrives hostile and attacks the summoner.** Hostile-summon mechanics
 work in pure stats with no Script Extender.
 
-Still unconfirmed: the *tame* half. `ApplyStatus(SWAP, ...)` firing on the killing blow
-has not been observed, because the worg has not yet been beaten — which surfaced a real
-balance problem, not a technical one (see below).
+The *tame* half was tested and **failed**, which turned out to be the most useful result
+of the project. The functor fields sat on a **StatusData**, where BG3 ignores them
+entirely — 272 uses on PassiveData, 0 on StatusData. The status applied, the worg turned
+hostile, and the tame trigger simply did not exist. Rewired onto a passive granted by the
+status; retest pending. See `games/baldurs-gate-3/BG3_RULES.md` findings 26-28.
 
 ## Known limitations
 
@@ -83,7 +85,7 @@ balance problem, not a technical one (see below).
 ## Toolchain
 
 Local repo at `C:\Users\johnf\Documents\BG3Mods\CursedArts`, not yet on GitHub. Build gate
-is 23 checks, each proven to fail on its broken input; `build.ps1` refuses to pack when
+is 24 checks, each proven to fail on its broken input; `build.ps1` refuses to pack when
 the gate fails.
 
 Notable tools: `validate.py` (gate), `build_icons.py` (atlas + TextureBank + metadata),
