@@ -165,10 +165,11 @@ universal rule 40, **prove each one fails on the broken input before trusting it
   under `AssetsLowRes/`, and no registered key without a file behind it.
 - **DDS header sanity** — recompute the base surface from width, height and block size,
   and reject any file whose declared pitch, mip count or payload disagrees.
-- **Resolve UUID arguments by kind.** `Summon()` takes a **character** RootTemplate;
-  `FactionOverride()` takes a **faction**. Asking "has vanilla passed this exact UUID
-  here before" is the wrong question and produces false failures. Build an index instead
-  (25,560 templates and 971 factions, from `_merged.lsf` and `Factions.lsx`).
+- **Resolve UUID arguments by kind.** `Summon()` takes a **character OR item**
+  RootTemplate — see finding 36, this was published here as "character only" and was
+  wrong. `FactionOverride()` takes a **faction**. Asking "has vanilla passed this exact
+  UUID here before" is the wrong question and produces false failures. Build an index
+  instead (25,560 templates and 971 factions, from `_merged.lsf` and `Factions.lsx`).
   **Watch the token filter:** a check that skips arguments beginning with a digit never
   validates about 62% of UUIDs, since 10 of the 16 possible hex first-characters are
   numerals.
@@ -260,3 +261,42 @@ Added 2026-08-25. **VERIFIED — Primary** (shipped game data).
     read of a creature's stats entry often returns nothing — Meenlock has no `Vitality`
     line of its own, but resolves to 49 by walking its `using` chain. A lookup that does
     not follow `using` will report "no HP" for real creatures and quietly skip them.
+
+## Corrections and further findings
+
+Added 2026-08-26. **VERIFIED — Primary** unless stated.
+
+36. **`Summon()` takes character templates AND item templates.** Measured: vanilla passes
+    a **character** template 99 times and an **item** template 46 times. **This corrects
+    an earlier statement in this file** that Summon takes a character RootTemplate. Items
+    are how every persistent aura or zone is built — `Helper_Spell_Silence` and
+    `Helper_Spell_HungerOfHadar` are both items. A build gate demanding a character
+    rejects 46 legitimate vanilla patterns; ours did, and blocked a working domain until
+    corrected.
+
+    *General lesson: when a validator blocks something vanilla demonstrably does, suspect
+    the validator. This was the second time on one project.*
+
+37. **Persistent zones and domains are an item + an aura status.** The shape, from
+    `Target_Silence` and `SILENCED_AURA`:
+    `GROUND:Summon(<item template>, <turns>, Projectile_AiHelper_<X>,,,<aura status>)`
+    where the aura status carries `AuraRadius` and
+    `AuraStatuses "IF(...):ApplyStatus(<status>)"`. The aura reapplies to whoever is
+    standing inside, each turn.
+38. **Auras can tell friend from foe.** 213 of 237 vanilla `AuraStatuses` use an `IF(...)`
+    condition — `IF(Character() and Enemy() and not Dead())`, `IF(Ally() and ...)` and so
+    on. A zone can therefore affect only enemies while allies stand in it safely.
+    `AuraFlags "IgnoreItems"` is the common companion setting.
+39. **Melee weapon spells must declare `TargetRadius "MeleeMainWeaponRange"`** (15 vanilla
+    spells do). Omitting it does not error. **Observed symptom in game:** the character
+    does not path into position before swinging, so there is a visible gap between moving
+    and the hit registering. If a melee attack feels laggy, check this first.
+40. **`RegainHitPoints` is not attested in `SpellFail`** (0 uses; it appears in
+    `SpellProperties`, `DescriptionParams` and `TooltipDamageList`). Healing that should
+    land regardless of a target's saving throw belongs in `SpellProperties` — which is
+    also better design, since allies are not the ones rolling that save.
+41. **`StatusType "INCAPACITATED"` is what actually stops a creature acting.** `STUNNED`
+    and `PARALYZED` are both built on it. `STUNNED` pairs it with
+    `AbilityFailedSavingThrow(Strength)`, `AbilityFailedSavingThrow(Dexterity)`,
+    `Advantage(AttackTarget)` — which is what makes a target vulnerable to follow-up
+    attacks — `DetectDisturbancesBlock(true)`, and `BreakConcentration()` on apply.

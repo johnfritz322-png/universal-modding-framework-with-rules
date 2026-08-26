@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased — 2026-08-26
+### Corrected
+- **`Summon()` takes character OR item templates.** This file previously published
+  "character only", which is wrong: vanilla passes characters 99 times and items 46
+  times, and items are how every persistent aura or zone is built. A gate demanding a
+  character rejects 46 legitimate patterns.
+
+### Added
+- BG3 findings 36-41: how persistent zones and domains are built (an item template plus
+  an aura status); that auras can tell friend from foe (213 of 237 use `IF(...)`); that
+  melee spells must declare `MeleeMainWeaponRange` or the character never walks into
+  position; that `RegainHitPoints` is not attested in `SpellFail`; and what
+  `StatusType "INCAPACITATED"` actually does.
+- A silent-failure entry for the missing melee range, which presents as an animation bug.
+
 ## Unreleased — 2026-08-25 (claude/bg3-verified-findings)
 ### Added
 - Universal rules 37-42, the six earned from real failures rather than published guidance:

@@ -55,6 +55,8 @@ expensive to diagnose.
 - **A field on the wrong entry type is ignored, not rejected.** `StatsFunctorContext`,
   `Conditions` and `StatsFunctors` are PassiveData-only; on a StatusData they do
   nothing at all and produce no error. Verify fields against the entry **type**.
+- **A melee spell with no `TargetRadius` does not error** — the character just never
+  walks into position, and the hit lands visibly late. Looks like an animation bug.
 - **A mis-staged pak makes BG3 delete the mod from `modsettings.lsx`** rather than report
   a problem. Verify internal archive paths after packing, not just that a file exists.
 
