@@ -204,14 +204,17 @@ out of this repo until a test result exists.
 
 ### Confirmed
 
-29. **The defeat-to-tame summon loop works in pure stats, no Script Extender.**
-    *Evidence: direct in-game observation.* A summon carrying a status with
+29. **The defeat-to-tame summon loop works end to end in pure stats, no Script Extender.**
+    *Evidence: direct in-game observation of the complete cycle — hostile summon, defeat,
+    permanent mark, and the same button then summoning the creature as an ally.* A summon carrying a status with
     `FactionOverride(<hostile faction>)` and `StatusPropertyFlags "LoseControl"` arrives
     hostile and attacks its summoner. That status grants a passive via `Passives`, and the
     passive's `OnDamaged` context with
     `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())` fires
     `ApplyStatus(SWAP, <status>, 100, -1)`, permanently marking whoever landed the killing
-    blow. Both halves observed working.
+    blow. A later cast reads that status through a `GROUND:IF(...)` branch and summons the
+    same creature as an ally instead, from the **same hotbar button**. Every step observed
+    working; no part of this loop needs Script Extender.
 30. **A single `SpellProperties` may hold several `GROUND:IF(<condition>):Summon(...)`
     branches.** *Evidence: shipped game data.* `Target_MageHand` summons a different
     creature depending on `HasPassive(...)`, in one spell. This is vanilla's own shape for

@@ -100,8 +100,8 @@ in no spell list and unreachable any other way.
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Ten Shadows — Worg trial (1 of 12) | **Tested in-game** | Full loop works: hostile summon, defeat, permanent Bound: Worg. One button now branches bound/unbound and by level tier | Balance pass on the level tiers |
-| Ten Shadows — remaining 11 shikigami | Designed only | Blocked on the tame trigger only; the hostile half is proven | Build after one full loop completes |
+| Ten Shadows — Worg trial (1 of 12) | **Tested in-game, complete** | Whole cycle confirmed: hostile summon, defeat, Bound: Worg, and the same button then summons it as an ally. Level tiering confirmed | None; this is the template for the other 11 |
+| Ten Shadows — remaining 11 shikigami | Designed only | Nothing mechanical left unproven; it is replication plus per-creature tuning | Build and test as one pass |
 | Purple as a purple beam | Loads | Visual only | Cast and observe |
 | Reversal Bloom, Divergent Fist, Melting Strike, Iron Body, King's Cleave, RCT | Implemented, validates | Untested behaviour | Cast each in combat |
 | Black Flash guaranteed critical | **Not possible as designed** | `AlwaysSucceed` exists nowhere; see KNOWN_LIMITATIONS | Redesign around a different mechanic |
