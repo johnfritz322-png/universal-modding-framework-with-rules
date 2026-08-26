@@ -1,5 +1,30 @@
 # Changelog
 
+## Unreleased — 2026-08-25 (claude/bg3-verified-findings)
+### Added
+- Universal rules 37-42, the six earned from real failures rather than published guidance:
+  change one variable per test; a null search result is not proof of absence; present is
+  not valid; prove every check fails on broken input; let test-cycle cost set batch size;
+  build the verification substrate before the feature. Each carries its incident.
+- `games/baldurs-gate-3/BG3_RULES.md`: 25 verified findings for class mods on Patch 8 —
+  structure and loading (subclass dialects, mandatory fields, `using`, localisation),
+  measured stats syntax, summons, and the two mandatory icon registrations.
+- `games/baldurs-gate-3/KNOWN_LIMITATIONS.md`: confirmed engine limits and a
+  silent-failure catalogue for things that fail with no error at all.
+- `games/baldurs-gate-3/SOURCES.md`: shipped game data, LSLib/Divine, texconv, bg3.wiki,
+  and three known-working reference mods, each with date checked.
+- `projects/bg3-cursed-arts/`: manifest and README for a playable JJK class mod.
+
+### Resolved
+- **Can `FactionOverride` make a summon hostile? YES** — verified in-game. Summons
+  normally inherit the caster's faction; a status carrying `FactionOverride` plus
+  `LoseControl` overrides it. Hostile-summon mechanics need no Script Extender.
+
+### Notes
+- BG3 findings are labelled individually. Most are VERIFIED against shipped data or
+  in-game observation; `SharedDev` template addressability remains HIGH CONFIDENCE.
+- A guaranteed critical hit is **not expressible** in BG3 stats. Recorded as a hard limit.
+
 ## Unreleased
 ### Added
 - Universal AI game modding hard rules.
