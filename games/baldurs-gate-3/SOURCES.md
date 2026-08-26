@@ -64,6 +64,46 @@ From `projects/bg3-cursed-arts`, BG3 Patch 8, Windows/Steam.
 - **Larian modding docs** — https://docs.baldursgate3.game/Adding_Skill_and_Item_Icons
   Returned HTTP 403 to automated fetch on 2026-08-25; not usable as a checked source.
 
+### Direct in-game testing — CursedArts, BG3 Patch 8
+
+The highest tier of evidence on the ladder, and the source behind the findings that could
+not have been established from data alone. Windows/Steam, Patch 8, fresh characters, mod
+loaded through `modsettings.lsx` with AnimationUnlocker also active.
+
+Each observation below was made by the project owner playing the build and reporting the
+result. Sessions on 2026-08-25.
+
+| Observed | Supports |
+|---|---|
+| Missing MetaData popup gone after registering every loose image | finding 20 |
+| Spell icons render on the hotbar for all three subclasses after adding a `TextureBank` resource | findings 21-22 |
+| A summoned worg carrying `FactionOverride` + `LoseControl` arrives hostile and attacks its summoner | findings 17, 29 |
+| Defeating that worg applies a permanent `Bound: Worg` status to the character who landed the killing blow | findings 26-28, 29 |
+| Pressing the **same** hotbar button after binding summons the worg as an ally instead | findings 29-30 |
+| `UnlockSpell(...)` on a status boost surfaced **no** new hotbar button | finding 32 |
+| A worg weakened by `IncreaseMaxHP(-13);AC(-2)` is a winnable level 1 fight; the unmodified creature killed the player | finding 33 |
+
+**Note on finding 32:** this is one observed attempt, not a proof that `UnlockSpell` never
+works on a status boost. It is recorded as an observation, and the branch approach in
+finding 30 was adopted instead.
+
+### Explicitly NOT verified in game
+
+Recorded here so the absence is as visible as the evidence:
+
+- **The other eleven shikigami** (Meenlock through Ansur). Generated from a data table in
+  the Worg's confirmed shape, validated by the build gate, and **never played**. Whether
+  the generator reproduced the working shape faithfully is unproven.
+- **The revised difficulty curve** (reduction applied only at unlock levels 1-4, nothing
+  above full strength). Deployed, unplayed.
+- **The Worg's own rewritten branches.** Its spell was rewritten after the successful test
+  to drop a tier, so even the Worg's current form is strictly untested.
+- **Whether a summon's tier is fixed at cast time** rather than updating continuously. An
+  inference from how statuses are applied at summon, never observed.
+
+The last state confirmed working in game is tagged `v1.10.0.0-verified` in the mod
+repository.
+
 ### Known-working reference mods (HIGH CONFIDENCE)
 
 Three third-party BG3 class mods, unpacked and diffed field by field. Used only as

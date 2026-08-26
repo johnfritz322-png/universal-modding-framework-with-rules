@@ -48,6 +48,20 @@
   inherited and must be resolved through `using` or real creatures silently read as
   having no HP.
 
+### Corrected (pre-merge review, PR #2)
+- Project docs still described `UnlockSpell(...)` on a status boost as granting the ally
+  summon. That design **did not work** and was replaced by branch-based summoning; the
+  manifest and README now describe the confirmed design and record the failed one as a
+  finding.
+- README still said the tame half had failed with a retest pending. It has since been
+  confirmed working end to end; replaced with the observed result.
+- Manifest localisation handle range said `01-26`; actual is `01-83` with **103 handles**
+  defined (validator-reported).
+- `SOURCES.md` gained a direct in-game evidence table mapping each observation to the
+  findings it supports, plus an explicit **NOT verified in game** section naming the
+  eleven generated shikigami, the revised difficulty curve, the Worg's own rewritten
+  branches, and the summon-tier inference.
+
 ### Corrected
 - The summon-patterns section was first published claiming five findings were "verified
   in-game". Two were deployed but untested and one was an inference never observed. The

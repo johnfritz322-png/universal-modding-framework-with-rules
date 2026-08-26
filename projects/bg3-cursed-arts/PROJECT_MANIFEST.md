@@ -64,7 +64,7 @@ Never regenerate these (universal rule 23).
 | Icon atlas | `5c9d4b21-7f3a-4e18-9c66-2d8ba4e71f03` — **must** equal the `TextureBank` Resource `ID` |
 | Spell list `TenShadows 1` | `7a1c0d52-3e64-4b8a-9f21-5d0e6c4b9a13` |
 | Stats namespace | `CA_` prefix on every entry |
-| Localisation handles | `hca000001g0000g0000g0000g0000000000NN`, currently NN = 01–26 |
+| Localisation handles | `hca000001g0000g0000g0000g0000000000NN`, NN currently 01–83. **103 handles defined in total** (validator-reported); the rest predate the NN scheme |
 
 ## Vanilla systems touched
 **None replaced.** The mod adds records only. No `using` points at shipping content — see
@@ -85,8 +85,15 @@ Ten Shadows loop: a trial spell summons a creature carrying a status with
 `FactionOverride` + `LoseControl` so it fights the player. That status also carries an
 `OnDamaged` functor conditioned on `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())`
 which does `ApplyStatus(SWAP, CA_TS_TAMED_<NAME>, 100, -1)` — marking whoever killed it.
-The permanent tamed status carries `UnlockSpell(...)` for the real ally summon, which is
-in no spell list and unreachable any other way.
+The permanent tamed status is a **marker only**. The Ritual button itself branches on it:
+`SpellProperties` holds several `GROUND:IF(...):Summon(...)` clauses, so while the status
+is absent the button summons the creature hostile, and once the status is present the same
+button summons it as an ally.
+
+`UnlockSpell(...)` on a status boost was the original design and **did not work** — the
+status applied and no second hotbar button ever appeared. The branch approach replaced it,
+is confirmed working in game, and is the better shape anyway: one button, no spell-list
+entry, nothing to unlock.
 
 ## Verified features
 | Feature | Verification state | Evidence | Last tested |

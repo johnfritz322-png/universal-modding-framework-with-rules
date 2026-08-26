@@ -61,18 +61,25 @@ Each mechanism was measured in shipped data before use (details in
 - `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())` under `OnDamaged` — how a
   creature notices its own death, since **there is no `OnDeath` functor context**
 - `ApplyStatus(SWAP, ...)` — marks whoever landed the killing blow
-- `UnlockSpell(...)` on a permanent status — grants the real summon
+- the permanent status is a **marker**; the Ritual button branches on it, so the same
+  button summons the creature hostile or allied depending on whether it is bound
 
 **The load-bearing question is answered.** Summons normally inherit the caster's faction,
 so whether `FactionOverride` could override that was the whole risk. **Confirmed in-game
 2026-08-25: the worg arrives hostile and attacks the summoner.** Hostile-summon mechanics
 work in pure stats with no Script Extender.
 
-The *tame* half was tested and **failed**, which turned out to be the most useful result
-of the project. The functor fields sat on a **StatusData**, where BG3 ignores them
-entirely — 272 uses on PassiveData, 0 on StatusData. The status applied, the worg turned
-hostile, and the tame trigger simply did not exist. Rewired onto a passive granted by the
-status; retest pending. See `games/baldurs-gate-3/BG3_RULES.md` findings 26-28.
+**The full loop is confirmed working in game.** Summoning the Ritual produces a hostile
+worg; defeating it applies **Bound: Worg** permanently; and pressing the *same* hotbar
+button afterwards summons the worg as an ally. Level tiering is confirmed too — a weakened
+worg is a winnable level 1 fight where the unmodified creature killed the player.
+
+Getting there produced the most useful finding of the project. The tame trigger first
+shipped doing nothing at all, because its functor fields sat on a **StatusData**, where
+BG3 ignores them entirely — 272 uses on PassiveData, 0 on StatusData. The status applied,
+the worg turned hostile, and the trigger simply did not exist. Moving the logic onto a
+passive granted by the status fixed it. See `games/baldurs-gate-3/BG3_RULES.md`
+findings 26-28.
 
 ## Known limitations
 
