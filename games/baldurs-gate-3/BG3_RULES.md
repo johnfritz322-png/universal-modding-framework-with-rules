@@ -80,9 +80,10 @@ occurrences in that corpus.
    status. `SWAP` resolves to the other party in an interaction, which is the supported
    way for a creature to apply something to whoever hit it.
 9. **`SpellAnimation` is exactly 9 slots** — 652 of 652 Target spells.
-10. **`CriticalHit(AttackRoll|AttackTarget, Success|Failure, Always|Never [,threshold])`.**
-    `AlwaysSucceed` appears **nowhere** and is inert, so a guaranteed critical hit is
-    **not expressible** this way.
+10. **`CriticalHit(AttackRoll|AttackTarget, Success|Failure, Always|Never|ForcedAlways
+    [,range])`.** `AlwaysSucceed` appears nowhere and is inert — but see **finding 42**:
+    this entry previously concluded from that a guaranteed critical hit is impossible,
+    **which is wrong**. `Always` and `ForcedAlways` both exist and both work.
 11. **`Force(-n)` pulls, `Force(+n)` pushes.**
 12. **`SpellAnimationIntentType` is the real field name** (487 uses).
     `AnimationIntentType` has 0 uses.
@@ -300,3 +301,28 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     `AbilityFailedSavingThrow(Strength)`, `AbilityFailedSavingThrow(Dexterity)`,
     `Advantage(AttackTarget)` — which is what makes a target vulnerable to follow-up
     attacks — `DetectDisturbancesBlock(true)`, and `BreakConcentration()` on apply.
+
+42. **A guaranteed critical hit IS expressible.** `CriticalHit(AttackRoll,Success,Always)`
+    is used by `WILD_MAGIC_ENCHANT`; `CriticalHit(AttackRoll,Success,ForcedAlways)` by an
+    adamantine-weapon passive; and `CriticalHit(AttackTarget,Success,Always,3)` is how
+    `UNCONSCIOUS` makes attacks within 3m automatic crits — so the fourth parameter is a
+    **distance**, not a multiplier.
+
+    **This corrects an earlier statement in this file and in `KNOWN_LIMITATIONS.md`** that
+    a guaranteed crit was not expressible. That was concluded from the absence of one
+    token, `AlwaysSucceed`, and generalised into an engine limitation. It is exactly the
+    failure universal rule 38 names: *a null search result is evidence about the search,
+    not the world.* The rule was already written down here, and still got broken.
+
+43. **To tune crit chance rather than force it, use `ReduceCriticalAttackThreshold(N)`** —
+    it lowers the number needed by N. Champion Fighter's Improved Critical is `(1)`, i.e.
+    crit on 19+. `(5)` gives crit on 15+, six faces of twenty, about one in three.
+
+44. **A crit needs an attack roll.** There is no free-floating die inside a spell, so
+    "cannot miss" and "can crit" are in tension. To have both, keep the attack roll and
+    make missing nearly impossible: `RollBonus(Attack,10)` is vanilla's largest flat
+    attack bonus.
+
+45. **Boosts can be scoped to a single spell** with `IF(SpellId('<SpellName>')):<boost>` —
+    26 vanilla Boosts do this. That is how to give one ability its own to-hit or crit
+    behaviour without altering everything else the character does.

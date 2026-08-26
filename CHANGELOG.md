@@ -7,7 +7,18 @@
   times, and items are how every persistent aura or zone is built. A gate demanding a
   character rejects 46 legitimate patterns.
 
+### Retracted
+- **"A guaranteed critical hit is not expressible in BG3" was wrong** and is retracted
+  rather than deleted. `CriticalHit(AttackRoll,Success,Always)` and `ForcedAlways` both
+  exist and work; the claim came from the absence of a single different token,
+  `AlwaysSucceed`, generalised into an engine limitation. Universal rule 38 names this
+  exact failure and was already in this repo when it happened.
+
 ### Added
+- BG3 findings 42-45: guaranteed crits are expressible; `ReduceCriticalAttackThreshold(N)`
+  tunes crit chance; a crit needs an attack roll, so "cannot miss" and "can crit" are
+  reconciled with a large `RollBonus(Attack,N)`; and Boosts can be scoped to one spell
+  with `IF(SpellId('...'))`.
 - BG3 findings 36-41: how persistent zones and domains are built (an item template plus
   an aura status); that auras can tell friend from foe (213 of 237 use `IF(...)`); that
   melee spells must declare `MeleeMainWeaponRange` or the character never walks into
