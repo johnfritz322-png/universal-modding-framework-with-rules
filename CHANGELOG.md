@@ -2,6 +2,13 @@
 
 ## Unreleased — 2026-08-26
 
+### Added — 2026-08-26 (third pass)
+- **BG3 findings 54-55.** Scoping a boost to melee with `IF(IsMeleeAttack())`, including
+  the reminder that a functor attested in one field is not thereby legal in another; and
+  the `StatusPropertyFlags` values that decide whether a status is visible at all.
+- **Universal rule 45**: if a mechanic asks the player to track state, every part of it
+  must be on screen. Hiding half of a required pair makes a correct mechanic unreadable.
+
 ### Added — 2026-08-26 (second pass)
 - **BG3 findings 48-53.** Two of them are direct in-game observations rather than corpus
   reads: a melee spell without `TargetRadius` has no reach and fires from any distance,

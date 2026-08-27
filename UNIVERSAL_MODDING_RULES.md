@@ -210,6 +210,18 @@ canonical multiattack spell. A raw grep found it in seven files in under a secon
 tool would have talked the project out of the only correct mechanism for the feature
 being built.*
 
+### 45. If you ask the player to track state, show all of it
+A mechanic that depends on several pieces of state at once is only as usable as its least
+visible part. Before shipping one, list every piece of state the player must hold in
+their head and confirm each is on screen. Hiding half of a required pair does not make
+the feature simpler, it makes it unreadable -- and the feedback arrives as "this is
+confusing", which points at the design rather than at the missing indicator.
+
+*Incident: a spell rewarded hitting a target carrying two different marks. One mark was
+flagged visible, the other suppressed, purely because they were written on different days
+by different conventions. The combo was correct, tested clean, and could only be executed
+from memory.*
+
 ## Evidence ladder
 1. **VERIFIED — Primary:** official game/SDK documentation; actual game/project files; compiler/validator output; direct in-game test.
 2. **VERIFIED — Framework:** maintainer documentation for the exact loader/extender/toolkit/API version.

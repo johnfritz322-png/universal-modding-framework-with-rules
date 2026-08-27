@@ -393,3 +393,24 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     `1.17.0.0`, and the mod loaded correctly every time. Useful because it means a
     deploy script does not have to rewrite those fields — but keeping them in sync costs
     nothing and removes a variable when something else breaks.
+
+54. **Scope a boost to melee only with `IF(IsMeleeAttack()):<boost>`.** `IsMeleeAttack`
+    has 85 uses across four fields, and critically **16 of them are in `Boosts`** --
+    `AURA_OF_HATE` is the cleanest reference:
+    `Boosts "IF(IsMeleeAttack()):CharacterWeaponDamage(max(1, Cause.CharismaModifier))"`.
+
+    Worth stating because the field matters as much as the functor: the same token also
+    appears in `Conditions` (60), `Properties` (7) and `RemoveConditions` (2), and a
+    functor being attested somewhere is not evidence it is legal where you want to put
+    it. Check the field, not just the name.
+
+55. **Status visibility is controlled by `StatusPropertyFlags`, and the default is not
+    "visible".** `DisableOverhead` (211 uses) and `DisableCombatlog` (216) suppress a
+    status; `OverheadOnTurn` (25) surfaces it on the character each turn.
+
+    This is a correctness issue, not a cosmetic one, whenever a mechanic asks the player
+    to line up more than one piece of state. On this project a spell required a target
+    to be carrying **two** different marks, and one of the two was flagged
+    `DisableOverhead;DisableCombatlog` while the other was `OverheadOnTurn` -- so the
+    combo could only be set up by memory. The mechanic was correct and unreadable at the
+    same time, and it read to the player as the design being confusing.
