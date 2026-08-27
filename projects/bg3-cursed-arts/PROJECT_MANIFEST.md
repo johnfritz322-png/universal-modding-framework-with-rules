@@ -6,7 +6,7 @@
 - Exact game version/build: Patch 8
 - Platform: Windows 11 (26200), Steam
 - Engine: Divinity 4.0
-- Mod version: **1.12.0.0** (Worg loop confirmed end to end; roster built, untested)
+- Mod version: **1.15.0.0** (Worg loop confirmed; everything since is built and unplayed)
 
 ## Toolchain
 - Mod loader/framework: native `modsettings.lsx` (no mod manager in the loop)
@@ -32,7 +32,8 @@
   and the Worg's own rewritten branches.
 - Earlier rollback tags: `blue-works`, `working-ds-dialect`, `working-blue-pending`,
   `v1.2.0.0-working`
-- Current milestone: test the 11 generated shikigami; only the Worg has been played
+- Current milestone: play-test the backlog — 11 shikigami, the difficulty curve, the
+  melee reach fix, Reversal Bloom's friend-or-foe split, and Unlimited Void
 - Next milestone: balance pass on the difficulty curve once the roster has been played
 
 ## Owned files
@@ -114,6 +115,9 @@ entry, nothing to unlock.
 |---|---|---|---|
 | Ten Shadows — Worg trial (1 of 12, the reference) | **Tested in-game, complete** | Whole cycle confirmed: hostile summon, defeat, Bound: Worg, and the same button then summons it as an ally. Level tiering confirmed | None; this is the template for the other 11 |
 | Ten Shadows — remaining 11 shikigami | **Implemented, validates, NOT tested in game** | Generated from a data table in the Worg's confirmed shape; whether the generator reproduced it faithfully is unproven | Play the Meenlock at level 2 — same button behaviour, different creature |
+| Ten Shadows melee reach + weapon animation | **Implemented, NOT tested** | Attacks had no `TargetRadius` at all; symptom was a delay between moving and hitting | Swing once and watch the timing |
+| Reversal Bloom friend-or-foe split | **Implemented, NOT tested** | Damage now gated behind `Enemy()`, party healed via `SpellProperties` | Cast it next to a party member |
+| Domain Expansion: Unlimited Void (Limitless 12) | **Implemented, NOT tested** | Summons a visible dome that incapacitates enemies inside and deals no damage; party unaffected | Needs level 12 |
 | Purple as a purple beam | Loads | Visual only | Cast and observe |
 | Reversal Bloom, Divergent Fist, Melting Strike, Iron Body, King's Cleave, RCT | Implemented, validates | Untested behaviour | Cast each in combat |
 | Black Flash guaranteed critical | **Not possible as designed** | `AlwaysSucceed` exists nowhere; see KNOWN_LIMITATIONS | Redesign around a different mechanic |
@@ -139,6 +143,7 @@ entry, nothing to unlock.
 
 ## Known bugs and limitations
 - Ten Shadows has 12 of 12 shikigami implemented, but only the Worg has been tested in game.
+- Limitless Adept still has nine empty levels; only its level 12 capstone is built.
 - Black Flash's guaranteed critical is not implementable as designed.
 - **Art is copyrighted anime/fan art. This blocks any public release** (universal rule 31).
 - Several abilities are implemented and validated but never cast in combat.

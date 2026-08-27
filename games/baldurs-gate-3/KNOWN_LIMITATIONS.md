@@ -31,7 +31,7 @@ than a caution. Full detail and evidence in `BG3_RULES.md`.
 
 | Limit | Consequence | Status |
 |---|---|---|
-| No `AlwaysSucceed` in `CriticalHit()` | A **guaranteed critical hit is not expressible** in stats. The vocabulary is `Success`/`Failure` and `Always`/`Never`. Any design promising one needs a different mechanic. | VERIFIED |
+| ~~No guaranteed critical hit~~ | **RETRACTED — this was wrong.** `AlwaysSucceed` does not exist, but `CriticalHit(AttackRoll,Success,Always)` and `ForcedAlways` both do and both work. See BG3_RULES finding 42. The absence of one token was generalised into an engine limitation. | RETRACTED 2026-08-26 |
 | No `OnDeath` `StatsFunctorContext` | Nothing can react directly to a creature dying. Use `OnDamaged` with `(HasHPPercentageEqualOrLessThan(0) or IsKillingBlow())`. | VERIFIED |
 | `ApplyStatus(TARGET, ...)` is not valid | `TARGET` appears 0 times; using it silently orphans the status with no error. Valid keywords are `SELF`, `SWAP`, `OBSERVER_TARGET`, `OBSERVER_OBSERVER`. | VERIFIED |
 | `SetFaction` is Osiris-only | Faction changes from stats must go through the `FactionOverride` **boost** on a status. | VERIFIED |
@@ -55,6 +55,8 @@ expensive to diagnose.
 - **A field on the wrong entry type is ignored, not rejected.** `StatsFunctorContext`,
   `Conditions` and `StatsFunctors` are PassiveData-only; on a StatusData they do
   nothing at all and produce no error. Verify fields against the entry **type**.
+- **A melee spell with no `TargetRadius` does not error** — the character just never
+  walks into position, and the hit lands visibly late. Looks like an animation bug.
 - **A mis-staged pak makes BG3 delete the mod from `modsettings.lsx`** rather than report
   a problem. Verify internal archive paths after packing, not just that a file exists.
 

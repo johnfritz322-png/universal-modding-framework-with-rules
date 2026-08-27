@@ -1,5 +1,51 @@
 # Changelog
 
+## Unreleased — 2026-08-26
+
+### Added — 2026-08-26 (third pass)
+- **BG3 findings 54-55.** Scoping a boost to melee with `IF(IsMeleeAttack())`, including
+  the reminder that a functor attested in one field is not thereby legal in another; and
+  the `StatusPropertyFlags` values that decide whether a status is visible at all.
+- **Universal rule 45**: if a mechanic asks the player to track state, every part of it
+  must be on screen. Hiding half of a required pair makes a correct mechanic unreadable.
+
+### Added — 2026-08-26 (second pass)
+- **BG3 findings 48-53.** Two of them are direct in-game observations rather than corpus
+  reads: a melee spell without `TargetRadius` has no reach and fires from any distance,
+  and a ground-targeted teleport without `TargetConditions` silently does nothing.
+  Also: the `Cast2[...]`/`Cast3[...]` multiattack mechanism and the
+  `AlternativeCastTextEvents` field its animations depend on, `DownedStatus()` for
+  surviving a killing blow, and evidence that `modsettings.lsx` checksums are not
+  enforced.
+- **Universal rules 43 and 44**, both from tooling that lied this session: a checker that
+  reads its own build output cannot see source rot, and a search tool reporting "never
+  used" should be doubted before the engine is.
+
+### Corrected
+- **`Summon()` takes character OR item templates.** This file previously published
+  "character only", which is wrong: vanilla passes characters 99 times and items 46
+  times, and items are how every persistent aura or zone is built. A gate demanding a
+  character rejects 46 legitimate patterns.
+
+### Retracted
+- **"A guaranteed critical hit is not expressible in BG3" was wrong** and is retracted
+  rather than deleted. `CriticalHit(AttackRoll,Success,Always)` and `ForcedAlways` both
+  exist and work; the claim came from the absence of a single different token,
+  `AlwaysSucceed`, generalised into an engine limitation. Universal rule 38 names this
+  exact failure and was already in this repo when it happened.
+
+### Added
+- BG3 findings 42-45: guaranteed crits are expressible; `ReduceCriticalAttackThreshold(N)`
+  tunes crit chance; a crit needs an attack roll, so "cannot miss" and "can crit" are
+  reconciled with a large `RollBonus(Attack,N)`; and Boosts can be scoped to one spell
+  with `IF(SpellId('...'))`.
+- BG3 findings 36-41: how persistent zones and domains are built (an item template plus
+  an aura status); that auras can tell friend from foe (213 of 237 use `IF(...)`); that
+  melee spells must declare `MeleeMainWeaponRange` or the character never walks into
+  position; that `RegainHitPoints` is not attested in `SpellFail`; and what
+  `StatusType "INCAPACITATED"` actually does.
+- A silent-failure entry for the missing melee range, which presents as an animation bug.
+
 ## Unreleased — 2026-08-25 (claude/bg3-verified-findings)
 ### Added
 - Universal rules 37-42, the six earned from real failures rather than published guidance:

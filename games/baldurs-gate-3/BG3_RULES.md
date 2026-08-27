@@ -80,9 +80,10 @@ occurrences in that corpus.
    status. `SWAP` resolves to the other party in an interaction, which is the supported
    way for a creature to apply something to whoever hit it.
 9. **`SpellAnimation` is exactly 9 slots** — 652 of 652 Target spells.
-10. **`CriticalHit(AttackRoll|AttackTarget, Success|Failure, Always|Never [,threshold])`.**
-    `AlwaysSucceed` appears **nowhere** and is inert, so a guaranteed critical hit is
-    **not expressible** this way.
+10. **`CriticalHit(AttackRoll|AttackTarget, Success|Failure, Always|Never|ForcedAlways
+    [,range])`.** `AlwaysSucceed` appears nowhere and is inert — but see **finding 42**:
+    this entry previously concluded from that a guaranteed critical hit is impossible,
+    **which is wrong**. `Always` and `ForcedAlways` both exist and both work.
 11. **`Force(-n)` pulls, `Force(+n)` pushes.**
 12. **`SpellAnimationIntentType` is the real field name** (487 uses).
     `AnimationIntentType` has 0 uses.
@@ -165,10 +166,11 @@ universal rule 40, **prove each one fails on the broken input before trusting it
   under `AssetsLowRes/`, and no registered key without a file behind it.
 - **DDS header sanity** — recompute the base surface from width, height and block size,
   and reject any file whose declared pitch, mip count or payload disagrees.
-- **Resolve UUID arguments by kind.** `Summon()` takes a **character** RootTemplate;
-  `FactionOverride()` takes a **faction**. Asking "has vanilla passed this exact UUID
-  here before" is the wrong question and produces false failures. Build an index instead
-  (25,560 templates and 971 factions, from `_merged.lsf` and `Factions.lsx`).
+- **Resolve UUID arguments by kind.** `Summon()` takes a **character OR item**
+  RootTemplate — see finding 36, this was published here as "character only" and was
+  wrong. `FactionOverride()` takes a **faction**. Asking "has vanilla passed this exact
+  UUID here before" is the wrong question and produces false failures. Build an index
+  instead (25,560 templates and 971 factions, from `_merged.lsf` and `Factions.lsx`).
   **Watch the token filter:** a check that skips arguments beginning with a digit never
   validates about 62% of UUIDs, since 10 of the 16 possible hex first-characters are
   numerals.
@@ -260,3 +262,155 @@ Added 2026-08-25. **VERIFIED — Primary** (shipped game data).
     read of a creature's stats entry often returns nothing — Meenlock has no `Vitality`
     line of its own, but resolves to 49 by walking its `using` chain. A lookup that does
     not follow `using` will report "no HP" for real creatures and quietly skip them.
+
+## Corrections and further findings
+
+Added 2026-08-26. **VERIFIED — Primary** unless stated.
+
+36. **`Summon()` takes character templates AND item templates.** Measured: vanilla passes
+    a **character** template 99 times and an **item** template 46 times. **This corrects
+    an earlier statement in this file** that Summon takes a character RootTemplate. Items
+    are how every persistent aura or zone is built — `Helper_Spell_Silence` and
+    `Helper_Spell_HungerOfHadar` are both items. A build gate demanding a character
+    rejects 46 legitimate vanilla patterns; ours did, and blocked a working domain until
+    corrected.
+
+    *General lesson: when a validator blocks something vanilla demonstrably does, suspect
+    the validator. This was the second time on one project.*
+
+37. **Persistent zones and domains are an item + an aura status.** The shape, from
+    `Target_Silence` and `SILENCED_AURA`:
+    `GROUND:Summon(<item template>, <turns>, Projectile_AiHelper_<X>,,,<aura status>)`
+    where the aura status carries `AuraRadius` and
+    `AuraStatuses "IF(...):ApplyStatus(<status>)"`. The aura reapplies to whoever is
+    standing inside, each turn.
+38. **Auras can tell friend from foe.** 213 of 237 vanilla `AuraStatuses` use an `IF(...)`
+    condition — `IF(Character() and Enemy() and not Dead())`, `IF(Ally() and ...)` and so
+    on. A zone can therefore affect only enemies while allies stand in it safely.
+    `AuraFlags "IgnoreItems"` is the common companion setting.
+39. **Melee weapon spells must declare `TargetRadius "MeleeMainWeaponRange"`** (15 vanilla
+    spells do). Omitting it does not error. **Observed symptom in game:** the character
+    does not path into position before swinging, so there is a visible gap between moving
+    and the hit registering. If a melee attack feels laggy, check this first.
+40. **`RegainHitPoints` is not attested in `SpellFail`** (0 uses; it appears in
+    `SpellProperties`, `DescriptionParams` and `TooltipDamageList`). Healing that should
+    land regardless of a target's saving throw belongs in `SpellProperties` — which is
+    also better design, since allies are not the ones rolling that save.
+41. **`StatusType "INCAPACITATED"` is what actually stops a creature acting.** `STUNNED`
+    and `PARALYZED` are both built on it. `STUNNED` pairs it with
+    `AbilityFailedSavingThrow(Strength)`, `AbilityFailedSavingThrow(Dexterity)`,
+    `Advantage(AttackTarget)` — which is what makes a target vulnerable to follow-up
+    attacks — `DetectDisturbancesBlock(true)`, and `BreakConcentration()` on apply.
+
+42. **A guaranteed critical hit IS expressible.** `CriticalHit(AttackRoll,Success,Always)`
+    is used by `WILD_MAGIC_ENCHANT`; `CriticalHit(AttackRoll,Success,ForcedAlways)` by an
+    adamantine-weapon passive; and `CriticalHit(AttackTarget,Success,Always,3)` is how
+    `UNCONSCIOUS` makes attacks within 3m automatic crits — so the fourth parameter is a
+    **distance**, not a multiplier.
+
+    **This corrects an earlier statement in this file and in `KNOWN_LIMITATIONS.md`** that
+    a guaranteed crit was not expressible. That was concluded from the absence of one
+    token, `AlwaysSucceed`, and generalised into an engine limitation. It is exactly the
+    failure universal rule 38 names: *a null search result is evidence about the search,
+    not the world.* The rule was already written down here, and still got broken.
+
+43. **To tune crit chance rather than force it, use `ReduceCriticalAttackThreshold(N)`** —
+    it lowers the number needed by N. Champion Fighter's Improved Critical is `(1)`, i.e.
+    crit on 19+. `(5)` gives crit on 15+, six faces of twenty, about one in three.
+
+44. **A crit needs an attack roll.** There is no free-floating die inside a spell, so
+    "cannot miss" and "can crit" are in tension. To have both, keep the attack roll and
+    make missing nearly impossible: `RollBonus(Attack,10)` is vanilla's largest flat
+    attack bonus.
+
+45. **Boosts can be scoped to a single spell** with `IF(SpellId('<SpellName>')):<boost>` —
+    26 vanilla Boosts do this. That is how to give one ability its own to-hit or crit
+    behaviour without altering everything else the character does.
+
+46. **Pinning a creature in place: `ActionResourceBlock(Movement)`** — 72 vanilla uses,
+    and it is what `WEB` uses. Combined with an aura (finding 37) it makes a zone
+    genuinely inescapable rather than merely damaging.
+47. **Gating a spell behind a state: `RequirementConditions "HasStatus('<X>',
+    context.Source)"`** — 237 vanilla spells do this. The ability appears on the hotbar
+    but is uncastable until the condition holds, which is how to make abilities that only
+    work inside a zone, stance or transformation.
+
+48. **A melee spell with no `TargetRadius` has no reach.** VERIFIED in game
+    2026-08-26: a melee spell missing this field can be cast from any distance, and the
+    caster never walks into range. `SpellFlags "IsMelee"` and
+    `SpellRoll "Attack(AttackType.MeleeUnarmedAttack)"` do **not** imply a range —
+    they describe the attack, not the reach. Set
+    `data "TargetRadius" "MeleeMainWeaponRange"`.
+
+    This was found three times on one project before being understood: first as "the hit
+    lands late", then as "a punch animation plays while holding a sword", and finally as
+    "this fires from across the room". One missing field, three different-looking
+    symptoms, none of which named it. Worth an automated check: any entry whose
+    `SpellFlags` contain `IsMelee`, or whose `SpellRoll` names a melee attack, and which
+    has neither `TargetRadius` nor `Shape`.
+
+49. **Multiple hits from one spell: `Cast2[...]`, `Cast3[...]`.** 67 and 20 vanilla uses
+    respectively; vanilla goes as far as `Cast7`. The wrapped functors run as an extra
+    attack, and the form appears in both `SpellRoll` and `SpellSuccess`:
+
+    ```
+    SpellRoll     "Attack(...);Cast2[Attack(...)];Cast3[Attack(...)]"
+    SpellSuccess  "DealDamage(...);Cast2[DealDamage(...)];Cast3[DealDamage(...)]"
+    ```
+
+    `Target_FlurryOfBlows` is the cleanest two-hit reference; every
+    `Target_Multiattack_*` creature (Owlbear, Werewolf, Hook Horror, Drider) is a
+    three-hit one.
+
+50. **`AlternativeCastTextEvents` is mandatory for multi-hit spells, and its absence is
+    silent.** Without `data "AlternativeCastTextEvents" "Cast2"` — or `"Cast2;Cast3"` —
+    the extra hits still land and still deal damage, but **no animation plays for them**.
+    Vanilla writes exactly as many events as there are extra casts.
+
+    This is a nasty one because the ability is not broken, only invisible: damage is
+    correct in the log, and the player reports that the ability "does not feel right"
+    rather than that it is bugged.
+
+51. **A ground-targeted teleport needs `TargetConditions` or it does nothing at all.**
+    VERIFIED in game 2026-08-26: a `SpellType "Target"` spell with
+    `SpellProperties "GROUND:TeleportSource();"` and no `TargetConditions` produced no
+    effect whatsoever when cast — no error, no movement, no failure message. There is no
+    valid ground for it to resolve against. `Target_MistyStep` supplies the working line:
+
+    ```
+    TargetConditions  "CanStand('') and not Character() and not Self()"
+    ```
+
+52. **Surviving a killing blow: `DownedStatus(<status>, N)`** — 15 vanilla uses, all in
+    `Boosts`, and it is how `RELENTLESS_ENDURANCE` works. The named status is
+    `StatusType "DOWNED"` and does the actual work on apply:
+    `OnApplyFunctors "RemoveStatus(<the guard>);RegainHitPoints(1,Guaranteed)"` — the
+    guard is consumed so it cannot fire twice.
+
+53. **BG3 does not appear to validate `MD5` or `Version64` in `modsettings.lsx`.**
+    HIGH CONFIDENCE, not proven. On one machine the load order carried a checksum from an
+    old build and a recorded version of `1.2.0.0` across roughly fifteen rebuilds up to
+    `1.17.0.0`, and the mod loaded correctly every time. Useful because it means a
+    deploy script does not have to rewrite those fields — but keeping them in sync costs
+    nothing and removes a variable when something else breaks.
+
+54. **Scope a boost to melee only with `IF(IsMeleeAttack()):<boost>`.** `IsMeleeAttack`
+    has 85 uses across four fields, and critically **16 of them are in `Boosts`** --
+    `AURA_OF_HATE` is the cleanest reference:
+    `Boosts "IF(IsMeleeAttack()):CharacterWeaponDamage(max(1, Cause.CharismaModifier))"`.
+
+    Worth stating because the field matters as much as the functor: the same token also
+    appears in `Conditions` (60), `Properties` (7) and `RemoveConditions` (2), and a
+    functor being attested somewhere is not evidence it is legal where you want to put
+    it. Check the field, not just the name.
+
+55. **Status visibility is controlled by `StatusPropertyFlags`, and the default is not
+    "visible".** `DisableOverhead` (211 uses) and `DisableCombatlog` (216) suppress a
+    status; `OverheadOnTurn` (25) surfaces it on the character each turn.
+
+    This is a correctness issue, not a cosmetic one, whenever a mechanic asks the player
+    to line up more than one piece of state. On this project a spell required a target
+    to be carrying **two** different marks, and one of the two was flagged
+    `DisableOverhead;DisableCombatlog` while the other was `OverheadOnTurn` -- so the
+    combo could only be set up by memory. The mechanic was correct and unreadable at the
+    same time, and it read to the player as the design being confusing.
