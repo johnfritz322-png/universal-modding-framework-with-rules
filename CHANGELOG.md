@@ -8,6 +8,9 @@
 - Recorded the project-specific workflow: read shared rules first, preserve stable IDs,
   label unverified work, use branches/PRs, update manifests and test docs, and never
   claim a feature works beyond the evidence available.
+- Recorded the Eight Gates review standard: inspect actual changed files without rewriting,
+  classify findings as BLOCKER/IMPORTANT/MINOR/VERIFIED GOOD, cite exact records/files, and
+  separate verified problems from suspected items.
 
 ### Added — 2026-08-26 (third pass)
 - **BG3 findings 54-55.** Scoping a boost to melee with `IF(IsMeleeAttack())`, including

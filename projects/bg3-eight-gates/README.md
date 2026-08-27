@@ -75,6 +75,33 @@ Before making changes:
 14. Never claim something is working unless it reached the relevant verified state: compiled, loaded, tested in-game, or regression tested.
 15. Treat the repository's current `main` branch as the stable baseline unless the user explicitly says otherwise.
 
+## Review Standard
+When reviewing Eight Gates work, inspect the actual latest branch, pull request, or changed
+local files. Do not rewrite anything during the review pass.
+
+Review for:
+- hallucinated APIs, IDs, UUIDs, hooks, files, engine behavior, or animations
+- unsupported assumptions
+- conflicts with existing architecture
+- unnecessary rewrites
+- compatibility risks
+- broken references or stable identifiers
+- missing or incorrect dependencies
+- missing tests
+- weak error handling
+- save or persistence risks
+- violations of `AGENTS.md`
+
+Separate findings into:
+- BLOCKER
+- IMPORTANT
+- MINOR
+- VERIFIED GOOD
+
+Every issue must explain why it matters and cite the exact file, function, record, or section
+involved. Distinguish verified problems from suspected items that still need verification.
+Do not approve unless the repository rules are satisfied.
+
 ## Current Status
 **ACTIVE BUILD / UNPLAYED** as of 2026-08-26.
 
