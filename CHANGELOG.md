@@ -1,6 +1,19 @@
 # Changelog
 
 ## Unreleased — 2026-08-26
+
+### Added — 2026-08-26 (second pass)
+- **BG3 findings 48-53.** Two of them are direct in-game observations rather than corpus
+  reads: a melee spell without `TargetRadius` has no reach and fires from any distance,
+  and a ground-targeted teleport without `TargetConditions` silently does nothing.
+  Also: the `Cast2[...]`/`Cast3[...]` multiattack mechanism and the
+  `AlternativeCastTextEvents` field its animations depend on, `DownedStatus()` for
+  surviving a killing blow, and evidence that `modsettings.lsx` checksums are not
+  enforced.
+- **Universal rules 43 and 44**, both from tooling that lied this session: a checker that
+  reads its own build output cannot see source rot, and a search tool reporting "never
+  used" should be doubted before the engine is.
+
 ### Corrected
 - **`Summon()` takes character OR item templates.** This file previously published
   "character only", which is wrong: vanilla passes characters 99 times and items 46

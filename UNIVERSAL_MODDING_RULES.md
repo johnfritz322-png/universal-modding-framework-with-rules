@@ -185,6 +185,31 @@ subsequent rule depends on this existing.
 against working mods field by field — a capability that did not exist for the first
 several days, during which the same questions were answered by guessing.*
 
+### 43. A checker must never read its own build output
+A validator that globs for its inputs will happily pick up the staged copy from the last
+build, and then it is comparing source against an artefact rather than against truth.
+Restrict every check to source paths and exclude build, dist, staging and worktree
+directories explicitly.
+
+*Incident: a bad edit shortened 89 localisation handles in source. The validator reported
+**2** problems, because the other 87 were still present, intact, in `build/stage` from the
+previous pack. The check was passing on a copy of the file it was supposed to be
+checking. Corruption of nearly every string in the project was invisible to a checker
+written specifically to catch exactly that.*
+
+### 44. When a tool reports "never used", suspect the tool's pattern first
+A corpus search is only as good as the pattern behind it, and a pattern encodes an
+assumption about syntax. When a search returns zero for something the engine plausibly
+supports, verify with a second, dumber method — a raw grep — before concluding the
+feature does not exist. This is rule 38 applied to your own instruments.
+
+*Incident: a corpus indexer matched identifiers followed by `(` and nothing else. Asked
+about `Cast2`, which uses `[`, it answered "0 occurrences anywhere in the corpus — NOT
+ATTESTED, using it is inventing it." The engine used it on 67 lines, including the
+canonical multiattack spell. A raw grep found it in seven files in under a second. The
+tool would have talked the project out of the only correct mechanism for the feature
+being built.*
+
 ## Evidence ladder
 1. **VERIFIED — Primary:** official game/SDK documentation; actual game/project files; compiler/validator output; direct in-game test.
 2. **VERIFIED — Framework:** maintainer documentation for the exact loader/extender/toolkit/API version.

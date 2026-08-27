@@ -334,3 +334,62 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     context.Source)"`** — 237 vanilla spells do this. The ability appears on the hotbar
     but is uncastable until the condition holds, which is how to make abilities that only
     work inside a zone, stance or transformation.
+
+48. **A melee spell with no `TargetRadius` has no reach.** VERIFIED in game
+    2026-08-26: a melee spell missing this field can be cast from any distance, and the
+    caster never walks into range. `SpellFlags "IsMelee"` and
+    `SpellRoll "Attack(AttackType.MeleeUnarmedAttack)"` do **not** imply a range —
+    they describe the attack, not the reach. Set
+    `data "TargetRadius" "MeleeMainWeaponRange"`.
+
+    This was found three times on one project before being understood: first as "the hit
+    lands late", then as "a punch animation plays while holding a sword", and finally as
+    "this fires from across the room". One missing field, three different-looking
+    symptoms, none of which named it. Worth an automated check: any entry whose
+    `SpellFlags` contain `IsMelee`, or whose `SpellRoll` names a melee attack, and which
+    has neither `TargetRadius` nor `Shape`.
+
+49. **Multiple hits from one spell: `Cast2[...]`, `Cast3[...]`.** 67 and 20 vanilla uses
+    respectively; vanilla goes as far as `Cast7`. The wrapped functors run as an extra
+    attack, and the form appears in both `SpellRoll` and `SpellSuccess`:
+
+    ```
+    SpellRoll     "Attack(...);Cast2[Attack(...)];Cast3[Attack(...)]"
+    SpellSuccess  "DealDamage(...);Cast2[DealDamage(...)];Cast3[DealDamage(...)]"
+    ```
+
+    `Target_FlurryOfBlows` is the cleanest two-hit reference; every
+    `Target_Multiattack_*` creature (Owlbear, Werewolf, Hook Horror, Drider) is a
+    three-hit one.
+
+50. **`AlternativeCastTextEvents` is mandatory for multi-hit spells, and its absence is
+    silent.** Without `data "AlternativeCastTextEvents" "Cast2"` — or `"Cast2;Cast3"` —
+    the extra hits still land and still deal damage, but **no animation plays for them**.
+    Vanilla writes exactly as many events as there are extra casts.
+
+    This is a nasty one because the ability is not broken, only invisible: damage is
+    correct in the log, and the player reports that the ability "does not feel right"
+    rather than that it is bugged.
+
+51. **A ground-targeted teleport needs `TargetConditions` or it does nothing at all.**
+    VERIFIED in game 2026-08-26: a `SpellType "Target"` spell with
+    `SpellProperties "GROUND:TeleportSource();"` and no `TargetConditions` produced no
+    effect whatsoever when cast — no error, no movement, no failure message. There is no
+    valid ground for it to resolve against. `Target_MistyStep` supplies the working line:
+
+    ```
+    TargetConditions  "CanStand('') and not Character() and not Self()"
+    ```
+
+52. **Surviving a killing blow: `DownedStatus(<status>, N)`** — 15 vanilla uses, all in
+    `Boosts`, and it is how `RELENTLESS_ENDURANCE` works. The named status is
+    `StatusType "DOWNED"` and does the actual work on apply:
+    `OnApplyFunctors "RemoveStatus(<the guard>);RegainHitPoints(1,Guaranteed)"` — the
+    guard is consumed so it cannot fire twice.
+
+53. **BG3 does not appear to validate `MD5` or `Version64` in `modsettings.lsx`.**
+    HIGH CONFIDENCE, not proven. On one machine the load order carried a checksum from an
+    old build and a recorded version of `1.2.0.0` across roughly fifteen rebuilds up to
+    `1.17.0.0`, and the mod loaded correctly every time. Useful because it means a
+    deploy script does not have to rewrite those fields — but keeping them in sync costs
+    nothing and removes a variable when something else breaks.
