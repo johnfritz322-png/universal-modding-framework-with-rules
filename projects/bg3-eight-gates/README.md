@@ -54,8 +54,28 @@ Before accepting any animation-related implementation:
 - Do not claim in-game functionality until tested in BG3.
 - Do not push unverified claims as verified framework findings.
 
+## Required Workflow for This Mod
+This project follows the shared GitHub modding workspace rules from
+`AGENTS.md`, `UNIVERSAL_MODDING_RULES.md`, and `games/baldurs-gate-3/BG3_RULES.md`.
+
+Before making changes:
+1. Read `AGENTS.md`.
+2. Read the universal modding rules.
+3. Read the Baldur's Gate 3 rules and limitations.
+4. Read this Eight Gates project manifest.
+5. Inspect the existing repository structure and actual EightGates files before proposing changes.
+6. Do not invent APIs, IDs, UUIDs, hooks, files, engine functions, or modding behavior.
+7. Mark anything not verified as UNVERIFIED or NEEDS TESTING.
+8. Preserve stable identifiers and working systems.
+9. Make the smallest necessary change.
+10. Do not rewrite working architecture just because you are uncertain.
+11. Use a branch for meaningful changes whenever possible.
+12. Commit changes clearly and prefer a pull request instead of directly overwriting `main`.
+13. Update the manifest, changelog, sources, limitations, or test files whenever the work changes those areas.
+14. Never claim something is working unless it reached the relevant verified state: compiled, loaded, tested in-game, or regression tested.
+15. Treat the repository's current `main` branch as the stable baseline unless the user explicitly says otherwise.
+
 ## Current Status
 **ACTIVE BUILD / UNPLAYED** as of 2026-08-26.
 
 Codex monitor is using `C:\Users\johnf\.claude\scheduled-tasks\eightgates-1am-wrapup` as the Claude coordination mailbox when direct Claude messaging is unavailable.
-

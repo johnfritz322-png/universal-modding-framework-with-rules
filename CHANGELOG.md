@@ -2,6 +2,13 @@
 
 ## Unreleased — 2026-08-26
 
+### Added — Eight Gates project setup
+- Added `projects/bg3-eight-gates/` for the standalone Might Guy / Eight Gates BG3 mod
+  coordination material, keeping it separate from the JJK/CursedArts project.
+- Recorded the project-specific workflow: read shared rules first, preserve stable IDs,
+  label unverified work, use branches/PRs, update manifests and test docs, and never
+  claim a feature works beyond the evidence available.
+
 ### Added — 2026-08-26 (third pass)
 - **BG3 findings 54-55.** Scoping a boost to melee with `IF(IsMeleeAttack())`, including
   the reminder that a functor attested in one field is not thereby legal in another; and

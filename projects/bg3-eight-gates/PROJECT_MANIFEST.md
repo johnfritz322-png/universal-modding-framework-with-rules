@@ -66,3 +66,10 @@ All persistence behavior is **NEEDS TESTING**. Gate states, resource changes, lo
 ## GitHub / Framework Note
 This project folder records design and review rules only. It does not mean the EightGates mod itself has been pushed or verified.
 
+## Branch / Baseline Policy
+- Shared framework repository: `https://github.com/johnfritz322-png/universal-modding-framework-with-rules`
+- Correct project folder for this mod: `projects/bg3-eight-gates/`
+- Do not save Eight Gates material over `projects/bg3-cursed-arts/`.
+- Treat `main` as the stable baseline unless the user explicitly says otherwise.
+- Use branches for meaningful changes and prefer pull requests over direct `main` edits.
+- Any actual EightGates code repository/remote must be recorded here before claiming the mod itself is on GitHub.
