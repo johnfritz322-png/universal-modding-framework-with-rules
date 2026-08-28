@@ -103,3 +103,30 @@ an explanation. Leading candidates, none tested:
 it with BG3 Mod Manager and export to game, and verify `modsettings.lsx` *after* a
 launch rather than after the write. Any tool that edits the file directly must refuse
 to run while `bg3`, `bg3_dx11` or `LariLauncher` is running, and must back up first.
+
+### RESOLVED IN PRACTICE 2026-08-28 01:42 — cause still not isolated
+
+A launch finally ended with the added mod **still present** in `modsettings.lsx`. The
+tell that BG3 *accepted* rather than regenerated the file: during every earlier wipe
+GustavX came back with a blank `MD5` and `Version64` reset to the 1.0.0.0 default
+(36028797018963968); afterwards it carried its true version (145241946983300916).
+
+**What changed — four things at once, so attribution is UNVERIFIED:**
+1. `FileSize` and `MD5` were added to the mod's `meta.lsx` `ModuleInfo`.
+2. The profile writer was changed to match BG3's byte shape (`UTF-8` casing, `/>`).
+3. A validator's file-scope was narrowed.
+4. BG3 Mod Manager exported the load order.
+
+Either (1) or (4) is the plausible cause and **they were not tested separately**
+(Rule 58 was not followed). Do not record a single cause as fact.
+
+**Caveat on (1): the values cannot ever be correct.** `meta.lsx` lives *inside* the
+pak, so writing the pak's own size and hash into it changes both — there is no fixed
+point. Here `meta.lsx` claimed `FileSize=14743` / `MD5=fa7bef71…` while the packed
+result was `14806` / `f8fa94e3…`, wrong from the moment it was packed. **All 9 vanilla
+`meta.lsx` files set `FileSize="0"`.** So if this attribute is what mattered, it is the
+*presence* of the field and not its value — which also means treating the value as
+meaningful is a mistake.
+
+**Practical guidance unchanged:** treat the load order as manager-owned, and verify
+`modsettings.lsx` *after* a launch rather than after the write.
