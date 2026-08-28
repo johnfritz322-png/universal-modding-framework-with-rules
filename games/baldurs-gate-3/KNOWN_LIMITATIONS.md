@@ -155,3 +155,34 @@ remove it, restore the known-good order, and check the picker.
 UI-overriding mod before suspecting the class data.** Diagnose by listing every active
 pak for `GUI/Pages/CharacterCreation*.xaml` — anything that overrides it is a candidate,
 and only one of them can win.
+
+### RETRACTION 2026-08-28 — ImpUI was NOT the cause
+
+The entry above named ImprovedUI as HIGH CONFIDENCE for hiding custom classes.
+**That is now contradicted by direct evidence and is withdrawn.** Both custom
+classes were confirmed visible in the character-creation list by the user while
+**ImpUI was still active in the load order** (position 1, ahead of both class mods).
+
+What stands, and what does not:
+
+- **STILL TRUE (verified by pak listing):** ImprovedUI does ship
+  `GUI/Pages/CharacterCreation.xaml` and `CharacterCreation_c.xaml`, so it *does*
+  override the page that draws the class list. That was measured, not inferred.
+- **STILL TRUE (verified from load-order backups):** ImpUI is not a required
+  dependency — a custom class worked on 2026-08-26 with no ImpUI present.
+- **WITHDRAWN:** that overriding the page was *breaking* class registration here.
+  It demonstrably does not, at least at this ImpUI version and load position.
+
+The real fix was the load order itself — BG3 Mod Manager's stale one-mod `Current`
+order was overwriting the profile and dropping the class mods entirely.
+
+**The lesson is about the reasoning, not the mod.** A mod that overrides the
+relevant UI page is a *plausible* suspect, and "it was absent when things worked"
+is real correlational evidence — but neither is proof of causation, and both
+pointed the wrong way here. The diagnostic below is still worth running; just do
+not stop at it.
+
+**General diagnostic (unchanged, still useful):** when a class is enabled but
+missing from the picker, list every active pak for
+`GUI/Pages/CharacterCreation*.xaml` — but confirm by removing the candidate and
+retesting before recording a cause.
