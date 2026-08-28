@@ -2,6 +2,24 @@
 
 ## Unreleased — 2026-08-26
 
+### Added — 2026-08-28 BG3 findings 56-57 and the load-order limitation
+- **Finding 56:** a mod's in-game Mod Manager picture comes only from mod.io media, never
+  from the pak. A blank tile is therefore NOT a load diagnostic. `meta.lsx` `PhotoBooth`
+  is a photo-mode *level name*, not an image — confirmed against a published mod that
+  ships a 1234x727 logo while its `PhotoBooth` is empty. Logo spec measured off
+  `thumb.modcdn.io`: three 16:9 crops (320x180, 640x360, 1280x720); author at 1280x720.
+- **Finding 57:** read a mod's identity from `meta.lsx` `//node[@id='ModuleInfo']`, never
+  `ModuleShortDesc` — the latter is one node *per dependency* and yields the dependency's
+  `Version64`. Never hardcode `Version64` into a load-order writer; it drifts silently and
+  an existence check cannot see the drift.
+- **Known limitation added:** a `modsettings.lsx` written while BG3 is closed and verified
+  on disk was still reduced to GustavX only after a launch, twice, dropping every mod
+  including one that had loaded for days. Cause **UNVERIFIED** — recorded as an
+  observation with candidate explanations, not as an explanation.
+- **Eight Gates manifest synced to reality**, including an explicit note that Night Guy
+  now kills the caster by user decision (2026-08-27); the manifest previously *required*
+  the opposite and would have led an agent to revert it.
+
 ### Added — 2026-08-28 workflow templates
 - Added `templates/AI_MODDING_COMMAND_CENTER.md`, a durable copy of the user's 11 shared
   Claude/Codex/ChatGPT workflow commands for starting work, reviewing, fixing review

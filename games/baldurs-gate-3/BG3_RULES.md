@@ -414,3 +414,44 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     `DisableOverhead;DisableCombatlog` while the other was `OverheadOnTurn` -- so the
     combo could only be set up by memory. The mechanic was correct and unreadable at the
     same time, and it read to the player as the design being confusing.
+
+56. **A mod's picture in the in-game Mod Manager comes only from mod.io — never from the
+    pak.** Larian's own publishing guide states that media uploaded to a mod's mod.io
+    **General Settings > Media** section is what appears "on the mod.io website, the
+    BaldursGate3.game/mods website, and in the in-game Mod Manager". The Toolkit's
+    Project Settings has **Thumbnail as a mandatory field**, and that is the only place
+    a BG3 mod's own logo is ever set. **Publish Local** — the Toolkit button that just
+    writes a `.pak` — attaches no thumbnail, which is functionally what a Divine-based
+    pipeline does.
+
+    **Therefore a blank tile is NOT evidence that a local pak failed to load.** Any
+    hand-built, locally-installed mod shows a blank tile no matter how healthy it is.
+    Do not use the tile as a load diagnostic.
+
+    Two measurements pin this down:
+    - `meta.lsx` **`PhotoBooth` is not an image field.** Across the vanilla corpus it
+      only ever holds `""` or `SYS_PortraitGeneration_A` — a **level name**, the same
+      class of value as `MenuLevelName`/`LobbyLevelName`. Confirmed against a published
+      third-party mod (CombatLogLog), which ships a 1234x727 `mod_publish_logo.png`
+      inside its pak **while its `PhotoBooth` is empty**. The PNG in the pak is a
+      leftover of the publish flow; the picture users see is the mod.io copy.
+    - **Logo spec, measured off `thumb.modcdn.io` 2026-08-28:** mod.io serves a BG3 mod
+      logo through exactly three transforms — `crop_320x180`, `crop_640x360`,
+      `crop_1280x720`, all 16:9. Browse-grid tiles use **640x360**. Other sizes and the
+      un-transformed original 307-redirect and fail. **Author at 1280x720 PNG**: the
+      smallest source that never upscales.
+
+57. **When reading a mod's own identity out of `meta.lsx`, select `ModuleInfo` — never
+    `ModuleShortDesc`.** `meta.lsx` carries a `ModuleShortDesc` node **per dependency**,
+    each with its own `Folder`, `Name`, `UUID` and `Version64`. A tool that grabs the
+    first `ModuleShortDesc` gets the *dependency's* identity — typically GustavX's
+    `Version64` 145241946983300916 — and will happily write it into `modsettings.lsx`
+    under the mod's own UUID.
+
+    The mod's real identity is `//node[@id='ModuleInfo']`. Verified both ways by parsing
+    the same file with each XPath, 2026-08-28.
+
+    General form of the same mistake: **never hardcode `Version64` into a load-order
+    writer.** It drifts silently the first time `meta.lsx` is bumped, and an existence
+    check on the entry cannot see the drift — only comparing the written values against
+    `meta.lsx` catches it.

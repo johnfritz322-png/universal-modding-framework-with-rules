@@ -69,3 +69,37 @@ expensive to diagnose.
 - Whether a hostile summon participates in combat initiative normally.
 - Whether a permanent status applied by `ApplyStatus(SWAP, ...)` survives save/reload and
   long rest as expected.
+
+## Load order written by hand or by script does not survive a launch — cause UNVERIFIED
+
+**Observed twice on 2026-08-28, one variable at a time.** A `modsettings.lsx` written
+while BG3 was closed, and verified by reparsing it from disk, was reduced to **GustavX
+only** after the game ran — losing every other mod, not just the newly added one.
+
+| time | event | verified result |
+|---|---|---|
+| 00:41 | script wrote 6 entries, BG3 closed, confirmed on disk | 6 active |
+| 00:43 | BG3 launched and exited (closed by user, not a crash) | **GustavX only** |
+| 00:56 | script wrote 2 entries, BG3 closed, confirmed on disk | 2 active |
+| ~01:06 | BG3 Mod Manager used to uninstall unrelated mods | — |
+| 01:08 | — | **GustavX only** |
+
+What this rules out: it is **not** specific to the new mod (a mod that had loaded for
+days was also dropped), and **not** a failed write (both writes were confirmed on disk
+before the game ran).
+
+**The cause is NOT established.** Recorded here so the observation is not lost, not as
+an explanation. Leading candidates, none tested:
+- BG3 re-serialises the profile from its in-memory module list and discards entries it
+  did not author — which would make manager export the only supported path.
+- BG3 rejects a file whose byte shape differs from its own writer's. Measured
+  difference between BG3's output and a .NET `XmlWriter` round-trip of the same content:
+  `encoding="UTF-8"` vs `encoding="utf-8"`, and `value="x"/>` vs `value="x" />`
+  (983 vs 1010 bytes). Neither matters to a conforming XML parser; Larian's LSX loader
+  may not be one.
+- A second tool (Vortex, BG3 Mod Manager) rewriting the file on its own schedule.
+
+**Practical rule until this is settled: treat the load order as manager-owned.** Write
+it with BG3 Mod Manager and export to game, and verify `modsettings.lsx` *after* a
+launch rather than after the write. Any tool that edits the file directly must refuse
+to run while `bg3`, `bg3_dx11` or `LariLauncher` is running, and must back up first.
