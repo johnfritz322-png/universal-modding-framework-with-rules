@@ -130,3 +130,28 @@ meaningful is a mistake.
 
 **Practical guidance unchanged:** treat the load order as manager-owned, and verify
 `modsettings.lsx` *after* a launch rather than after the write.
+
+## A UI mod can hide every custom class while the mods still report as enabled
+
+**2026-08-28.** Both custom class mods showed green/enabled in BG3's own Installed Mods
+screen, both paks validated and deployed clean — and the character-creation class picker
+still showed only the 12 vanilla classes.
+
+**ImprovedUI (ImpUI) replaces the character-creation UI wholesale.** Its pak ships
+`Mods/ImpUI_<uuid>/GUI/Pages/CharacterCreation.xaml` and `CharacterCreation_c.xaml`,
+i.e. the page that *renders* the class list. A UI mod built for an older patch therefore
+removes custom classes from the picker without touching class data, without failing any
+validator, and without any mod reporting a problem.
+
+**ImpUI is NOT required for custom classes.** VERIFIED from load-order backups: on
+2026-08-26, when a custom class was confirmed working in game, the active order was
+`GustavX, CursedArts, AnimationUnlocker, Instant Level Up, Combat Log Viewer` —
+**no ImpUI**. It was added later, and the class picker broke.
+
+That ImpUI is the *cause* is HIGH CONFIDENCE, not verified — the decisive test is to
+remove it, restore the known-good order, and check the picker.
+
+**The general rule: when a custom class is enabled but absent from the picker, suspect a
+UI-overriding mod before suspecting the class data.** Diagnose by listing every active
+pak for `GUI/Pages/CharacterCreation*.xaml` — anything that overrides it is a candidate,
+and only one of them can win.

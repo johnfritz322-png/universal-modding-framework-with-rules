@@ -20,39 +20,27 @@
 
 ## Current Milestone
 
-**Content-complete at v1.3.0.0, and blocked on load order — not on mod data.**
+**Content-complete at v1.3.0.0; package loading and CursedArts coexistence verified.**
 
-Definition-of-done state (highest verified only): **Validates**. It compiles/validates,
-references resolve, it packs, and the deployed pak is hash-identical to the built one.
-It has **never reached Loads or Tested In-Game** — the class has not been seen in
-character creation even once.
+Definition-of-done state (highest verified only): **Loads**. Validation, references,
+packing, deployment, and load-order survival pass. On 2026-08-28, BG3's own Installed
+Mods screen showed both CursedArts and EightGates enabled during the same launch.
+Gameplay behavior is not yet verified.
 
-### The live blocker: BG3 rewrites `modsettings.lsx` down to GustavX only
+### Resolved blocker: BG3 Mod Manager had a stale one-mod `Current` order
 
-Reproduced **twice** on 2026-08-28, one variable at a time (Rule 58):
+The manager's saved `Current` order contained only EightGates. Manual repairs to
+`modsettings.lsx` were temporary because a later manager refresh, export, or launch
+could write that stale order back and remove CursedArts.
 
-| time | event | result |
-|---|---|---|
-| 00:41 | `build.ps1` wrote 6 entries, BG3 closed, verified on disk | 6 active |
-| 00:42 | BG3 launched | — |
-| 00:43 | BG3 exited (closed by user, **not a crash**) | **GustavX only** |
-| 00:56 | `build.ps1` wrote 2 entries, BG3 closed, verified on disk | 2 active |
-| ~01:06 | BG3 Mod Manager used to uninstall unrelated mods | — |
-| 01:08 | — | **GustavX only** |
+Resolved 2026-08-28 by making BG3 Mod Manager the source of truth: CursedArts is active
+at position 0, EightGates at position 1, and the order was saved and exported to the
+game. The exported profile contains GustavX, CursedArts 1.22.6.0, and EightGates
+1.3.0.0. BG3 launched successfully and showed green enabled checks for both mods.
 
-The wipe removes **every** non-base entry, including CursedArts, which had survived
-launches for days beforehand. So this is **not** specific to Eight Gates and not caused
-by the build script: both writes were verified on disk before the game ran.
-
-Working hypothesis, **UNVERIFIED**: BG3 re-serialises the profile from its own in-memory
-module list on launch/exit and discards entries it did not author, or rejects the whole
-file when the on-disk shape differs from its writer's. Codex's `Save-Lsx` uses
-`XmlWriter` (no BOM, `value="x" />` with a space); BG3's own output is BOM-less but
-writes `value="x"/>`. Not yet tested as the deciding variable.
-
-**Next step is manager-side, not data-side:** BG3 Mod Manager → import `EightGates.pak`
-→ drag into active order → Export to Game → launch → re-check `modsettings.lsx`. Until
-that holds, no in-game testing is possible and no gameplay claim can be made.
+`tools/build.ps1` now treats BG3 Mod Manager as a profile writer and refuses to repair
+`modsettings.lsx` while it is running. This prevents an in-memory manager order from
+silently overwriting a build-time repair.
 
 ## Required Architecture
 - Standalone mod folder and metadata
@@ -100,6 +88,7 @@ What *is* verified, at the evidence level stated and no higher:
 | Packs with correct internal paths | VERIFIED | `divine list-package` asserts `Mods/<Folder>/meta.lsx` and the `Public` tree |
 | Deployed pak == built pak | VERIFIED | SHA-256 `da569ee88a3ad69c…` identical both sides, 2026-08-28 |
 | Load-order entry matches `meta.lsx` | VERIFIED | written then reparsed from disk; Folder/Name/Version64 compared |
+| CursedArts and EightGates load together | VERIFIED | BG3 Installed Mods showed both enabled, 2026-08-28 |
 | Class appears in game | **NOT VERIFIED** | never observed |
 
 **Rule 21 — the 3 skipped checks are NOT passes.** `icon atlas registration`,
@@ -156,16 +145,15 @@ All persistence behavior is **NEEDS TESTING**. Gate states, resource changes, lo
 
 ## Release Blockers (Rule 59 — not hidden)
 
-1. **Never loaded in game.** Definition of done is not met at any gameplay level.
-2. **Load order does not survive a launch.** See Current Milestone.
-3. **No original art.** Every icon borrows `Action_Monk_FlurryOfBlows`. Not a licensing
+1. **No completed gameplay test.** Loading is verified; class mechanics are not.
+2. **No original art.** Every icon borrows `Action_Monk_FlurryOfBlows`. Not a licensing
    problem (it is vanilla), but 3 validator checks skip and icons may render blank.
-4. **No mod.io presence, so no in-manager tile image.** Measured 2026-08-28: the tile
+3. **No mod.io presence, so no in-manager tile image.** Measured 2026-08-28: the tile
    picture comes only from media uploaded to mod.io — there is no in-pak or `meta.lsx`
    path. `PhotoBooth` is a photo-mode *level name*, not an image (confirmed: the
    published CombatLogLog mod ships a 1234x727 logo while its `PhotoBooth` is empty).
    **A blank tile is therefore NOT evidence that a local pak failed to load.**
-5. **Save/persistence behaviour untested** — gate states across save/load, long rest,
+4. **Save/persistence behaviour untested** — gate states across save/load, long rest,
    and respec.
 
 ## GitHub / Framework Note
