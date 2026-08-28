@@ -2,6 +2,12 @@
 
 ## Unreleased — 2026-08-26
 
+### Added — 2026-08-28 workflow templates
+- Added `templates/AI_MODDING_COMMAND_CENTER.md`, a durable copy of the user's 11 shared
+  Claude/Codex/ChatGPT workflow commands for starting work, reviewing, fixing review
+  findings, research-before-coding, broken-mod debugging, in-game test planning, recording
+  successful tests, and pre-merge checks.
+
 ### Added — Eight Gates project setup
 - Added `projects/bg3-eight-gates/` for the standalone Might Guy / Eight Gates BG3 mod
   coordination material, keeping it separate from the JJK/CursedArts project.
