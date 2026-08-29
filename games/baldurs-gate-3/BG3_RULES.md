@@ -517,3 +517,42 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     is what finally made the attacks work. The original crash came from a period with
     nine crashes and several variables moving at once, and the single-cause
     attribution did not hold up. Treat that old note as unproven, not as a rule.
+
+61. **A hand-rolled spell with no `using` parent can silently do nothing — and this
+    is the single highest-value thing to check when a mod spell is inert.**
+    CONFIRMED IN GAME 2026-08-29 by a clean split across eight spells in one mod:
+
+    | | result |
+    |---|---|
+    | 6 spells with `using "Target_UnarmedAttack"` | **all worked** |
+    | 2 spells with **no** `using` parent | **both did nothing** |
+
+    The two failures were the only non-inheriting entries — one `Target` (an area
+    save spell) and one `Shout` (a self-buff). Giving each the vanilla parent it was
+    modelled on fixed both: `using "Target_Shatter"` and `using "Shout_ActionSurge"`.
+    Nothing else about them changed.
+
+    **The symptom is the dangerous part: the button is enabled, clickable, consumes
+    nothing and produces no error.** It is indistinguishable from an unaffordable
+    cost or a failed condition, and it survives every static check — syntax,
+    field-scoped attestation, status existence, icon validity and resource wiring all
+    came back clean while the spell was completely inert.
+
+    **Check `using` FIRST.** Before auditing conditions, costs or functors, ask
+    whether the entry inherits a real shipping parent. `Shout_ActionSurge` is the
+    most-inherited self-buff shout in the game (64 uses) and is a good default parent
+    for a self-applied status; override `Requirements ""` because it is combat-only.
+
+    This also finally explains the sister project's old "`using` causes crashes"
+    note (retracted in finding 60): `using` is not dangerous, it is **required**.
+
+62. **`StatusEffect` on a status is how you get a visible aura, and the GUID cannot
+    be recoloured — pick one that is already the colour you want.** VERIFIED in game
+    2026-08-29: `SANCTUARY`'s glow is `2e0fa509-6711-45e2-bda2-debe1046b577` and is
+    gold. For a red flame wreath, `FIRE_SHIELD_WARM`'s
+    `a25f92a9-7078-4a5f-8648-c0bb9f4fee39` works on an unrelated custom status.
+
+    Worth doing early, not as polish: an ability with no visible effect is
+    **unfalsifiable**. "Nothing happens" cost this project several sessions precisely
+    because there was no way to tell a broken spell from a working invisible buff.
+    Give any toggled state a visible marker before debugging it.
