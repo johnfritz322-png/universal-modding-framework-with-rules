@@ -562,3 +562,38 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     **unfalsifiable**. "Nothing happens" cost this project several sessions precisely
     because there was no way to tell a broken spell from a working invisible buff.
     Give any toggled state a visible marker before debugging it.
+
+
+63. **The custom-icon pipeline is now a SPEC, not a lucky configuration.** It was
+    reproduced from scratch on a second, unrelated mod on 2026-08-29 and confirmed
+    rendering in game. Every step below is load-bearing; drop one and icons render
+    blank with no error.
+
+    - **Ability/status icons live in a texture atlas**, not as loose files. Ours:
+      512x512, 64px tiles, **DXT5/BC3 with a FULL mip chain** (10 levels).
+    - **A UV map** `Public/<Mod>/GUI/Icons_<Name>.lsx` maps each name to a rect.
+      The filename does not matter — the game scans the GUI folder.
+      `U1 = (x + 0.5) / W`, `U2 = (x + icon - 0.5) / W`.
+    - **The atlas must ALSO be declared as a TextureBank resource** at
+      `Public/<Mod>/Content/[PAK]_<Name>/<uuid>.lsf`, with `ID` equal to the UV
+      map's `TextureAtlasPath` UUID and `SourceFile` given **from the pak root**.
+      Skipping this is the classic silent failure: every file correct, every icon blank.
+    - **Class icons are loose `.DDS`**, `BC7_UNORM` in a DX10 header, **mipcount 1**,
+      under `Mods/<Mod>/GUI/Assets/ClassIcons/` with a `hotbar/` variant and an
+      `AssetsLowRes/` pair.
+    - **Resource icons are found by NAME**, not declared — `<Resource>.DDS` under
+      `Assets/CC/icons_resources`, `Assets/ActionResources_c/Icons` and
+      `.../Icons/Resources`. The `ActionResourceDefinition` has no Icon attribute
+      and vanilla never gives it one.
+    - **`Mods/<Mod>/GUI/metadata.lsf` must register every loose image under
+      `Assets/`**, keyed by the **`.png`** path even though `.DDS` ships beside it,
+      with `w`/`h`/`mipcount=1`. Nothing under `AssetsLowRes/` is ever registered.
+      Miss one and BG3 throws a blocking "Missing MetaData" dialog in character creation.
+    - **Write the DDS with texconv, never Pillow.** Pillow emits `mipcount 0` and a
+      `dwPitchOrLinearSize` that contradicts the payload — files that look fine on
+      disk and render blank.
+
+    **Design note worth as much as the plumbing:** give a mechanic's states a
+    *countable* visual. The eight gate statuses share one arc motif and differ by arc
+    count and heat, so the player reads their current gate from the status bar. This
+    is the same lesson as finding 62 — an invisible state is an undebuggable one.
