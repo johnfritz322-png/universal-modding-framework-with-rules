@@ -2,6 +2,18 @@
 
 ## Unreleased — 2026-08-26
 
+### Added — 2026-08-29 BG3 findings 60-62, the session that made a class playable
+- **Finding 60:** unarmed techniques must inherit `Target_UnarmedAttack`. Confirmed in
+  game — the first working attack after every hand-rolled version did nothing. Also
+  retracts the old "using causes crashes" note from the sister project.
+- **Finding 61:** a spell with **no `using` parent silently does nothing** while staying
+  enabled, clickable, costing nothing and erroring nothing. Six spells with a parent
+  worked; the only two without one were dead; giving each a real vanilla parent fixed
+  both. **Check `using` before auditing conditions, costs or functors.**
+- **Finding 62:** `StatusEffect` gives a status a visible aura and its GUID cannot be
+  recoloured. Recorded as a *debugging* rule: an ability with no visible effect is
+  unfalsifiable, which is exactly why "nothing happens" burned several sessions.
+
 ### Added — 2026-08-28 BG3 findings 56-57 and the load-order limitation
 - **Finding 56:** a mod's in-game Mod Manager picture comes only from mod.io media, never
   from the pak. A blank tile is therefore NOT a load diagnostic. `meta.lsx` `PhotoBooth`
