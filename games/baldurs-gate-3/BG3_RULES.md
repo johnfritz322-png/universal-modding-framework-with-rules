@@ -546,6 +546,12 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     This also finally explains the sister project's old "`using` causes crashes"
     note (retracted in finding 60): `using` is not dangerous, it is **required**.
 
+    **Closed end to end 2026-08-29.** Both no-parent spells were fixed by adding the
+    parent they were modelled on, and **both are now confirmed working in game** — the
+    self-buff Shout and the area save spell. Seven of seven techniques in the mod
+    function. The prediction ("give it a parent and it will work") was made before the
+    test and held for both, which is what moves this from correlation to cause.
+
 62. **`StatusEffect` on a status is how you get a visible aura, and the GUID cannot
     be recoloured — pick one that is already the colour you want.** VERIFIED in game
     2026-08-29: `SANCTUARY`'s glow is `2e0fa509-6711-45e2-bda2-debe1046b577` and is
