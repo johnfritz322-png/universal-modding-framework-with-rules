@@ -491,3 +491,29 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     **A blank mod-manager tile proves nothing here** (see finding 56), and a
     UI-overriding mod is a *plausible but unproven* suspect — one was wrongly
     accused on this project; see the retraction in KNOWN_LIMITATIONS.
+
+60. **A custom melee technique should inherit `Target_UnarmedAttack` when the class
+    fights empty-handed.** CONFIRMED IN GAME 2026-08-29 — first working attack on
+    the Eight Gates class after every hand-rolled version did nothing.
+
+    The working shape, copied from vanilla `Target_UnarmedStrike_Monk`:
+
+    ```
+    using "Target_UnarmedAttack"
+    data "SpellSuccess" "DealDamage(UnarmedDamage,Bludgeoning);DealDamage(<technique dice>,...)"
+    data "TooltipAttackSave" "MeleeUnarmedAttack"
+    data "TooltipDamageList" "DealDamage(MartialArtsUnarmedDamage,Bludgeoning);..."
+    ```
+
+    Leading with `DealDamage(UnarmedDamage,Bludgeoning)` and adding the technique's
+    own dice after it is what makes the strike behave like a real unarmed attack.
+    `UnarmedDamage` (35 uses) and `MartialArtsUnarmedDamage` (10) both resolve for a
+    **non-Monk** class — previously an open question.
+
+    **This RETRACTS an earlier project note.** `docs/three-way-comparison.md` on the
+    sister project recorded "repointed `using` to `Target_UnarmedAttack` -> crash",
+    and the accompanying rule was "leave `using` alone until it is understood."
+    Pointing `using` at that exact live, shipping parent did **not** crash here — it
+    is what finally made the attacks work. The original crash came from a period with
+    nine crashes and several variables moving at once, and the single-cause
+    attribution did not hold up. Treat that old note as unproven, not as a rule.
