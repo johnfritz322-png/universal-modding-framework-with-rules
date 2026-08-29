@@ -455,3 +455,39 @@ Added 2026-08-26. **VERIFIED — Primary** unless stated.
     writer.** It drifts silently the first time `meta.lsx` is bumped, and an existence
     check on the entry cannot see the drift — only comparing the written values against
     `meta.lsx` catches it.
+
+58. **Melee reach must come from something the character actually has.**
+    `MeleeMainWeaponRange` resolves the range of the **equipped main-hand weapon**.
+    Vanilla draws the line explicitly:
+
+    | spell | TargetRadius |
+    |---|---|
+    | `Target_MainHandAttack` (weapon) | `MeleeMainWeaponRange` |
+    | `Target_UnarmedAttack` (no weapon) | `1.5` |
+
+    Give `MeleeMainWeaponRange` to a class that fights **empty-handed** and there is
+    nothing to resolve, so the spell has no valid reach and simply cannot be used.
+    No error, no log line — the button is clickable and does nothing.
+
+    This matters because it is a **direct reversal of an earlier finding on the same
+    project**: "a melee spell with no `TargetRadius` has no reach, use
+    `MeleeMainWeaponRange`" was correct for a weapon class and is exactly wrong for
+    an unarmed one. VERIFIED from shipped data 2026-08-28. The general rule is the
+    reusable part: reach must derive from something the character actually carries,
+    so an unarmed class needs a literal.
+
+59. **A custom class enabled but absent from the character-creation picker is a
+    LOAD-ORDER problem far more often than a data problem.** Confirmed 2026-08-28
+    after a long chase: two class mods both showed enabled in BG3's Installed Mods
+    screen while neither appeared in the class list. Cause was BG3 Mod Manager
+    holding a stale one-mod saved order and re-exporting it, dropping the class mods
+    from the active profile.
+
+    Diagnostics in cost order:
+    1. Read `modsettings.lsx` **after** a launch, not after writing it.
+    2. Check the manager's own saved order — it can silently overwrite the profile.
+    3. Only then look at the class data.
+
+    **A blank mod-manager tile proves nothing here** (see finding 56), and a
+    UI-overriding mod is a *plausible but unproven* suspect — one was wrongly
+    accused on this project; see the retraction in KNOWN_LIMITATIONS.
