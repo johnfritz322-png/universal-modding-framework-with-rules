@@ -232,3 +232,27 @@ from memory.*
 
 ## Required development loop
 Scope -> Inspect -> Research -> Feasibility -> Architecture -> Baseline -> Implement -> Validate -> Test -> Freeze -> Expand -> Regression -> Compatibility -> Release
+
+
+## 46. Do the arithmetic on a resource economy before testing it
+
+Add up what a build can actually afford before asking anyone to play it. A cost
+curve that does not close is invisible in play: the ability simply stays greyed
+out, which reads as a bug in the ability, a missing requirement, a broken
+resource, or a wrong level — anything except the real cause.
+
+Measured example, BG3, 2026-08-29. A class capstone needed 8 resource to reach its
+prerequisite state and 6 to fire, against a pool of 13. **It was uncastable by one
+point.** Nothing about the ability was wrong. A play session would have produced a
+confused bug report; two minutes of addition produced the fix.
+
+Check, for the level the content is gated at:
+- total pool available, including every per-level grant
+- the full cost of reaching the prerequisite state, not just the final ability
+- whether the deepest intended combo fits in one rest cycle
+- whether the **action** economy allows it, separately from the resource economy —
+  in the same example, reaching the prerequisite took eight bonus actions, i.e.
+  eight turns, which remained the binding constraint after the resource was fixed
+
+This is the resource-economy form of rule 1: verify before coding, and verify
+before asking for a test.
