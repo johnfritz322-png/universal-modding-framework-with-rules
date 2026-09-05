@@ -63,20 +63,52 @@ preconfigured package instead.
 with a settings file that pins the engine version and disables the two crashing
 hooks.
 
+Details read from the mod page 2026-09-04 (VERIFIED — page inspected directly):
+
+| | |
+|---|---|
+| Author | **Grimpil** |
+| File | **"UE4SS For Dawnwalker 1111 0.2"**, file version 2 |
+| Size | **8.5 MB** |
+| Uploaded | 2026-09-03, 02:38 |
+| Downloads | 5.2k unique / 5.8k total, 35 endorsements |
+| Virus scan | Nexus reports "Safe to use" |
+| Licence | UE4SS is MIT, by the RE-UE4SS team; included unmodified |
+
+The author's own description, quoted:
+
+> "Out of the box UE4SS cannot find the engine version on this game and, once that
+> is overridden, two of its default function hooks crash the game seconds after the
+> main menu."
+
+Note the crash is **seconds after reaching the main menu**, not at launch — so a
+successful launch alone does not prove the configuration is working. Get to the
+menu and wait before concluding anything.
+
+> "Built against the current Steam build, September 2026."
+
+The mod was uploaded **2026-09-03**; this install patched **2026-09-04**. So it
+predates the installed build by a day. That is the mismatch risk below.
+
 There is also an earlier [UE4SS for Dawnwalker](https://www.nexusmods.com/thebloodofdawnwalker/mods/18)
 and a [Console Enabler and Mod Loader](https://www.nexusmods.com/thebloodofdawnwalker/mods/16).
 
 ### ⚠ Build mismatch — the main risk
 
-| | Steam build |
-|---|---|
-| Package reportedly tested against | **25107392** |
-| **This install** (`GAME_VERSION.md`) | **25129649** — patch 2 |
+| | Steam build | Date |
+|---|---|---|
+| Package built against | reportedly **25107392** | uploaded 2026-09-03 |
+| **This install** (`GAME_VERSION.md`) | **25129649** — patch 2 | patched 2026-09-04 |
 
-The package ships build-specific signatures. Ours is **newer**, so the signatures
-may not match and the loader may fail or crash. **UNVERIFIED** — it may well be
-fine, since the documented fixes are config rather than AOB scanning. Treat a
-first launch as a test, not a routine step.
+The package predates the installed build by one day and may carry build-specific
+signatures. **UNVERIFIED** whether it still works. It may well be fine — the
+documented fixes are configuration (engine version + two disabled hooks) rather
+than AOB scanning. Treat the first launch as a test, not a routine step, and
+remember the failure mode is **seconds after the main menu**, not at startup.
+
+If it does not work, the fallback is
+[UnrealMappingsDumper](https://github.com/TheNaeem/UnrealMappingsDumper), or
+waiting for Grimpil to refresh the package against patch 2.
 
 ---
 
@@ -115,9 +147,11 @@ logged-in browser and a manual download; do not use command-line Nexus downloads
    Leave the package's engine-version and hook settings **exactly as shipped** —
    those are the fixes that stop the crash.
 6. Launch the game. A separate UE4SS console window should appear.
-   **If the game crashes on launch, stop and delete the two items from step 1.**
+   **If the game crashes, stop and delete the two items from step 1.**
    That is the build-mismatch risk, not something you broke.
-7. Let the game reach the **main menu** and wait for it to settle.
+7. Let the game reach the **main menu** and **wait there a good minute**. The known
+   failure mode is a crash a few seconds after the menu, not at startup, so a
+   successful launch alone proves nothing.
 8. Switch to the UE4SS window → **Dumpers** tab → **Generate .usmap file**.
    (Or press **Ctrl + Numpad 6** with the game focused.)
 9. `Mappings.usmap` appears next to the game executable, in
