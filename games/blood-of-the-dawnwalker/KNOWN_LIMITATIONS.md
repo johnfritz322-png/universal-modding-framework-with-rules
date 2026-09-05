@@ -74,11 +74,25 @@ values are possible.
 
 ## L4. What is NOT limited
 
-**Config / CVar mods work with zero blockers.** VERIFIED: the installed
-`~TBODoptimizedTweaksBASE_P.pak` is a plain pak-version-3 archive, mount point
-`../../../`, containing `Engine/Config/Windows/WindowsEngine.ini`. Its index SHA-1
-validates. No IoStore, no encryption, no Oodle, no base assets required. The tools
-in `tools/pak.py` read this format completely.
+**Config mods work with zero blockers**, in two shapes, both VERIFIED on this
+install:
+
+1. **Packed engine config.** `~TBODoptimizedTweaksBASE_P.pak` and the project's own
+   `~JohnRTX5080Quality_P.pak` are plain pak-version-3 archives, mount point
+   `../../../`, containing `Engine/Config/Windows/WindowsEngine.ini`. Index SHA-1
+   validates on both. No IoStore, no encryption, no Oodle, no base assets.
+2. **Loose user config.** *Better Story Timer* is two lines in
+   `%LOCALAPPDATA%\Dawnwalker\Saved\Config\Windows\Game.ini`. No packaging at all.
+
+`tools/pak.py` reads shape 1 completely and re-verifies the index SHA-1, giving an
+independent check that shares no code with `repak` or `UnrealPak`.
+
+**`CONFIG_SURFACE.md` lists 67 settings classes** that shipped in the build and are
+addressable this way — the practical route to more mods while L1 stands.
+
+**Residual limitation on this path:** the *section* names are verified, but the
+*property* names on those classes are not obtainable from `global.ucas` and still
+need a `.usmap` (L3) or trial and error. Aiming is solved; ammunition is not.
 
 ---
 

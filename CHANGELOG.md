@@ -1,5 +1,58 @@
 # Changelog
 
+## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format)
+
+First game added to the framework besides BG3.
+
+### Added
+- `games/blood-of-the-dawnwalker/DAWNWALKER_RULES.md`: the UE5 IoStore, Zen package,
+  container-header and legacy-pak formats, decoded by direct binary analysis of the
+  shipped files and validated structurally — section sizes sum to file size, index
+  SHA-1s recomputed, container-header arrays tile exactly to the declared end.
+- `games/blood-of-the-dawnwalker/CONFIG_SURFACE.md`: **67 settings classes that
+  shipped in the retail build**, addressable as `[/Script/Module.Class]` from an INI.
+  This is the practical route to more mods while the AES key is unavailable, and it
+  is the single most useful artifact of this pass.
+- `games/blood-of-the-dawnwalker/KNOWN_LIMITATIONS.md` and `SOURCES.md`.
+- `games/blood-of-the-dawnwalker/tools/`: six dependency-free Python readers for
+  `.utoc`, `.ucas`, Zen `.uasset`, `global.ucas`, container headers and legacy paks.
+  They read this game's mod containers, which the local UnrealPak cannot.
+- `projects/dawnwalker-modding/PROJECT_MANIFEST.md`: the project's review record.
+- `projects/dawnwalker-modding/profiles/john-rtx5080-quality/verify.py`: structural
+  verification that shares no code with repak or UnrealPak, plus drift detection
+  between the installed package and the repo source.
+
+### Resolved
+- **"What do we need for bigger mods?"** — mostly answered. Reading mod containers,
+  reading `global.ucas`, and building config mods all need **no** extra tooling.
+  Only three things remain blocked: the AES-256 key (base assets), an Oodle
+  decompressor (reading the base container), and a `.usmap` (interpreting cooked
+  data assets). Practical order: config mods now, `.usmap` next, AES key last.
+- **Mod containers do not have to match the base game.** The base container is
+  Oodle + AES; shipped working mods use `None`/`Zlib` with no encryption. Writing
+  Oodle or AES is never necessary.
+- **The engine resolves packages by chunk ID, not path.** A shipped mod stores bare
+  filenames with no directory structure and works. The directory index is cosmetic.
+
+### Corrections
+- Two UE struct readings that silently produce garbage *resembling encryption*:
+  `FIoStoreTocHeader`'s perfect-hash seed count is at offset **84**, not 52; and
+  `FFilePackageStoreEntry`'s `CArrayView` offset is relative to the **array-view
+  member's own address**, not to the offset field. Both are recorded because both
+  cost real time and both mimic a legitimate-looking failure.
+- Corrected my own earlier claim that `00000000_SkillsNoTimeCost_P` ships no `.pak`.
+  It does — a 347-byte stub. That was a misread of a directory listing.
+- `Dawnwalker-Modding-Map.md`: the recorded installed-package SHA-256 was stale
+  (revision 1.0); the installed package is revision 1.1. Both now recorded.
+
+### Open — for Codex
+- The repo source for `john-rtx5080-quality` is **behind** the installed package,
+  and the version in the repo carries `r.Nanite.Streaming.StreamingPoolSize=2048`,
+  which revision 1.1's own comment says hits an allocation failure. Revision 1.1
+  was deliberately **not** auto-committed: it encodes an in-game observation that
+  cannot be verified from this side (AGENTS.md rules 1 and 9). Codex should push it
+  with its evidence.
+
 ## Unreleased — 2026-08-25 (claude/bg3-verified-findings)
 ### Added
 - Universal rules 37-42, the six earned from real failures rather than published guidance:

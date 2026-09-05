@@ -86,11 +86,17 @@ Three mods were present on this install. They are three *different* techniques.
 ### 3.1 IoStore asset mod, modern (`00000000_SkillsNoTimeCost_P`)
 
 ```
-.pak  = absent
+.pak  = 347 bytes  (stub, 0 files — same as the DualSense mod)
 .utoc = TOC version 8, flags 0x08 = Indexed  (NOT compressed, NOT encrypted)
 .ucas = 313,683 bytes, compression ['None']
 chunks = 113  →  112 ExportBundleData + 1 ContainerHeader
 ```
+
+> **Correction (2026-09-04).** An earlier revision of this page said this mod ships
+> no `.pak`. That was a misread of the directory listing — the 347-byte stub **is**
+> present. **Both** IoStore mods on this install ship a 347-byte 0-file `.pak`
+> stub alongside the `.utoc`/`.ucas`, so treat the stub as required until something
+> demonstrates otherwise.
 
 Contents: 112 `DA_Trait_*.uasset` trait data assets
 (`/Game/_Dawnwalker/Player/CharacterDevelopment/Traits/DataAssets/…`).
@@ -145,9 +151,45 @@ The INI is a large `[ConsoleVariables]` / `[/Script/Engine.RendererSettings]` bl
 (Niagara, streaming, D3D12, Lumen, Nanite, shadow, pak-cache and async-loading
 CVars). Author credits Nexus mod `thebloodofdawnwalker/mods/42` (VynnGfx).
 
-**This is the cheapest mod path in the entire game: no assets, no key, no
-IoStore.** A plain file-based pak mounted at `../../../` that drops an INI into
-`Engine/Config/Windows/`.
+This is a cheap mod path: no assets, no key, no IoStore. A plain file-based pak
+mounted at `../../../` that drops an INI into `Engine/Config/Windows/`.
+
+### 3.4 Loose user-config override — the cheapest path of all
+
+Not a pak at all. The installed *Better Story Timer* mod is a single file:
+
+```
+%LOCALAPPDATA%\Dawnwalker\Saved\Config\Windows\Game.ini
+```
+
+```ini
+[/Script/Quest.QuestSettings]
+DaysToPass=91
+```
+
+VERIFIED on disk. `/Script/Quest/QuestSettings` **is present in the shipped
+`global.ucas` script-object table** (global index `0x5b782aa1c565ff82`), which is
+why that section resolves. The property name `DaysToPass` is **not** verifiable from
+`global.ucas` — property names are not stored in the object table — so it rests on
+the mod working in practice, not on shipped-data evidence.
+
+Observed detail: that `Game.ini` is marked **read-only** (`-r--r--r--`) on this
+install. **HIGH CONFIDENCE** this is deliberate, to stop the game rewriting the file
+and discarding the override — standard practice for UE user-config edits.
+**NEEDS TESTING** whether it is actually required here.
+
+**This technique is the single biggest opportunity on this game**, because it needs
+no key, no tooling, and no assets. See **`CONFIG_SURFACE.md`** for the full list of
+**67 settings classes** that shipped in the build and are addressable this way.
+
+### 3.5 Which technique to reach for
+
+| Want to change | Technique | Blocked? |
+|---|---|---|
+| A gameplay value exposed as a `config` property | §3.4 loose `Game.ini` | No |
+| An engine CVar / performance setting | §3.3 pak with `WindowsEngine.ini` | No |
+| A texture, mesh, sound, or UI asset | §3.1/§3.2 IoStore container | Yes — needs AES key |
+| A cooked data-asset value with no config route | §3.1 IoStore container | Yes — needs AES key **and** a `.usmap` |
 
 ---
 
@@ -322,16 +364,26 @@ The story-clock system that both gameplay mods target shows up as
 
 ## 6. Install layout and load order
 
-VERIFIED (observed on disk):
+VERIFIED (observed on disk **2026-09-04 21:52**; this install changes often, so
+re-check rather than trusting this snapshot):
 
 ```
 Dawnwalker/Content/Paks/
-├─ Dawnwalker-Windows.{pak,ucas,utoc}     base game
-├─ global.{ucas,utoc}                     script objects
-├─ zzz_DualSenseAtlas_v1_1_P.{pak,ucas,utoc}
+├─ Dawnwalker-Windows.{pak,ucas,utoc}          base game
+├─ global.{ucas,utoc}                          script objects
+├─ zzz_DualSenseAtlas_v1_1_P.{pak,ucas,utoc}   active
+├─ BetterStoryTimer-backup-.../                (empty — that mod is a loose Game.ini, §3.4)
+├─ DualSenseAtlas-backup-.../
+├─ PerformanceTweaks-backup-20260904-213547/   ~TBODoptimizedTweaksBASE_P.pak (retired)
+├─ PerformanceTweaks-backup-20260904-215212/   ~JohnRTX5080Quality_P-revision-1.0.pak
 └─ ~mods/
-   ├─ 00000000_SkillsNoTimeCost_P.{ucas,utoc}
-   └─ ~TBODoptimizedTweaksBASE_P.pak
+   ├─ 00000000_SkillsNoTimeCost_P.{pak,ucas,utoc}   active
+   └─ ~JohnRTX5080Quality_P.pak                     active (revision 1.1)
+
+%LOCALAPPDATA%\Dawnwalker\Saved\Config\Windows\
+├─ Game.ini              Better Story Timer override (read-only)
+├─ GameUserSettings.ini
+└─ GameUserFramegen.ini
 ```
 
 * Mods load from `Content/Paks/` **and** from a `~mods/` subfolder. VERIFIED that
@@ -339,10 +391,12 @@ Dawnwalker/Content/Paks/
 * `_P` suffix, `zzz_` / `00000000_` / `~` name prefixes are the authors steering
   alphabetical mount order. **HIGH CONFIDENCE** (standard UE `_P` patch-priority
   and name-ordering behaviour) — **not** verified against this game's loader.
-* `00000000_SkillsNoTimeCost_P` ships **no `.pak` stub** and is in `~mods/`;
-  `zzz_DualSenseAtlas_v1_1_P` ships a 0-file `.pak` stub and sits in `Paks/`.
-  Both shapes exist on a working install, so the stub is evidently not always
-  required. **NEEDS TESTING** to establish which is required where.
+* **Both** IoStore mods ship a 347-byte 0-file `.pak` stub next to the
+  `.utoc`/`.ucas`. Treat the stub as required. (An earlier revision of this page
+  wrongly said one of them lacked it — see the correction in §3.1.)
+* Only **one** performance-tweaks pak should be active at a time; the project keeps
+  retired ones in timestamped `*-backup-*` folders inside `Content/Paks/`, which is
+  a good rollback pattern (AGENTS.md rule 13).
 
 ---
 
@@ -350,12 +404,20 @@ Dawnwalker/Content/Paks/
 
 ### 7.1 Config / CVar mod — no key, no assets needed. READY TO USE.
 
-Build a legacy `.pak`, mount point `../../../`, containing
-`Engine/Config/Windows/WindowsEngine.ini`. Everything needed is in
-`tools/pak.py` (reader/extractor, SHA-1 validated against the shipped mod).
+Two shapes, both unblocked:
 
-This path needs nothing from the encrypted base container. It is the correct
-starting point for any performance, CVar, or engine-setting mod.
+* **Engine CVars / performance** — a legacy `.pak` (version 3), mount point
+  `../../../`, containing `Engine/Config/Windows/WindowsEngine.ini`. This is what
+  `projects/dawnwalker-modding/profiles/john-rtx5080-quality` builds, and
+  `repak pack --version V3 --mount-point '../../../'` produces it.
+* **Gameplay values** — a loose `Game.ini` in
+  `%LOCALAPPDATA%\Dawnwalker\Saved\Config\Windows\` (§3.4). No packaging at all.
+
+`tools/pak.py` reads and extracts both, and recomputes the index SHA-1, so a built
+package can be verified with no dependency on `repak` or `UnrealPak`.
+
+**See `CONFIG_SURFACE.md`** for the 67 shipped settings classes this path can aim
+at. That file is the practical answer to "what else can we mod without the key".
 
 ### 7.2 IoStore asset mod
 
@@ -406,6 +468,10 @@ files described above.
 | Mods extract correctly, hashes and tilings validate | **VERIFIED** |
 | Base container is Oodle + AES encrypted | **VERIFIED** |
 | `global.ucas` fully readable without a key | **VERIFIED** |
+| 67 game settings classes exist in the shipped build | **VERIFIED** (`CONFIG_SURFACE.md`) |
+| Property names on those settings classes | **UNVERIFIED** — needs a `.usmap` |
+| Loose `Game.ini` override technique works | **VERIFIED on disk**; in-game effect reported by user, not observed here |
 | Engine version 5.5 | **ASSUMPTION** |
 | Load-order semantics of `~mods/`, `_P`, name prefixes | **HIGH CONFIDENCE**, not tested |
-| Any mod built from this research | **NONE BUILT YET** — nothing here has been loaded in game |
+| Any mod built from *this format research* | **NONE** — the research contributed no built artifact |
+| `~JohnRTX5080Quality_P.pak` rev 1.1 | built by Codex, installed, **independently re-verified here** (index SHA-1 OK, v3, mount `../../../`, 2 files) |
