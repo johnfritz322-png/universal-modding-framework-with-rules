@@ -91,9 +91,11 @@ Target hardware:
 - 3840x2160 display
 
 What it changes:
-- Uses an 8192 MB texture pool and 2048 MB Nanite streaming pool.
+- Uses an 8192 MB texture pool and a safer 1792 MB Nanite streaming pool.
 - Enables supported PSO precaching and D3D12 disk caching.
-- Sizes asynchronous loading for the 5900X and available system memory.
+- Uses a 2048 MB IoDispatcher cache and eight decompression workers sized for
+  the 5900X and available system memory.
+- Limits large texture and Nanite install bursts to improve frame consistency.
 - Enables safe parallel animation, geometry, effects, and shader work.
 - Disables mouse smoothing and acceleration.
 
@@ -102,7 +104,11 @@ What it deliberately leaves alone:
   ray tracing, Lumen quality, shadows, foliage, post-processing, and VRS.
 
 Installed package SHA-256:
-- C3F13F82200FEF32C35511D4182CDFBEFE6DFADBF217F6BB8BFD3D24C73D8F06
+- 4C6CD96937480E29C05FD0DE4744AD91D0E1ABA21401F8298530C097CFF1B00B
+
+Recommended 4K Ultra high-refresh settings:
+- Full Screen, NVIDIA DLSS Balanced, DLSS 2x Frame Generation, Unlocked frame
+  mode, NVIDIA Reflex On + Boost if available, and in-game VSync Off.
 
 ## Local Tooling Found
 
@@ -115,3 +121,4 @@ Does not reveal contents of Dawnwalker `.ucas/.utoc` payload mods by itself.
 ## What We Need For Bigger Mods
 
 For asset/gameplay data mods, we need a UE5 I/O Store-aware workflow such as FModel/UAssetGUI or a current Unreal packaging pipeline compatible with Dawnwalker. The current local tool can handle simple config `.pak` files, but not enough to safely author cooked Data Asset replacements yet.
+
