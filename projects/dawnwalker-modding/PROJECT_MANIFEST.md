@@ -13,6 +13,14 @@ project. Codex: the open items for you are in **§ Handoff** at the bottom.
   the mapping is not VERIFIED. No engine version string exists in the binary.
   Full fingerprint and re-check instructions: **`GAME_VERSION.md`**.
   Quick check: `python ../../games/blood-of-the-dawnwalker/tools/gameversion.py`
+- Game build string (from the exe's version resource, **VERIFIED**):
+  **`dw1-pc-257186-shipping-patch2-all-CL-257186`** — i.e. Dawnwalker 1, PC,
+  shipping, **patch 2**, Perforce changelist 257186. This is a better version
+  identifier than the Steam build id. Rebel Wolves replaced the stock Unreal
+  version string, which is why no `++UE5+Release-5.x` marker exists in the binary.
+- Engine version narrowed to **UE 5.4 or 5.5** — the build ships the
+  `UniversalObjectLocator` and `WorldConditions` modules (both UE 5.4+), libcurl
+  8.4.0, IoStore TOC v8 and container header v4. Still an inference, but bounded.
 - Platform: Windows / Steam
 - Engine: Unreal Engine 5 (**likely 5.5** — ASSUMPTION, see game rules §1)
 - Mod version: profile `john-rtx5080-quality` **revision 1.1** (installed)
@@ -158,7 +166,8 @@ No code, no hooks, no runtime component.
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Perk time cost via config instead of 112 asset replacements | HYPOTHESIS | Is the cost a `config` property on `DogwoodCharacterDevelopmentSettings`, or baked into each data asset? | Dump a `.usmap`, inspect that class's properties |
+| Perk time cost via config instead of 112 asset replacements | HYPOTHESIS | Is the cost a `config` property on `DogwoodCharacterDevelopmentSettings`, or baked into each data asset? | Dump a `.usmap` — plan ready in `USMAP_PLAN.md` |
+| UE4SS runs on this build at all | UNVERIFIED | Community package targets Steam build 25107392; we are on 25129649 (patch 2), so its signatures may be stale | Install the preconfigured package and launch once — treat as a test |
 | Editor/debug settings classes active in retail | UNVERIFIED | Cooked builds usually strip editor behaviour | Probe `[/Script/DogwoodDebug.DogwoodDebugSettings]` |
 | `Game.ini` must be read-only to persist | HIGH CONFIDENCE | Standard UE behaviour, untested here | Clear read-only, relaunch, re-read the file |
 | Property names on any settings class | UNVERIFIED | Not in `global.ucas` | `.usmap` |

@@ -67,8 +67,33 @@ inspecting `DA_Trait_CombatFocus_Kick.uasset`, whose entire local name map is 6
 entries of package paths and the asset name.
 
 Mapping bytes to named properties requires a `.usmap` file dumped from the running
-game (Dumper-7, UE4SS). Without one, only byte-level edits of already-identified
-values are possible.
+game (UE4SS, UnrealMappingsDumper). Without one, only byte-level edits of
+already-identified values are possible.
+
+**A concrete, researched plan to lift this exists:
+`projects/dawnwalker-modding/USMAP_PLAN.md`.** Summary of what was established
+2026-09-04:
+
+* **No anti-cheat** in the install (no EasyAntiCheat, no BattlEye) — VERIFIED, so
+  runtime dumping is viable.
+* **Stock UE4SS is expected to crash this game.** Per the community package's own
+  notes, UE4SS cannot auto-detect the engine version here, and two default hooks
+  crash it even when the version is set manually. A Dawnwalker-specific
+  preconfigured UE4SS package exists and is the right starting point.
+* Main risk: that package was tested against Steam build `25107392`; this install
+  is `25129649` (patch 2). Signatures may be stale. **UNVERIFIED.**
+
+### Property names are in the exe — but that is not a shortcut
+
+VERIFIED: `DaysToPass` is present in `Dawnwalker.exe` at `0x8e84c10`, inside a
+**length-bucketed name pool** (10-character names padded to 16 bytes, packed
+consecutively). So reflection property-name strings do ship in the binary.
+
+This does **not** substitute for a `.usmap`. A flat pool of names carries no
+class→property association, and that association is the entire point. Recovering it
+statically would mean parsing UE's reflection registration structures out of the
+binary — considerably more work than dumping at runtime. Recorded so nobody
+re-discovers the name pool and assumes the problem is solved.
 
 ---
 

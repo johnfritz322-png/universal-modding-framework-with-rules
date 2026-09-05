@@ -1,5 +1,35 @@
 # Changelog
 
+## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format) — usmap research
+
+### Added
+- `projects/dawnwalker-modding/USMAP_PLAN.md`: a researched, step-by-step plan to
+  dump a `.usmap`, which is the cheapest remaining unlock — it would turn
+  `CONFIG_SURFACE.md` from "67 verified section names, unknown properties" into
+  real property names, **without needing the AES key**.
+
+### Verified
+- **Real game build string** from the exe's PE version resource:
+  `dw1-pc-257186-shipping-patch2-all-CL-257186` — patch 2, changelist 257186.
+  Rebel Wolves replaced the stock Unreal version string, which is why earlier
+  `++UE5+Release-5.x` searches found nothing.
+- Engine narrowed to **UE 5.4 or 5.5**: the build ships `UniversalObjectLocator`
+  and `WorldConditions` (both 5.4+), alongside libcurl 8.4.0, TOC v8, header v4.
+- **No anti-cheat** in the install — runtime dumping is viable.
+- **Property names DO ship in the exe.** `DaysToPass` sits at `0x8e84c10` inside a
+  length-bucketed name pool (10-char names padded to 16 bytes). Recorded together
+  with why this is *not* a shortcut: a flat name pool carries no class→property
+  association, which is the whole point of a `.usmap`.
+
+### Recorded, unverified
+- Stock UE4SS is expected to **crash this game** — it cannot auto-detect the engine
+  version, and two default hooks crash it even when the version is set manually.
+  A Dawnwalker-specific preconfigured UE4SS package exists and is the right start.
+- That package targets Steam build `25107392`; this install is `25129649`
+  (patch 2), so its signatures may be stale. First launch is a test, not routine.
+- Community discussion indicates a public AES key for this game exists. **Not
+  obtained, not tested** — recorded only so the option is visible.
+
 ## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format) — update check
 
 ### Added

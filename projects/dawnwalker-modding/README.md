@@ -29,6 +29,7 @@ See `Dawnwalker-Modding-Map.md` for the installed mod list, what each mod appear
 |---|---|
 | `PROJECT_MANIFEST.md` | **Start here.** Project state, verified vs. unverified, open handoff items |
 | `GAME_VERSION.md` | Installed build fingerprint. **Check this first in a new session** — if it still matches, all format findings still apply |
+| `USMAP_PLAN.md` | Researched, step-by-step plan to dump a `.usmap` — the cheapest remaining unlock |
 | `Dawnwalker-Modding-Map.md` | Installed mods, what each one actually changes, install workflow |
 | `profiles/john-rtx5080-quality/` | The active performance profile: source, `build.ps1`, `verify.py` |
 | `reference/mod42_optimized_tweaks_base/` | Extracted VynnGfx reference mod |
