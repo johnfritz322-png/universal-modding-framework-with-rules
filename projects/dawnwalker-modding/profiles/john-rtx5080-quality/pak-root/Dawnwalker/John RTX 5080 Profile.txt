@@ -1,4 +1,4 @@
-John RTX 5080 Quality + Smoothness Profile
+John RTX 5080 Quality + Smoothness Profile - revision 1.1
 
 Target hardware:
 - NVIDIA GeForce RTX 5080, 16 GB VRAM
@@ -12,3 +12,9 @@ https://www.nexusmods.com/thebloodofdawnwalker/mods/42
 
 It avoids forcing resolution or visual-quality settings and focuses on texture
 and Nanite streaming, PSO caching, asynchronous loading, and CPU scheduling.
+
+Revision 1.1 uses a safer 1792 MB Nanite pool and a larger 2 GB asset-streaming
+cache. For the best chance of 120-150 displayed FPS at 4K Ultra, use Full
+Screen, DLSS Balanced, DLSS 2x Frame Generation, Unlocked frame mode, and
+NVIDIA Reflex On + Boost if available.
+
