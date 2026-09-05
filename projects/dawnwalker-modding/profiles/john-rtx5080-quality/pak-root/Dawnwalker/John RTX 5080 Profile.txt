@@ -1,0 +1,14 @@
+John RTX 5080 Quality + Smoothness Profile
+
+Target hardware:
+- NVIDIA GeForce RTX 5080, 16 GB VRAM
+- AMD Ryzen 9 5900X, 12 cores / 24 threads
+- 32 GB system RAM
+- 3840x2160 display
+
+This profile is an independent, hardware-specific configuration inspired by the
+configuration-based approach used in VynnGfx's Optimized Tweaks TBOD mod:
+https://www.nexusmods.com/thebloodofdawnwalker/mods/42
+
+It avoids forcing resolution or visual-quality settings and focuses on texture
+and Nanite streaming, PSO caching, asynchronous loading, and CPU scheduling.
