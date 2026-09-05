@@ -11,8 +11,13 @@ Local modding notes and reference files for The Blood of Dawnwalker.
 
 ## Current Scope
 
-This repo is for planning, notes, extracted reference config, and future custom mod source.
+This repo is for planning, notes, extracted reference config, and custom mod source.
 It should not store the full game files or large copied game archives.
+
+## Custom Profiles
+
+- `profiles/john-rtx5080-quality`: active quality-and-smoothness profile tuned
+  for John's RTX 5080, Ryzen 9 5900X, 32 GB RAM, and 4K display.
 
 ## Installed Mod References
 
