@@ -133,9 +133,11 @@ Target hardware:
 - 3840x2160 display
 
 What it changes:
-- Uses an 8192 MB texture pool and 2048 MB Nanite streaming pool.
+- Uses an 8192 MB texture pool and a safer 1792 MB Nanite streaming pool.
 - Enables supported PSO precaching and D3D12 disk caching.
-- Sizes asynchronous loading for the 5900X and available system memory.
+- Uses a 2048 MB IoDispatcher cache and eight decompression workers sized for
+  the 5900X and available system memory.
+- Limits large texture and Nanite install bursts to improve frame consistency.
 - Enables safe parallel animation, geometry, effects, and shader work.
 - Disables mouse smoothing and acceleration.
 
@@ -144,20 +146,28 @@ What it deliberately leaves alone:
   ray tracing, Lumen quality, shadows, foliage, post-processing, and VRS.
 
 Installed package SHA-256:
-- **Revision 1.1 (current, verified 2026-09-04 21:52):**
+- **Revision 1.1 (current):**
   4C6CD96937480E29C05FD0DE4744AD91D0E1ABA21401F8298530C097CFF1B00B
 - Revision 1.0 (superseded, kept in
   `Content\Paks\PerformanceTweaks-backup-20260904-215212\`):
   C3F13F82200FEF32C35511D4182CDFBEFE6DFADBF217F6BB8BFD3D24C73D8F06
 
+Recommended 4K Ultra high-refresh settings:
+- Full Screen, NVIDIA DLSS Balanced, DLSS 2x Frame Generation, Unlocked frame
+  mode, NVIDIA Reflex On + Boost if available, and in-game VSync Off.
+
 Independent verification (2026-09-04, `profiles/john-rtx5080-quality/verify.py`,
 which shares no code with repak or UnrealPak):
 - pak version 3, mount point `../../../`, 2 files, nothing encrypted or compressed
 - index SHA-1 `aaa4dc78…d964` recomputed from the data and **matched**
+- SHA-256 recomputed independently and **matched** the value recorded above, so the
+  hash in this file is confirmed by two unrelated toolchains.
 
-⚠ The repo source in `pak-root/` is still revision **1.0** and does not match the
-installed 1.1 package. See `PROJECT_MANIFEST.md` for the diff and the reason it was
-not auto-committed.
+Repo/install sync: a desync was flagged earlier on 2026-09-04 (installed 1.1 vs.
+repo source 1.0). **Resolved** — Codex pushed the revision 1.1 source to `main`
+in "Tune RTX 5080 profile for high refresh stability" / "Document high refresh
+Dawnwalker profile". Re-run `verify.py` after any rebuild to confirm they stay in
+sync.
 
 ## Local Tooling Found
 
@@ -209,3 +219,7 @@ be needed for only *part* of the problem:
 
 Practical order of work: config mods now → `.usmap` next (unblocks a lot cheaply)
 → AES key last (only if asset replacement is actually wanted).
+
+(Superseded note, kept for history: this section previously said we needed FModel /
+UAssetGUI or a full Unreal pipeline. That is now true only for cooked Data Asset
+replacement, not for reading containers or building config mods.)
