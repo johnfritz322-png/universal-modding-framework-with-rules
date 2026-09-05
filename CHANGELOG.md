@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format) — update check
+
+### Added
+- `projects/dawnwalker-modding/GAME_VERSION.md`: the installed build fingerprint —
+  Steam app **3751260**, build **25129649**, installed 2026-09-04 23:49 UTC, plus
+  SHA-256 of `global.utoc` / `global.ucas` / `Dawnwalker-Windows.utoc` / the exe and
+  the base container's structural fingerprint. Also records what a future patch
+  would and would not break.
+- `games/blood-of-the-dawnwalker/tools/gameversion.py`: regenerates that fingerprint
+  in seconds. Run it first in any session — if it matches, all format findings hold.
+
+### Verified
+- **The game is on the newest build and the research already reflects it.** The
+  install was patched 2026-09-04 at 17:49 local (~2.19 GB); the format research was
+  carried out from ~21:00 the same evening, i.e. **after** the patch.
+- Re-checked after the update: base container id `0x8fc20dab729a0600`, TOC v8,
+  778,643 chunks, 1,056,336 blocks, flags `0x0b` — **all identical** to the recorded
+  values. `global.ucas` still parses to exactly 54,880 names and 58,720 script
+  objects. `CONFIG_SURFACE.md` needs no revision.
+- Steam reports nothing queued (`ScheduledAutoUpdate 0`), install complete
+  (`StateFlags 4`), last update clean (`UpdateResult 0`).
+
+### Labelled honestly
+- That build `25129649` **is** Hotfix 1.0.2 / console update 1.004 (released
+  2026-09-03) is **HIGH CONFIDENCE, not VERIFIED** — matched by patch date and
+  download size only. No public source publishes Steam build ids for this game.
+
 ## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format)
 
 First game added to the framework besides BG3.
@@ -45,13 +72,20 @@ First game added to the framework besides BG3.
 - `Dawnwalker-Modding-Map.md`: the recorded installed-package SHA-256 was stale
   (revision 1.0); the installed package is revision 1.1. Both now recorded.
 
+### Resolved same day
+- The repo/install desync is **fixed**. Codex pushed revision 1.1 to `main`; this
+  branch merged it and re-verified — `verify.py` now passes every check including
+  drift. Codex's recorded SHA-256 and the value computed here by unrelated code
+  **agree**, so the installed artifact is confirmed by two toolchains.
+- Fixed a false positive in `verify.py`: a trailing blank line was reported as
+  drift. A noisy check gets ignored, which is worse than no check, so the
+  comparison now normalises line endings and trailing whitespace.
+
 ### Open — for Codex
-- The repo source for `john-rtx5080-quality` is **behind** the installed package,
-  and the version in the repo carries `r.Nanite.Streaming.StreamingPoolSize=2048`,
-  which revision 1.1's own comment says hits an allocation failure. Revision 1.1
-  was deliberately **not** auto-committed: it encodes an in-game observation that
-  cannot be verified from this side (AGENTS.md rules 1 and 9). Codex should push it
-  with its evidence.
+- The **2048 MB Nanite allocation failure** is referenced only in an INI comment.
+  The observation behind it — what was seen, where, on what settings — is written
+  down nowhere. It is the only in-game observation either agent has on this game
+  and belongs in `games/blood-of-the-dawnwalker/KNOWN_LIMITATIONS.md`.
 
 ## Unreleased — 2026-08-25 (claude/bg3-verified-findings)
 ### Added

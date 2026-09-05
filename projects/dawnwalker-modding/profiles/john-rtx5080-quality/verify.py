@@ -100,8 +100,16 @@ def main():
     packed = data[o + hdr: o + hdr + entry["size"]]
     source = open(SOURCE_INI, "rb").read()
 
-    same = packed.replace(b"\r\n", b"\n") == source.replace(b"\r\n", b"\n")
+    # Normalise line endings AND trailing whitespace. A packer adding or dropping a
+    # final blank line is not drift, and reporting it as such trains people to
+    # ignore this check -- which is worse than not having it.
+    def norm(b):
+        return b.replace(b"\r\n", b"\n").rstrip()
+
+    same = norm(packed) == norm(source)
     check("packaged INI matches repo source", same)
+    if same and packed != source:
+        print("        (differs only in line endings / trailing blank lines -- not drift)")
     if not same:
         print()
         print("  DRIFT -- the installed package was NOT built from this repo source.")

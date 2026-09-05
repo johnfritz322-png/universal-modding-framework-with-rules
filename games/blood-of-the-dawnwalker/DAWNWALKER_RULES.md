@@ -14,6 +14,7 @@ structure-validated* — it does **not** mean tested in game unless it says so.
 
 | Item | Value | Evidence |
 |---|---|---|
+| Steam app / build | **3751260 / build `25129649`** | VERIFIED (Steam manifest) — installed 2026-09-04, likely Hotfix 1.0.2. Fingerprint: `projects/dawnwalker-modding/GAME_VERSION.md` |
 | Engine | Unreal Engine 5 | VERIFIED (IoStore magic + Zen packages) |
 | Engine minor version | likely 5.5 | **ASSUMPTION** — inferred from a build path `UE5\Engine\Source\ThirdParty\libcurl\8.4.0\` in the exe (libcurl 8.4.0 ships with 5.5) plus container-header v4 and TOC v8. No `++UE5+Release-5.x` string exists in the binary. |
 | Game root | `<steam>\steamapps\common\The Blood of Dawnwalker\` | VERIFIED |

@@ -11,6 +11,22 @@ Set `PAKS` to your install:
 D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Content\Paks
 ```
 
+## gameversion.py — RUN THIS FIRST
+
+```bash
+python gameversion.py          # add --json for machine-readable output
+```
+
+Reads Steam's `appmanifest_3751260.acf` for the build id and update state, then
+hashes `global.utoc`, `global.ucas`, `Dawnwalker-Windows.utoc` and the exe, and
+prints the base container's structural fingerprint.
+
+Compare the output against `projects/dawnwalker-modding/GAME_VERSION.md`. If it
+matches, every format finding in this folder still applies. If it does not, the
+game was patched and findings must be re-verified before being trusted.
+
+Takes a few seconds — it deliberately does not hash the 43.5 GB `.ucas`.
+
 ## utoc.py — inspect any container
 
 ```bash

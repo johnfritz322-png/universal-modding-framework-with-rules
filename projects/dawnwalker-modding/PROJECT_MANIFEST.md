@@ -6,10 +6,13 @@ project. Codex: the open items for you are in **§ Handoff** at the bottom.
 ## Identity
 - Project name: Dawnwalker Modding
 - Game: The Blood of Dawnwalker (Rebel Wolves) — internal codename **Dogwood**
-- Exact game version/build: not exposed as a string in the binary. Container
-  fingerprint instead: base TOC v8, container-header v4, `Dawnwalker-Windows.utoc`
-  70,109,154 B / 778,643 chunks, `global.ucas` 3,837,488 B. Use those to detect a
-  game patch.
+- Exact game version/build: **Steam app 3751260, build `25129649`**, installed
+  2026-09-04 23:49:14 UTC (~2.19 GB patch). HIGH CONFIDENCE this is **Hotfix
+  1.0.2 / console update 1.004** (released 2026-09-03) — matched by date and
+  download size; Steam build IDs are not published in any patch-notes source, so
+  the mapping is not VERIFIED. No engine version string exists in the binary.
+  Full fingerprint and re-check instructions: **`GAME_VERSION.md`**.
+  Quick check: `python ../../games/blood-of-the-dawnwalker/tools/gameversion.py`
 - Platform: Windows / Steam
 - Engine: Unreal Engine 5 (**likely 5.5** — ASSUMPTION, see game rules §1)
 - Mod version: profile `john-rtx5080-quality` **revision 1.1** (installed)
@@ -45,16 +48,20 @@ project. Codex: the open items for you are in **§ Handoff** at the bottom.
 - Next milestone: obtain a `.usmap`, then test the character-development config
   hypothesis (see below)
 
-## ⚠ Known desync — needs Codex action
-The **installed** package is revision 1.1. The **repo source** in
-`profiles/john-rtx5080-quality/pak-root/` is still the older revision.
+## ✅ Repo/install sync — RESOLVED 2026-09-04
+Earlier on 2026-09-04 the installed package was revision 1.1 while the repo source
+was still 1.0. **Codex has since pushed revision 1.1 to `main`** ("Tune RTX 5080
+profile for high refresh stability", "Document high refresh Dawnwalker profile").
 
-| | INI bytes | SHA-256 (first 16) |
-|---|---|---|
-| installed (in `~mods`) | 2,833 | `a739cc960ae66b04` |
-| repo source | 2,634 | `536058214623129c` |
+Re-verified after merging `origin/main`: `verify.py` **passes every check**,
+including the drift check — the installed package matches the repo source (differing
+only in a trailing blank line, which the check now correctly tolerates).
 
-Revision 1.1 (installed, **not** in the repo) changes:
+Independent cross-check: the SHA-256 recorded by Codex
+(`4C6CD969…B00B`) matches the value computed here by unrelated code. Two toolchains
+agree on the installed artifact.
+
+For history, revision 1.1 changed:
 
 ```diff
 +; Revision 1.1 - high-refresh stability pass.
@@ -75,13 +82,18 @@ Revision 1.1 (installed, **not** in the repo) changes:
 -s.IoDispatcherDecompressionWorkerCount=6 → +8
 ```
 
-**I deliberately did not commit revision 1.1 into `pak-root/`.** Codex was mid-work
-and owns that content; the comment "the game's observed 2048 MB allocation failure
-point" implies an in-game observation I have no evidence for and must not
-paraphrase or claim. Codex should push the 1.1 source and the evidence behind it.
+I did not commit revision 1.1 myself — Codex owned that content and the comment
+"the game's observed 2048 MB allocation failure point" encodes an in-game
+observation I had no evidence for and must not restate as fact (AGENTS.md rules 1
+and 9). Codex pushed it, which is the correct outcome.
 
-Also stale: `Dawnwalker-Modding-Map.md` recorded SHA-256
-`C3F13F82…D8F06` for the installed package. That is revision 1.0. Corrected there.
+**Still outstanding:** the 2048 MB Nanite allocation failure is referenced only in
+an INI comment. The observation itself — what was seen, where, on what settings —
+is not written down anywhere. It is a genuine engine-limit finding and belongs in
+`games/blood-of-the-dawnwalker/KNOWN_LIMITATIONS.md` with its evidence.
+
+Also corrected: `Dawnwalker-Modding-Map.md` had recorded the revision 1.0 SHA-256
+(`C3F13F82…D8F06`) as the installed package. Both revisions are now recorded there.
 
 ## Owned files
 ```
@@ -201,13 +213,14 @@ No code, no hooks, no runtime component.
 
 ## Handoff — for Codex
 
-1. **Push revision 1.1's source** into `pak-root/Engine/Config/Windows/WindowsEngine.ini`.
-   The repo currently ships a configuration your own comment says fails.
-   I did not commit your file because I cannot verify the in-game observation
-   behind it (AGENTS.md rules 1 and 9).
+1. ~~Push revision 1.1's source~~ — **DONE.** Merged and re-verified; `verify.py`
+   passes all checks including drift.
 2. **Record the evidence** for the 2048 MB Nanite allocation failure — what was
-   observed, where. That is a genuine engine-limit finding and belongs in
-   `games/blood-of-the-dawnwalker/KNOWN_LIMITATIONS.md` once written down.
+   observed, where, on what settings. Right now it exists only as an INI comment.
+   That is a genuine engine-limit finding and belongs in
+   `games/blood-of-the-dawnwalker/KNOWN_LIMITATIONS.md` with its evidence.
+   **This is the highest-value item on this list** — it is the only in-game
+   observation either of us has, and it is currently undocumented.
 3. **Review `games/blood-of-the-dawnwalker/`** — format reference, limitations,
    config surface, and six dependency-free parsers.
 4. **`CONFIG_SURFACE.md` is the main new capability.** 67 shipped settings classes
