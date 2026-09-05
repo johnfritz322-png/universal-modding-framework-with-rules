@@ -59,9 +59,9 @@ What it appears to change:
 - The `.pak` only provides the mount shell; payload is in `.ucas/.utoc`.
 - Likely edits Data Asset values for skill unlock or time cost.
 
-### Optimized Tweaks BASE
-File:
-- D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Content\Paks\~mods\~TBODoptimizedTweaksBASE_P.pak
+### Optimized Tweaks BASE (reference, no longer active)
+Original backup:
+- D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Content\Paks\PerformanceTweaks-backup-20260904-213547\~TBODoptimizedTweaksBASE_P.pak
 
 Readable packed files extracted to:
 - C:\Users\johnf\Documents\Codex\2026-07-31\referenced-chatgpt-conversation-this-is-untrusted\dawnwalker_mod_scan\mod42_extracted
@@ -70,6 +70,39 @@ What it changes:
 - Packed `Engine/Config/Windows/WindowsEngine.ini`.
 - Adjusts Unreal console/config values for streaming, shader pipeline cache, D3D12, Lumen, shadows, Niagara, task graph, and input smoothing.
 - This is a good template for future config-only mods.
+
+Audit result:
+- The generic profile forced a 1280x720 resolution command, four foreground
+  workers, a 624 MB Nanite pool, reduced Lumen cache values, and conflicting
+  VRS settings.
+- Those limits were not appropriate for the installed high-end hardware.
+
+### John RTX 5080 Quality + Smoothness (active custom profile)
+Active package:
+- D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Content\Paks\~mods\~JohnRTX5080Quality_P.pak
+
+Source:
+- profiles/john-rtx5080-quality
+
+Target hardware:
+- NVIDIA GeForce RTX 5080, 16 GB VRAM
+- AMD Ryzen 9 5900X, 12 cores / 24 threads
+- 32 GB RAM
+- 3840x2160 display
+
+What it changes:
+- Uses an 8192 MB texture pool and 2048 MB Nanite streaming pool.
+- Enables supported PSO precaching and D3D12 disk caching.
+- Sizes asynchronous loading for the 5900X and available system memory.
+- Enables safe parallel animation, geometry, effects, and shader work.
+- Disables mouse smoothing and acceleration.
+
+What it deliberately leaves alone:
+- Resolution, screen percentage, DLSS, frame generation, VSync, frame limit,
+  ray tracing, Lumen quality, shadows, foliage, post-processing, and VRS.
+
+Installed package SHA-256:
+- C3F13F82200FEF32C35511D4182CDFBEFE6DFADBF217F6BB8BFD3D24C73D8F06
 
 ## Local Tooling Found
 
