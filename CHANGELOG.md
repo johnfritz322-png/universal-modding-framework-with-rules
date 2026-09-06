@@ -1,5 +1,54 @@
 # Changelog
 
+## Unreleased — 2026-09-05 (claude/dawnwalker-doc-fixes) — audit of the 2026-09-04 work
+
+### Re-verified against the live install
+- **All seven Dawnwalker tools were re-run 2026-09-05 and all seven still work**:
+  `gameversion.py`, `utoc.py`, `pak.py`, `extract.py`, `zen.py`,
+  `containerheader.py`, and the profile's `verify.py`.
+- The build fingerprint in `projects/dawnwalker-modding/GAME_VERSION.md` **still
+  matches exactly** — Steam build `25129649`, all four SHA-256 hashes, and the base
+  container's structure (TOC v8, 778,643 chunks, 1,056,336 blocks, flags `0x0b`).
+  Every format finding in `games/blood-of-the-dawnwalker/` therefore still applies.
+- `globals.py` still parses `global.ucas` to exactly 54,880 names / 58,720 script
+  objects, cursor landing at 3,837,478 of 3,837,488.
+- `containerheader.py` still reports `TILING VALID: True` on the SkillsNoTimeCost
+  container header (528 imported-package refs).
+
+### Fixed
+- `games/blood-of-the-dawnwalker/tools/README.md`: the `pak.py` usage examples
+  pointed at `~mods/~TBODoptimizedTweaksBASE_P.pak`, which was retired on
+  2026-09-04 and moved into a `*-backup-*` folder — the documented command failed
+  on a current install. Repointed at `~mods/~JohnRTX5080Quality_P.pak` and both
+  forms (list and `x` extract) were run to confirm they work.
+
+### Resolved
+- The drift recorded on 2026-09-04 — installed pak at revision 1.1 while the repo
+  source was still 1.0 — is **closed**. `verify.py` now reports "packaged INI
+  matches repo source" with all five assertions passing.
+
+### Open — UNVERIFIED, flagged not fixed
+- `DAWNWALKER_RULES.md` §6 contains an internal tension: it states that mods load
+  from `Content/Paks/` **and** from its `~mods/` subfolder, while also calling the
+  `*-backup-*` folders kept *inside* `Content/Paks/` "a good rollback pattern".
+  If the loader scans Paks subfolders recursively, those backups are not inert —
+  three of them currently hold live `.pak`/`.utoc` files, including a **duplicate
+  of the still-installed DualSenseAtlas container**. Not tested in game, so no
+  claim is made either way; the safe move is to keep backups outside
+  `Content/Paks/`. Left for whoever can test it in game.
+
+### Process note
+- The 2026-09-04 format research landed on `main` directly and no pull request was
+  ever opened, which departs from the repo protocol (branch, PR, `main` stays the
+  stable baseline). No work was lost. The `claude/dawnwalker-iostore-format` branch
+  remains on origin at `84eed6b7f5165c5b37fe6da66f7d9859cd03ff61`, two commits
+  behind `main` with **zero unique commits** — every commit on it is already in
+  `main`. It is kept as a historical record of where that research was done.
+  **Branches in this repo are not deleted after merging**; a merged branch is a
+  record, and a stale-looking ref costs nothing next to losing the trail.
+- This entry's own change was made the protocol way, as a correction to the above:
+  branch `claude/dawnwalker-doc-fixes`, pull request, `main` untouched.
+
 ## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format) — usmap research
 
 ### Added
