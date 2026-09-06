@@ -5,8 +5,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $win64 = Join-Path $GameRoot "Dawnwalker\Binaries\Win64"
-$ue4ssRoot = Join-Path $win64 "ue4ss"
-$modsRoot = Join-Path $ue4ssRoot "Mods"
+$modsRoot = Join-Path $win64 "Mods"
 $target = Join-Path $modsRoot "JohnLoadoutOptimizer"
 $source = Join-Path $PSScriptRoot "ue4ss\Mods\JohnLoadoutOptimizer"
 
@@ -14,8 +13,8 @@ if (-not (Test-Path -LiteralPath $win64 -PathType Container)) {
     throw "DW Win64 folder not found: $win64"
 }
 
-if (-not (Test-Path -LiteralPath $ue4ssRoot -PathType Container)) {
-    throw "UE4SS is not installed yet. Expected folder: $ue4ssRoot"
+if (-not (Test-Path -LiteralPath (Join-Path $win64 "UE4SS.dll") -PathType Leaf)) {
+    throw "UE4SS is not installed yet. Expected file: $(Join-Path $win64 "UE4SS.dll")"
 }
 
 if (-not (Test-Path -LiteralPath $source -PathType Container)) {
@@ -41,4 +40,3 @@ if (Test-Path -LiteralPath $modsTxt -PathType Leaf) {
 Write-Host "Installed JohnLoadoutOptimizer to:"
 Write-Host $target
 Write-Host "Hotkeys: Numpad 1 = attack, Numpad 2 = defense"
-

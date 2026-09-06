@@ -45,7 +45,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 Expected installed structure:
 
 ```text
-D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\ue4ss\Mods\JohnLoadoutOptimizer\
+D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\Mods\JohnLoadoutOptimizer\
 ├─ enabled.txt
 └─ Scripts\
    └─ main.lua
@@ -56,4 +56,3 @@ D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\ue4s
 This is a prototype. If Numpad 1 or 2 logs that it found the inventory but could
 not score/equip items, the next step is a short in-game probe run with UE4SS object
 inspection enabled.
-
