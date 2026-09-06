@@ -98,14 +98,20 @@ Version 4 headers only (see `../KNOWN_LIMITATIONS.md` L5).
 ## pak.py — legacy `.pak`
 
 ```bash
-python pak.py "<PAKS>/~mods/~TBODoptimizedTweaksBASE_P.pak"
-python pak.py x "<PAKS>/~mods/~TBODoptimizedTweaksBASE_P.pak" out_tweaks
+python pak.py "<PAKS>/~mods/~JohnRTX5080Quality_P.pak"
+python pak.py x "<PAKS>/~mods/~JohnRTX5080Quality_P.pak" out_profile
 ```
 
 Reads pak v3 and v11 footers, **recomputes and checks the index SHA-1**, lists
 entries, and with `x` extracts them.
 
 This is the format to use for config/CVar mods — the one mod type with no blockers.
+
+> Earlier revisions of this page used `~mods/~TBODoptimizedTweaksBASE_P.pak` as the
+> example. That mod was **retired on 2026-09-04** and moved to
+> `<PAKS>/PerformanceTweaks-backup-20260904-213547/`, so the old command fails on a
+> current install. Both commands above were re-run and confirmed working
+> **2026-09-05** (index SHA-1 validates, 2 entries, mount `../../../`).
 
 ## Notes
 
