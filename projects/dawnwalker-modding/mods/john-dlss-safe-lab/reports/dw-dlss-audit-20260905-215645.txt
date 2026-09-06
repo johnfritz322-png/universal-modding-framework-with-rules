@@ -1,0 +1,92 @@
+Dawnwalker DLSS Safety Audit
+Checked: 2026-09-05T21:56:46
+GameRoot: D:\steam\steamapps\common\The Blood of Dawnwalker
+
+Unsafe/community DLSS 5 files found:
+- None
+
+Tracked runtime files:
+
+amd_fidelityfx_framegeneration_dx12.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\amd_fidelityfx_framegeneration_dx12.dll
+  Version: 3.1.5.0
+  Company: Advanced Micro Devices, Inc.
+  SHA256: 1429C91128D59A20120DD09B189A7E7DDFECF7E7B700D825BCE4C4C6E9C0D451
+
+amd_fidelityfx_upscaler_dx12.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\amd_fidelityfx_upscaler_dx12.dll
+  Version: 4.0.2.0
+  Company: Advanced Micro Devices, Inc.
+  SHA256: 241E6E5E4D848424EB8EC9A6B22C43FE34CF0CF52D30002CA435BA42E53A9CA0
+
+dwmapi.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\dwmapi.dll
+  Version: 0.0.0.0
+  Company: 
+  SHA256: CE596412BEFA68C30B7F88F65BEB77D9BDAD55E9B96A276A5A9CF690C63F24BB
+
+UE4SS.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker\Binaries\Win64\UE4SS.dll
+  Version: 
+  Company: 
+  SHA256: 8AC18FBFFC1EF96B0662D4A2D537B3F224C26D65CAABA7989A9404C566102B26
+
+nvngx_dlss.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\DLSS\Binaries\ThirdParty\Win64\nvngx_dlss.dll
+  Version: 310,2,1,0
+  Company: NVIDIA
+  SHA256: 139F682991C40B36695F0E9D8993901D276E0E7B1EEFD5E5C88D74AE714020D4
+
+nvngx_dlssd.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\DLSS\Binaries\ThirdParty\Win64\nvngx_dlssd.dll
+  Version: 310,2,1,0
+  Company: NVIDIA
+  SHA256: 599940728E5E93AE930ADC36D90DAD1F00CF92A5612488140A024DCAAD00382E
+
+nvngx_deepdvc.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\nvngx_deepdvc.dll
+  Version: 310,2,0,0
+  Company: NVIDIA
+  SHA256: 473F83072B8873D23809A346C768E6AF07EE103DD853DB404EE69CC22D62A330
+
+nvngx_dlssg.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\nvngx_dlssg.dll
+  Version: 310,2,1,0
+  Company: NVIDIA
+  SHA256: 3D17996B4C4F669F0FE27C9672E9FA71A39E997E09AC020C077EDEC682570CE8
+
+sl.common.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\sl.common.dll
+  Version: 2,7,30,0
+  Company: NVIDIA
+  SHA256: 1942AA47A8504EB09B3A0B074D47BD66F5D6BDE8F67E00C4177342FF939AF2B0
+
+sl.deepdvc.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\sl.deepdvc.dll
+  Version: 2,7,30,0
+  Company: NVIDIA
+  SHA256: 2BCB5E0B68EC97DF99168E0E9E23667C145A4F17AE03B39B563FEBBF7F33A026
+
+sl.dlss_g.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\sl.dlss_g.dll
+  Version: 2,7,30,0
+  Company: NVIDIA
+  SHA256: A5CFCF553A3C6D4559A78DF2617C52D8B25D02A2458BC5E1178ACEB19F676AE2
+
+sl.interposer.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\sl.interposer.dll
+  Version: 2,7,30,0
+  Company: NVIDIA
+  SHA256: 34411F9AE0BA3C55897AA8BD229568671409D1094F210D75595FF57DC6AB6908
+
+sl.pcl.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\sl.pcl.dll
+  Version: 2,7,30,0
+  Company: NVIDIA
+  SHA256: A944784BAB320D3A59C48AEAA291FA3D7254A2E9DA765A847DF0CA1E92B2BEFE
+
+sl.reflex.dll
+  Path: D:\steam\steamapps\common\The Blood of Dawnwalker\Engine\Plugins\Runtime\Nvidia\StreamlineCore\Binaries\ThirdParty\Win64\sl.reflex.dll
+  Version: 2,7,30,0
+  Company: NVIDIA
+  SHA256: E0FDE699F74634892A4BDC3209310463A334510FBF0CEBC7B65A2B5A9A41BE8F
