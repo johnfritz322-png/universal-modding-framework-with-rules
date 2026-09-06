@@ -9,7 +9,7 @@ rather than `games/<game>/`.
 
 ---
 
-## 1. What DLSS 5 actually is — VERIFIED
+## 1. What DLSS 5 actually is — VERIFIED except where noted in the table
 
 Not an upscaler. Not a frame generator. **A one-step pixel-space diffusion model
 that generates the final displayed appearance of the frame**, adding lighting and
@@ -19,11 +19,13 @@ Rendering**.
 
 | Fact | Value |
 |---|---|
-| Launched | **2026-09-03**, 21:00 PT |
+| Announced | GTC 2026 |
+| Research page published | **2026-09-01** (dateline read directly from the page) |
+| Available in a shipping game | **2026-09-03**, 21:00 PT, with driver 616.64 |
 | First and (as of 2026-09-05) **only** native title | **NBA 2K27** |
 | Minimum driver | **Game Ready 616.64 WHQL** |
 | Supported hardware | **GeForce RTX 50 series** desktop + laptop, and GeForce NOW |
-| Runtime DLL | `nvngx_dlssnr.dll` |
+| Runtime DLL | `nvngx_dlssnr.dll` — **HIGH CONFIDENCE, not VERIFIED** (see note below) |
 | Integration routes | NVIDIA Streamline, or an Unreal Engine 5 plugin |
 | Developer controls | Multiple model variants (A/B/C), Structure Intensity, Tone Intensity, semantic AI masking |
 
@@ -35,6 +37,26 @@ Reconstruction, and runs as an additional stage alongside them.
 It is the first DLSS technology to *generate* final appearance rather than
 *reconstruct* a more expensive reference. NVIDIA describes it as the first
 generative rendering model productised to run in real time.
+
+### Note on the DLL name — HIGH CONFIDENCE, downgraded 2026-09-05
+
+`nvngx_dlssnr.dll` is named consistently across independent secondary sources
+(modding coverage describing it being patched for Ada, and SDK reporting), and it
+fits NVIDIA's confirmed naming convention — `nvngx_dlss.dll`, `nvngx_dlssd.dll`
+and `nvngx_dlssg.dll` were all found in an actual game install. But:
+
+- **No NVIDIA primary source naming the file was found**, by either agent.
+- A search of this machine's NVIDIA driver locations found only `nvngx_dlssg.dll`
+  (in `DriverStore/FileRepository/nv_dispi.inf_amd64_*`). **No `nvngx_dlssnr.dll`
+  anywhere**, including across both Steam libraries. These feature DLLs ship with
+  games rather than with the driver, and the only native DLSS 5 title, NBA 2K27,
+  is not installed here — so this is an absence of evidence, not evidence of
+  absence.
+- The public `NVIDIA/DLSS` SDK sample (latest public release 310.7.0) contains
+  `nvngx_dlss.dll` and not `nvngx_dlssnr.dll`.
+
+**To settle it:** inspect an NBA 2K27 install, or a driver package that ships the
+neural-rendering runtime. Until then do not state the filename as fact.
 
 ---
 
@@ -71,12 +93,25 @@ Source: NVIDIA ADLR Research, *DLSS 5: Generative Neural Rendering*, published
 
 ## 3. Can DLSS 5 be forced into a game that lacks it?
 
-### Officially: no — NVIDIA-STATED
+### Officially: no — HIGH CONFIDENCE (downgraded 2026-09-05)
 
-**NVIDIA has confirmed there is no DLSS 5 toggle in the NVIDIA App**, neither
-per-game nor global. Whether a game supports DLSS 5 depends entirely on the
-developer integrating it. The existing DLSS Override feature modifies an existing
-DLSS feature; it cannot create one.
+**There is no DLSS 5 toggle in the NVIDIA App**, per-game or global. Whether a
+game supports DLSS 5 depends on the developer integrating it. The existing DLSS
+Override feature modifies an existing DLSS feature; it cannot create one.
+
+This was originally labelled NVIDIA-STATED. That was **overclaiming**, and the
+label is corrected here. The basis was a VideoCardz headline reporting an NVIDIA
+confirmation — but the article itself returned HTTP 402 and was never actually
+read, so no direct NVIDIA wording was ever in hand. What genuinely supports the
+conclusion:
+
+- Neural Rendering does not appear among the DLSS Override options in NVIDIA's
+  own NVIDIA App documentation, which lists Super Resolution, model presets,
+  Frame Generation and Ray Reconstruction.
+- NVIDIA's own DLSS 5 instructions direct users to enable it in **NBA 2K27's
+  in-game video settings**, not through the NVIDIA App.
+
+That is strong, consistent, and indirect. It is not a direct denial from NVIDIA.
 
 ### Unofficially: three tiers, by what the game already provides
 
@@ -163,6 +198,11 @@ via the NVIDIA App — **not DLSS 5** (VERIFIED, NVIDIA launch article). Because
 does have an upscaler, it is a legitimate **tier-2 candidate**. See
 `games/blood-of-the-dawnwalker/` and `projects/dawnwalker-modding/`.
 
+Confirmed independently by inspecting the installed game files, which contain
+`nvngx_dlss.dll`, `nvngx_dlssd.dll`, `nvngx_dlssg.dll` and Streamline DLLs, and
+**no `nvngx_dlssnr.dll`**. That is consistent with the article and is also the
+evidence that NVIDIA's `nvngx_dlss*` naming convention is real.
+
 Recorded environment of the machine this was researched on (VERIFIED via
 `nvidia-smi`): **GeForce RTX 5080, driver 616.64, 16,303 MiB**. That meets the DLSS 5
 requirement exactly, so **no patched DLL or hardware bypass is needed here** — every
@@ -179,7 +219,10 @@ tool in section 4 solves a problem this machine does not have.
 2. **Which DLSS SDK version first shipped `nvngx_dlssnr.dll`.** Secondary reporting
    points at 310.8 with eleven DLLs. A direct read of NVIDIA's DLSS releases page
    returned version dates inconsistent with the known DLSS 4 timeline, so that read
-   is being treated as unreliable rather than cited.
+   is being treated as unreliable rather than cited. Independently checked
+   2026-09-05: the **latest public `NVIDIA/DLSS` release is 310.7.0**, and its
+   sample package contains `nvngx_dlss.dll` but **not** `nvngx_dlssnr.dll` — so the
+   neural-rendering runtime is not in the public SDK, and ships by some other route.
 3. **Whether the RTX 50 gate is in the DLL or the driver** (see section 4).
 4. **Whether tier-3 output is genuine neural rendering** or a degraded
    approximation. No side-by-side analysis found.
@@ -187,6 +230,36 @@ tool in section 4 solves a problem this machine does not have.
    nowhere.
 
 ---
+
+## 8. Cross-check record
+
+**2026-09-05.** This document was independently reviewed by Codex against NVIDIA and
+official sources, with an explicit brief to falsify it. Recorded here because the
+corrections matter more than the agreements.
+
+**Agreed, unchanged:**
+
+- Section 2, the inference-versus-training input split — reached independently from
+  the same NVIDIA Research page. This is the load-bearing claim and it holds.
+- DLSS 5 as a one-step pixel-space diffusion model generating final appearance;
+  RTX 50 official support; driver 616.64; Streamline and UE5 integration routes;
+  NBA 2K27 as the only native title found.
+- The Blood of Dawnwalker conclusion (section 6).
+- The refusal to endorse or install any one-click DLSS 5 installer (section 5).
+
+**Corrected as a result — the original was overclaiming in both cases:**
+
+| Item | Was | Now | Why |
+|---|---|---|---|
+| `nvngx_dlssnr.dll` as runtime DLL | VERIFIED | HIGH CONFIDENCE | No NVIDIA primary source names the file; not present anywhere on the research machine; not in the public SDK |
+| No DLSS 5 override in the NVIDIA App | NVIDIA-STATED | HIGH CONFIDENCE | The reporting behind that label was never actually read — the article returned HTTP 402. Supported indirectly, not by a direct NVIDIA denial |
+
+**Also refined:** the launch date now separates the GTC 2026 announcement, the
+2026-09-01 research-page publication, and 2026-09-03 availability in a shipping
+game, rather than collapsing them into one date.
+
+**Unchanged after review:** all five open questions in section 7 remain open. Both
+agents were blocked by the same HTTP 403 on NVIDIA Research's paper PDF.
 
 ## Sources
 

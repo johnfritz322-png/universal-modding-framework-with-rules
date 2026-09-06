@@ -54,6 +54,28 @@ Status: **Researched only.** Nothing installed, injected, or run. No in-game evi
   count and per-frame cost (NVIDIA Research's paper PDF is 403-blocked) and which SDK
   version first shipped `nvngx_dlssnr.dll`.
 
+### Corrected after independent cross-check (2026-09-05)
+Codex reviewed this document against NVIDIA and official sources with a brief to
+falsify it. It confirmed the load-bearing claim (the inference-versus-training input
+split) and found two places where the label was stronger than the sourcing. Both are
+corrected, and section 8 of the findings document records the review.
+- **`nvngx_dlssnr.dll` downgraded from VERIFIED to HIGH CONFIDENCE.** No NVIDIA
+  primary source names the file. A search of this machine found only
+  `nvngx_dlssg.dll` in the driver store and no `nvngx_dlssnr.dll` anywhere, and the
+  latest public DLSS SDK (310.7.0) does not contain it either. The only native title,
+  NBA 2K27, is not installed here, so this is absence of evidence rather than
+  disproof — but it is not VERIFIED.
+- **"No DLSS 5 override in the NVIDIA App" downgraded from NVIDIA-STATED to HIGH
+  CONFIDENCE.** The basis was a headline reporting an NVIDIA confirmation, but that
+  article returned HTTP 402 and was never read. The conclusion still stands on
+  indirect evidence: Neural Rendering is absent from NVIDIA's documented App override
+  options, and NVIDIA's own instructions point users to NBA 2K27's in-game settings.
+- **Launch dating refined** to separate the GTC 2026 announcement, the 2026-09-01
+  research-page publication, and 2026-09-03 availability in a shipping game.
+- **Dawnwalker conclusion strengthened** with game-file evidence: the install carries
+  `nvngx_dlss.dll`, `nvngx_dlssd.dll`, `nvngx_dlssg.dll` and Streamline DLLs, and no
+  `nvngx_dlssnr.dll`.
+
 ## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format) — usmap research
 
 ### Added
