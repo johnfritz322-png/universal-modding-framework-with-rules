@@ -1,5 +1,51 @@
 # Changelog
 
+## Unreleased — 2026-09-05 (claude/dlss5-second-pass) — DLSS 5 second cross-check
+
+Status unchanged: **Researched only.** Still nothing installed, injected, or run.
+
+Codex made a second pass over `platform/nvidia-dlss/DLSS5_NEURAL_RENDERING.md`.
+Most of it was an improvement and is kept; three points were adjusted.
+
+### Kept from the second pass
+- Brittle relative wording ("two days after launch") removed.
+- "Only native title" softened to "only native title found in NVIDIA public
+  material" — accurate about the limits of the search, not just the result.
+- **Supply-chain risk downgraded from VERIFIED to HIGH CONFIDENCE**, and the risk
+  restated more precisely: a one-click wrapper may well have buildable source, but
+  the DLSS 5 add-on/model path it pulls in is the leaked, closed-source, third-party
+  hosted part. That is the part that matters, and the original wording aimed at the
+  wrong target.
+- Real URLs added for every primary source, with secondary and community-only
+  sources listed separately — including an explicit note that the VideoCardz article
+  behind the App-override claim was **never read** (HTTP 402).
+
+### Corrected against the second pass
+- **The GTC 2026 line was removed as unsourced. It was not unsourced, and is
+  restored — with the citation it should have carried in the first place.** NVIDIA's
+  own GeForce article of 2026-03-17 states DLSS 5 was unveiled at GTC by the
+  company's CEO. The criticism was still fair: an uncited claim is
+  indistinguishable from an unsourced one.
+- **Re-check date corrected from 2026-09-06 back to 2026-09-05.** The second pass
+  ran the same evening, roughly twenty minutes later; 09-06 is only true in UTC,
+  while every other date in this repository is local. A document whose value rests
+  on precise dating should not imply a day of new information arrived when none did.
+  The local-time convention is now stated explicitly at the top.
+- **Restored the specific driver-store finding** that `nvngx_dlssg.dll` *is* present
+  under `DriverStore/FileRepository/nv_dispi.inf_amd64_*`, alongside the second
+  pass's broader search scope. The positive hit is what shows the search could have
+  found `nvngx_dlssnr.dll` had it been there; without it the absence proves less.
+- Restored the Unreal Engine 5 plugin alongside Streamline in the agreed-claims
+  list — it is stated in NVIDIA's own DLSS 5 article and the fact table already
+  carried it.
+
+### Unchanged
+- Claim 1 stands as VERIFIED: at inference the model consumes the rendered frame,
+  engine motion vectors, carried temporal state and artistic-direction values;
+  G-buffer and scene attributes are training-time supervision.
+- `nvngx_dlssnr.dll` stays HIGH CONFIDENCE. "No NVIDIA App override" stays HIGH
+  CONFIDENCE. All five open questions in section 7 remain open.
+
 ## Unreleased — 2026-09-05 (claude/research-dlss5-neural-rendering) — DLSS 5
 
 Status: **Researched only.** Nothing installed, injected, or run. No in-game evidence.

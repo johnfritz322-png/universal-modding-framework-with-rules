@@ -1,6 +1,8 @@
 # NVIDIA DLSS 5 — what it is, and whether it can be forced into a game
 
-**Researched 2026-09-05**, two days after launch. Status on the AGENTS.md ladder:
+**Researched and cross-checked 2026-09-05.** Dates in this document are local
+(UTC-6); the second pass ran the same evening, not the following day. Status on
+the AGENTS.md ladder:
 **Researched only.** Nothing here was installed, injected, or run. No in-game
 evidence of any kind. Findings will move quickly — re-verify before relying on them.
 
@@ -19,10 +21,10 @@ Rendering**.
 
 | Fact | Value |
 |---|---|
-| Announced | GTC 2026 |
-| Research page published | **2026-09-01** (dateline read directly from the page) |
+| Unveiled | **GTC 2026**, by NVIDIA's CEO — per NVIDIA's own GeForce article of 2026-03-17 |
+| Public NVIDIA Research / GeForce pages | **2026-09-01** |
 | Available in a shipping game | **2026-09-03**, 21:00 PT, with driver 616.64 |
-| First and (as of 2026-09-05) **only** native title | **NBA 2K27** |
+| First and (as of 2026-09-05) only native title found in NVIDIA public material | **NBA 2K27** |
 | Minimum driver | **Game Ready 616.64 WHQL** |
 | Supported hardware | **GeForce RTX 50 series** desktop + laptop, and GeForce NOW |
 | Runtime DLL | `nvngx_dlssnr.dll` — **HIGH CONFIDENCE, not VERIFIED** (see note below) |
@@ -46,12 +48,13 @@ fits NVIDIA's confirmed naming convention — `nvngx_dlss.dll`, `nvngx_dlssd.dll
 and `nvngx_dlssg.dll` were all found in an actual game install. But:
 
 - **No NVIDIA primary source naming the file was found**, by either agent.
-- A search of this machine's NVIDIA driver locations found only `nvngx_dlssg.dll`
-  (in `DriverStore/FileRepository/nv_dispi.inf_amd64_*`). **No `nvngx_dlssnr.dll`
-  anywhere**, including across both Steam libraries. These feature DLLs ship with
-  games rather than with the driver, and the only native DLSS 5 title, NBA 2K27,
-  is not installed here — so this is an absence of evidence, not evidence of
-  absence.
+- A search of this machine's NVIDIA driver locations, `ProgramData`, NVIDIA
+  program folders, and both Steam libraries found **no `nvngx_dlssnr.dll`**. The
+  one DLSS feature DLL that *is* present in the driver store is `nvngx_dlssg.dll`,
+  under `DriverStore/FileRepository/nv_dispi.inf_amd64_*` — recorded because it
+  shows the search was capable of finding such a file had one been there. The only
+  native DLSS 5 title, NBA 2K27, is not installed here, so this remains an absence
+  of evidence rather than evidence of absence.
 - The public `NVIDIA/DLSS` SDK sample (latest public release 310.7.0) contains
   `nvngx_dlss.dll` and not `nvngx_dlssnr.dll`.
 
@@ -116,9 +119,10 @@ That is strong, consistent, and indirect. It is not a direct denial from NVIDIA.
 ### Unofficially: three tiers, by what the game already provides
 
 **Tier 1 — native integration.** Developer-tuned models, semantic masking, art
-direction per scene. The real thing. Today: NBA 2K27 only. Announced support
-includes Bethesda, Capcom, Ubisoft, NetEase, NCSOFT, Tencent, WB Games, Hotta and
-S-GAME, with no dates given.
+direction per scene. The real thing. As of the 2026-09-05 re-check, NBA 2K27 is
+the only native title found in NVIDIA public material. Announced support includes
+Bethesda, Capcom, Ubisoft, NetEase, NCSOFT, Tencent, WB Games, Hotta and S-GAME,
+with no dates given.
 
 **Tier 2 — driven over an existing upscaler.** COMMUNITY-CLAIMED, not tested here.
 A game already running DLSS, FSR2 or XeSS is producing genuine engine motion
@@ -167,20 +171,21 @@ described, not a confirmed mechanism.
 
 ---
 
-## 5. Supply-chain risk — VERIFIED, and the reason nothing was installed
+## 5. Supply-chain risk — HIGH CONFIDENCE, and the reason nothing was installed
 
 A cluster of repositories appeared within days of launch offering one-click DLSS 5
 for every game. These were **read, not run**. The recurring pattern:
 
-- **Precompiled executables with no buildable source.** The most-starred ships an
-  `.exe` plus DLLs; its README states it was engineered with an AI model.
+- **The important binaries are not auditable.** One checked one-click wrapper has
+  buildable Rust source, but its own documentation says the DLSS 5 add-on/model is
+  leaked, closed-source, and third-party hosted. That is the part that matters.
 - **Claims that contradict the vendor.** "All PC games, RTX 20 through 50" is
   asserted while NVIDIA's own engineers are still tuning RTX 40.
 - **Silence on the only hard part.** None explain how they supply motion vectors in
   a game that has none.
-- **An active, named threat.** DLSS Swapper's developer has publicly warned that
-  users upload malware-bearing DLLs into the community pool, and that lookalike
-  sites distribute viruses under the tool's name.
+- **Known ecosystem risk.** DLSS Swapper's developer has publicly warned about
+  malware-bearing DLLs and lookalike sites. Treat downloaded DLSS DLLs as unsafe
+  unless they come from NVIDIA or an installed game.
 
 **Rule for this repository:** model DLLs come from an official NVIDIA driver
 package or a game's own installation. Never from a mod bundle. Any tool requiring a
@@ -242,8 +247,9 @@ corrections matter more than the agreements.
 - Section 2, the inference-versus-training input split — reached independently from
   the same NVIDIA Research page. This is the load-bearing claim and it holds.
 - DLSS 5 as a one-step pixel-space diffusion model generating final appearance;
-  RTX 50 official support; driver 616.64; Streamline and UE5 integration routes;
-  NBA 2K27 as the only native title found.
+  RTX 50 official support; driver 616.64; Streamline and Unreal Engine 5 plugin as
+  the integration routes; and NBA 2K27 as the only native title found in NVIDIA
+  public material.
 - The Blood of Dawnwalker conclusion (section 6).
 - The refusal to endorse or install any one-click DLSS 5 installer (section 5).
 
@@ -254,9 +260,15 @@ corrections matter more than the agreements.
 | `nvngx_dlssnr.dll` as runtime DLL | VERIFIED | HIGH CONFIDENCE | No NVIDIA primary source names the file; not present anywhere on the research machine; not in the public SDK |
 | No DLSS 5 override in the NVIDIA App | NVIDIA-STATED | HIGH CONFIDENCE | The reporting behind that label was never actually read — the article returned HTTP 402. Supported indirectly, not by a direct NVIDIA denial |
 
-**Also refined:** the launch date now separates the GTC 2026 announcement, the
-2026-09-01 research-page publication, and 2026-09-03 availability in a shipping
-game, rather than collapsing them into one date.
+**Also refined:** the timeline now separates three events rather than collapsing
+them into one date — the GTC 2026 unveiling, the 2026-09-01 NVIDIA Research and
+GeForce publications, and 2026-09-03 availability in a shipping game.
+
+**One correction rejected, with evidence.** The second pass removed the GTC 2026
+line as unsourced. It was not — NVIDIA's own GeForce article of 2026-03-17 states
+that DLSS 5 was unveiled at GTC by the company's CEO. The line is restored *with*
+the citation it should have carried originally. The underlying criticism was fair:
+a claim whose source is not cited is indistinguishable from one that has none.
 
 **Unchanged after review:** all five open questions in section 7 remain open. Both
 agents were blocked by the same HTTP 403 on NVIDIA Research's paper PDF.
@@ -268,13 +280,21 @@ agents were blocked by the same HTTP 403 on NVIDIA Research's paper PDF.
   distinction in section 2 comes from here. Linked paper PDF is 403-blocked.
 - NVIDIA GeForce — *DLSS 5: Neural Rendering Brings Lifelike Lighting to NBA 2K27* —
   <https://www.nvidia.com/en-us/geforce/news/dlss-5-3d-guided-neural-rendering/>
-- NVIDIA GeForce — Game Ready 616.64 driver article (driver requirement).
+- NVIDIA GeForce — Game Ready 616.64 driver article —
+  <https://www.nvidia.com/en-us/geforce/news/nba-2k27-dlss-5-3d-guided-neural-rendering-geforce-game-ready-driver/>
 - NVIDIA GeForce — launch article confirming The Blood of Dawnwalker gets DLSS
   Super Resolution —
   <https://www.nvidia.com/en-us/geforce/news/star-wars-zero-company-aliens-fireteam-elite-blood-of-dawnwalker-dlss/>
-- VideoCardz — NVIDIA confirms no DLSS 5 override in the NVIDIA App.
-- Igor's Lab / TweakTown / Guru3D — `nvngx_dlssnr.dll` patched onto Ada; per-game
-  results.
-- Tom's Hardware — DLSS Swapper developer's malware warning.
-- GitHub — `Dagherbou/OptiScaler_DLSSNR` release notes; `NVIDIA-RTX/Streamline`
-  plugin list (no neural-rendering plugin present as of v2.12.0).
+- NVIDIA GeForce — DLSS 5 unveiled at GTC 2026, article dated 2026-03-17 —
+  <https://www.nvidia.com/en-us/geforce/news/death-stranding-2-crimson-desert-dlss-4-multi-frame-gen/>
+- NVIDIA Developer — public DLSS SDK and integration page —
+  <https://developer.nvidia.com/rtx/dlss>
+- GitHub — public `NVIDIA/DLSS` releases —
+  <https://github.com/NVIDIA/DLSS/releases>
+- GitHub — public `NVIDIA-RTX/Streamline` releases —
+  <https://github.com/NVIDIA-RTX/Streamline/releases>
+- Secondary/community-only sources for downgraded claims: VideoCardz headline
+  about NVIDIA App override status (article not read; HTTP 402), Igor's Lab /
+  TweakTown / Guru3D reporting on Ada-patched `nvngx_dlssnr.dll`, Tom's Hardware
+  reporting the DLSS Swapper malware warning, and GitHub community tool release
+  notes for `Dagherbou/OptiScaler_DLSSNR`.
