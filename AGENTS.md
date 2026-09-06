@@ -57,6 +57,7 @@ Designed -> Implemented -> Compiles -> Validates -> Loads -> Tested In-Game -> R
 - `games/<game>/` — verified game-specific rules and limitations.
 - `templates/` — project, testing, and compatibility templates.
 - `projects/` — individual mod projects that consume this framework.
+- `platform/` — cross-game hardware, driver and vendor-technology reference (e.g. GPU upscaling and neural rendering) that applies to more than one game.
 
 ## Change policy
 Prefer branches and pull requests for meaningful changes. Keep `main` as the stable source of truth. Update `CHANGELOG.md` when behavior, architecture, dependencies, compatibility, or framework rules materially change.
