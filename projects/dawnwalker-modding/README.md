@@ -19,6 +19,11 @@ It should not store the full game files or large copied game archives.
 - `profiles/john-rtx5080-quality`: active quality-and-smoothness profile tuned
   for John's RTX 5080, Ryzen 9 5900X, 32 GB RAM, and 4K display.
 
+## Runtime Mod Prototypes
+
+- `mods/john-loadout-optimizer`: UE4SS Lua prototype for Numpad 1 attack
+  optimization and Numpad 2 defense optimization from inside the game.
+
 ## Installed Mod References
 
 See `Dawnwalker-Modding-Map.md` for the installed mod list, what each mod appears to change, and the workflow rules for Nexus downloads.
