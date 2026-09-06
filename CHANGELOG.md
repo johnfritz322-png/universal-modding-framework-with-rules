@@ -40,11 +40,14 @@
 ### Process note
 - The 2026-09-04 format research landed on `main` directly and no pull request was
   ever opened, which departs from the repo protocol (branch, PR, `main` stays the
-  stable baseline). No work was lost — but the `claude/dawnwalker-iostore-format`
-  branch was left on origin two commits behind `main` with **zero unique commits**,
-  where it read as in-flight work that no longer existed. It has been deleted;
-  its tip was `84eed6b7f5165c5b37fe6da66f7d9859cd03ff61`, fully contained in `main`,
-  so the ref can be recreated from that SHA if anyone wants it back.
+  stable baseline). No work was lost. The `claude/dawnwalker-iostore-format` branch
+  remains on origin at `84eed6b7f5165c5b37fe6da66f7d9859cd03ff61`, two commits
+  behind `main` with **zero unique commits** — every commit on it is already in
+  `main`. It is kept as a historical record of where that research was done.
+  **Branches in this repo are not deleted after merging**; a merged branch is a
+  record, and a stale-looking ref costs nothing next to losing the trail.
+- This entry's own change was made the protocol way, as a correction to the above:
+  branch `claude/dawnwalker-doc-fixes`, pull request, `main` untouched.
 
 ## Unreleased — 2026-09-04 (claude/dawnwalker-iostore-format) — usmap research
 
