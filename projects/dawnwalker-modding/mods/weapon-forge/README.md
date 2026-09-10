@@ -27,6 +27,9 @@ not yet verified. Do not install it.**
 - [`DISPOSABLE-ITEM-TEST-2026-09-10.md`](DISPOSABLE-ITEM-TEST-2026-09-10.md)
   — a new-ID, zero-collision container that has passed packing and read-back
   checks; game registration and granting remain the final unsolved gate
+- [`NEXT-STEPS-HANDOFF-2026-09-10.md`](NEXT-STEPS-HANDOFF-2026-09-10.md)
+  — exact resume point, finished checks, safety limits, and the first in-game
+  test sequence
 
 ## Where the pieces live
 
