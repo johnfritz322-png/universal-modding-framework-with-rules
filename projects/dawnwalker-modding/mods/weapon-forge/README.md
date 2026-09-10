@@ -9,6 +9,9 @@ matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 - [`ATTACHMENT-FINDINGS-2026-09-09.md`](ATTACHMENT-FINDINGS-2026-09-09.md) — Codex's
   asset paths verified, AES key confirmed valid on 258042, and the mesh-override
   route that is actually available
+- [`DT_WEAPONAPPEARANCES-2026-09-09.md`](DT_WEAPONAPPEARANCES-2026-09-09.md) — Oodle solved
+- [`USMAP-DECODING-2026-09-09.md`](USMAP-DECODING-2026-09-09.md) — property values now
+  decode; **`weapon_appearances.csv` maps all 206 weapons to their meshes**
 - [`INVENTORY-ITEM-FINDINGS-2026-09-10.md`](INVENTORY-ITEM-FINDINGS-2026-09-10.md)
   — separate-inventory-item route, its verified evidence, and its remaining
   authoring blocker
