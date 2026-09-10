@@ -3,8 +3,12 @@
 Custom weapon visuals for The Blood of Dawnwalker — five original swords with
 matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 
-**Status: NOT SHIPPABLE. Do not install the current build.** Independent audit in
-[`AUDIT-2026-09-09.md`](AUDIT-2026-09-09.md).
+**Status: NOT SHIPPABLE. Do not install the current build.**
+
+- [`AUDIT-2026-09-09.md`](AUDIT-2026-09-09.md) — why the cooked build is retired
+- [`ATTACHMENT-FINDINGS-2026-09-09.md`](ATTACHMENT-FINDINGS-2026-09-09.md) — Codex's
+  asset paths verified, AES key confirmed valid on 258042, and the mesh-override
+  route that is actually available
 
 ## Where the pieces live
 
@@ -29,9 +33,12 @@ Emberveil Saber, Oathlight Longsword.
    report 0 collisions. The current build reports 390.
 2. **Real geometry.** The source meshes are 40-vert boxes with no UVs and no
    normals. They need actual modelling before any visual judgement is meaningful.
-3. **An attachment route.** Nothing yet connects a custom mesh to an equipped
-   weapon on this build. This is the genuinely unsolved problem and the one worth
-   attacking first — the other two are only worth fixing if this one is solvable.
+3. **An attachment route.** Now partly answered — see
+   `ATTACHMENT-FINDINGS-2026-09-09.md`. The available route is a **targeted mesh
+   override**, not an additive plugin, which means gate 3 below changes from "zero
+   collisions" to "collides with exactly the intended packages and nothing else".
+   Still unknown: which sword folder a given item uses. That mapping lives in
+   `/Game/_Dawnwalker/Inventory/Items/DT_WeaponAppearances`.
 4. **Build match.** The game patched to `dw1-pc-258042` (Steam build 25191761) on
    2026-09-09. Re-verify against the current build, not the notes.
 5. **Disposable save.** First install goes on a throwaway save, never the main
