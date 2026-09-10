@@ -1,5 +1,11 @@
 # FText cracked; item-asset decode still misaligned — handoff
 
+> **Superseded for `ItemWeaponDataAsset` by
+> [`ITEM-WEAPON-DECODE-2026-09-10.md`](ITEM-WEAPON-DECODE-2026-09-10.md).**
+> The measured byte offsets and FText work below remain useful history, but the
+> decode problem was caused by a reversed inheritance lookup, not an unknown
+> preamble.
+
 Picks up from `USMAP-DECODING-2026-09-09.md`. **Read this before touching
 `ItemWeaponDataAsset`.** Stopped mid-investigation on a context budget, so the
 open question is written out with the exact offsets rather than summarised.

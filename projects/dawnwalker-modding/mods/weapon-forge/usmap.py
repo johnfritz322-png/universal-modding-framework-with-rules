@@ -146,30 +146,23 @@ class Usmap:
             pt.value, p = self._ptype(b, p)
         return pt, p
 
-    def schema_chain(self, name):
-        """Flattened property list, base class first — the order the header indexes."""
-        chain = []
-        while name and name in self.structs:
-            chain.append(self.structs[name])
-            name = self.structs[name].super_name
-        out = []
-        for s in reversed(chain):
-            out.append(s)
-        return out
-
     def flat_props(self, name):
-        """Global schema index -> Prop across the inheritance chain.
+        """Global unversioned-header index -> Prop across inheritance.
 
-        Each struct stores property indices local to itself, but the unversioned
-        header numbers them globally: base class properties come first, then each
-        derived level offset by the running total of its ancestors' prop_count.
-        Only classes whose ancestors declare no properties look the same either
-        way, which is why simple row structs decode correctly without this.
+        The current struct's properties occupy the first indices; its parent is
+        offset by the current struct's *declared* property count, then that
+        parent's parent is offset again, and so on.  This is intentionally
+        derived-class-first.  CUE4Parse's mapping reader uses the same rule
+        (try the current type, then recurse into its super with
+        ``index - PropertyCount``).  Reversing this order makes deep data assets
+        look plausible while shifting every value after their first child field.
         """
         out = {}
         offset = 0
-        for s in self.schema_chain(name):
+        while name and name in self.structs:
+            s = self.structs[name]
             for pr in s.props:
                 out[offset + pr.schema_index] = pr
             offset += s.prop_count
+            name = s.super_name
         return out

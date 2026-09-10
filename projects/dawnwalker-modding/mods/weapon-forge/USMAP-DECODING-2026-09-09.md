@@ -31,11 +31,13 @@ The correct masks are `SkipNum 0x007F`, `HasZero 0x0080`, `IsLast 0x0100`,
 
 ## Two traps worth writing down
 
-**Schema indices are global across the inheritance chain**, not per struct. Each
-struct stores indices local to itself; the header numbers them base-class-first,
-each level offset by the running total of its ancestors' `prop_count`. Simple row
-structs whose parents declare nothing decode correctly either way, so this stays
-hidden until a deep class like `ItemWeaponDataAsset` (offset 25) hits it.
+**Correction (2026-09-10): schema indices are derived-class-first across an
+inheritance chain.** Each struct stores indices local to itself; header indices
+first address the current struct, then its parent after the current struct's
+`prop_count`, and so on. The earlier base-first explanation was wrong. Simple
+row structs whose parents declare nothing decode correctly either way, which hid
+the error until a deep class like `ItemWeaponDataAsset` exposed it. See
+[`ITEM-WEAPON-DECODE-2026-09-10.md`](ITEM-WEAPON-DECODE-2026-09-10.md).
 
 **`GameplayTag` is not a bare FName.** It writes a normal unversioned property
 header, and in these rows an empty tag is 3 bytes (header + zero mask), not 8.
@@ -64,15 +66,12 @@ against assuming they meant Shortsword/Longsword/Greatsword. **They do not.**
 `L_Sword_Vampiric_01`, and `ITM_Weapon_SwordGreatMaster1a` uses `L_Sword_NPC_07`.
 The prefix is not the weapon class. Use the CSV, never the name.
 
-## Still not decoded: item data assets
+## Item data assets: corrected in the next handoff
 
-`ItemWeaponDataAsset` does **not** decode correctly yet. Its `Text` properties
-(`ItemName`, `ItemDescription`) do not match the standard FText layouts tried
-(history `-1` with culture-invariant flag, or history `0` with
-namespace/key/source), and item exports carry trailing data past their property
-block, so whole-export byte-exactness cannot be used as the validator. Decoding
-attempts produced garbage — an `ItemId` reading as a blueprint path, a denormal
-float for damage — and are **not** recorded anywhere as fact.
+`ItemWeaponDataAsset` now decodes correctly; the resolution and full validation
+are in [`ITEM-WEAPON-DECODE-2026-09-10.md`](ITEM-WEAPON-DECODE-2026-09-10.md).
+The historical paragraph that used to be here described the old, misaligned
+decoder and must not be treated as current status.
 
 This matters because Codex's current goal is authoring **new inventory items**,
 which needs this asset type readable. It is the next thing to solve.
