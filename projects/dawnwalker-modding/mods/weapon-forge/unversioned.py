@@ -165,6 +165,10 @@ class Decoder:
             key = r.fstring()
             src = r.fstring()
             return src or key
+        if history == 11:                # StringTableEntry: table id + key
+            table = self.name(r)
+            key = r.fstring()
+            return "%s[%s]" % (table.split("/")[-1], key)
         raise NotImplementedError("FText history type %d" % history)
 
     def struct(self, r, struct_name):

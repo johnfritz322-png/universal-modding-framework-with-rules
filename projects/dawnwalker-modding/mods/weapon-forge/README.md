@@ -12,6 +12,9 @@ matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 - [`DT_WEAPONAPPEARANCES-2026-09-09.md`](DT_WEAPONAPPEARANCES-2026-09-09.md) — Oodle solved
 - [`USMAP-DECODING-2026-09-09.md`](USMAP-DECODING-2026-09-09.md) — property values now
   decode; **`weapon_appearances.csv` maps all 206 weapons to their meshes**
+- [`FTEXT-HANDOFF-2026-09-09.md`](FTEXT-HANDOFF-2026-09-09.md) — **read before touching
+  `ItemWeaponDataAsset`**: FText solved (string tables), but the item decode is still
+  misaligned and the open question is written out with exact offsets
 - [`INVENTORY-ITEM-FINDINGS-2026-09-10.md`](INVENTORY-ITEM-FINDINGS-2026-09-10.md)
   — separate-inventory-item route, its verified evidence, and its remaining
   authoring blocker
