@@ -51,6 +51,12 @@ The game must be shown to **register and grant** this new item ID on a disposabl
 save without UE4SS.  The old UE4SS path remains disabled because it previously
 crashed the game.  No verified native grant mechanism has been found yet.
 
+Current public inventory menus describe adding indexed weapon IDs, but that is
+not proof that they can see a newly packed asset.  The locally downloaded
+`Dawnwalker-UE4SS-v1.2.0-rc5-build25129649` also fails its own signature scan on
+the current game executable (`EngineVersion`, `GUObjectArray`, `GMalloc`, and
+`FText` are unresolved), so it is not a safe fallback.  It remains disabled.
+
 Do not install the test container or claim the item is in inventory until that
 mechanism is verified.  Once it is, use this test first; only after it appears in
 inventory should the five authored weapon assets be built and added.
