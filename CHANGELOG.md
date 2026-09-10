@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Added Dawnwalker Weapon Forge findings for the requested separate-inventory-item
+  architecture. The feature remains unimplemented and untested.
+
 ## Unreleased — 2026-09-09 (claude/dawnwalker-weaponforge-audit) — Weapon Forge audit
 
 Status: **Audited only.** Nothing installed; no game file or save touched.
