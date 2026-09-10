@@ -1,0 +1,4 @@
+# Locally verified third-party binaries and extracted game data.  The scripts
+# and findings that use them remain versioned; proprietary game content does not.
+tools/retoc-v0.1.5/
+projects/dawnwalker-modding/mods/weapon-forge/.local/

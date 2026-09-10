@@ -5,6 +5,9 @@ matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 
 **Status: NOT SHIPPABLE. Do not install the current build.**
 
+**Additive inventory-item test: container format verified; registration/grant is
+not yet verified. Do not install it.**
+
 - [`AUDIT-2026-09-09.md`](AUDIT-2026-09-09.md) — why the cooked build is retired
 - [`ATTACHMENT-FINDINGS-2026-09-09.md`](ATTACHMENT-FINDINGS-2026-09-09.md) — Codex's
   asset paths verified, AES key confirmed valid on 258042, and the mesh-override
@@ -21,6 +24,9 @@ matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 - [`INVENTORY-ITEM-FINDINGS-2026-09-10.md`](INVENTORY-ITEM-FINDINGS-2026-09-10.md)
   — separate-inventory-item route, its verified evidence, and its remaining
   authoring blocker
+- [`DISPOSABLE-ITEM-TEST-2026-09-10.md`](DISPOSABLE-ITEM-TEST-2026-09-10.md)
+  — a new-ID, zero-collision container that has passed packing and read-back
+  checks; game registration and granting remain the final unsolved gate
 
 ## Where the pieces live
 
