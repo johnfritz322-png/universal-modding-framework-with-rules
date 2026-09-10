@@ -79,6 +79,12 @@ weapon.
 
 ## Next research task
 
-Find a proven way to author or serialize a new cooked `ItemWeaponDataAsset` for the
-retail `DogwoodInventory` module. Until that is solved, describe the feature only
-as a design goal, not a working mod.
+The read-side layout is now resolved—see
+[`ITEM-WEAPON-DECODE-2026-09-10.md`](ITEM-WEAPON-DECODE-2026-09-10.md), which
+validates 191 present retail weapon packages. The remaining task is to prove a
+way to **author and package** a new cooked `ItemWeaponDataAsset` for the retail
+`DogwoodInventory` module, then prove that the game's asset scan discovers it
+and that its item id can be granted without the previously crash-prone UE4SS
+route. Current public Dawnwalker cooked tools document only asset/data-table
+replacement, not a tested additive inventory-item workflow. Until that is
+solved, describe the feature only as a design goal, not a working mod.
