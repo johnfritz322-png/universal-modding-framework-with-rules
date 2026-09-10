@@ -1,0 +1,59 @@
+# Dawnwalker Weapon Forge
+
+Custom weapon visuals for The Blood of Dawnwalker — five original swords with
+matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
+
+**Status: NOT SHIPPABLE. Do not install the current build.** Independent audit in
+[`AUDIT-2026-09-09.md`](AUDIT-2026-09-09.md).
+
+## Where the pieces live
+
+These paths are on John's PC and are not mirrored into this repository — the build
+alone is 143 MB.
+
+| Piece | Path |
+| --- | --- |
+| Unreal project | `D:\Dawnwalker-Modding\Projects\DawnwalkerWeaponForge` |
+| Engine | `D:\UE55\UE_5.5` |
+| Source meshes | `…\SourceArt\Weapons`, `…\SourceArt\Scabbards` |
+| Cooked build | `Documents\Codex\2026-09-07\referenced-chatgpt-conversation-this-is-an\outputs\DawnwalkerWeaponForge-VerifiedBuild` |
+| Codex's handoff | same `outputs\` folder, `DawnwalkerWeaponForge-HANDOFF.md` |
+
+The five swords: Riftforged Slabblade, Nightfall Colossus, Moonrend Cleaver,
+Emberveil Saber, Oathlight Longsword.
+
+## What has to be true before this ships
+
+1. **Cook scope.** Only `/DawnwalkerWeaponForge/Weapons`, engine content excluded.
+   Verify with `python verify_container.py <mod.utoc> --expect-none` — it must
+   report 0 collisions. The current build reports 390.
+2. **Real geometry.** The source meshes are 40-vert boxes with no UVs and no
+   normals. They need actual modelling before any visual judgement is meaningful.
+3. **An attachment route.** Nothing yet connects a custom mesh to an equipped
+   weapon on this build. This is the genuinely unsolved problem and the one worth
+   attacking first — the other two are only worth fixing if this one is solvable.
+4. **Build match.** The game patched to `dw1-pc-258042` (Steam build 25191761) on
+   2026-09-09. Re-verify against the current build, not the notes.
+5. **Disposable save.** First install goes on a throwaway save, never the main
+   playthrough.
+
+## verify_container.py
+
+Reports which base-game packages a mod container replaces, by intersecting IoStore
+chunk-ID tables. Works on the encrypted base container with **no AES key and no
+Oodle** — chunk IDs live in the TOC header region, outside the encrypted directory
+index. Standard library only.
+
+```bash
+python verify_container.py "<mod>.utoc"                 # report replacements
+python verify_container.py "<mod>.utoc" --expect-none   # additive mod: fail on any
+```
+
+Collision is normal for a *replacement* mod — `SkillsNoTimeCost` collides on 112 of
+113 chunks and that is it working. Use `--expect-none` only for mods that mean to
+add rather than replace.
+
+## Related
+
+- Format research: [`../../../../games/blood-of-the-dawnwalker/`](../../../../games/blood-of-the-dawnwalker/)
+- Build fingerprint: [`../../GAME_VERSION.md`](../../GAME_VERSION.md)
