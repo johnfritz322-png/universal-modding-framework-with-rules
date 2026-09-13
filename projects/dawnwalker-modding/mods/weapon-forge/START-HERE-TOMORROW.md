@@ -22,13 +22,15 @@ A custom sword in The Blood of Dawnwalker, as its own inventory item.
 - Why a *new* item never registers: it is not in the baked `AssetRegistry.bin`.
   Confirmed by extraction — every listed item is in it, the test item is not.
 
-**The wall:**
+**The wall — NEW GEOMETRY ONLY:**
 
-**Packages cooked in a stock UE 5.5 project are not loadable by this game.** Five
-in-game attempts, five crashes. Proved by control: a plain engine cube fails
-identically to a custom sword, so mesh content is not the cause. retoc's
-`to-zen` produces a structurally perfect container — 347-byte stub pak matching
-the working mods, correct chunk id, 1 collision — and it still crashes.
+**Custom StaticMesh cooked in a stock UE 5.5 project will not load.** Six
+attempts, six crashes, ending at `Serial size mismatch: Expected 17488, Actual
+18589`. Proved by control: a plain engine cube fails identically, while the
+game's own mesh round-tripped through retoc renders fine.
+
+**This wall does NOT apply to data changes.** DataTable overrides work — see the
+breakthrough page. Existing game meshes can be swapped freely.
 
 ## Do this first tomorrow
 
@@ -72,8 +74,18 @@ dead ends. Do not rediscover them.
 
 ## State of the machine
 
-- **Nothing of ours is installed.** `~mods` has only `SkillsNoTimeCost` and the
-  RTX 5080 profile. No save, base archive or executable was ever modified.
+**Currently INSTALLED (as of 2026-09-13):**
+
+- `~mods\zzz_VrakhirGargoyle_P.{pak,ucas,utoc}` — the working appearance override
+- `ue4ss\Mods\ForgeAppearanceProbe\` — the read-only probe, plus a line in
+  `mods.txt` (backed up as `mods.txt.bak-before-appearanceprobe`)
+- Older, inert: `ForgeRegistryProbe`, `ForgeItemLoadProbe`, and
+  `Dawnwalker\Mods\ForgeRegistryProbe\`
+
+The user's own `SkillsNoTimeCost` and `~JohnRTX5080Quality_P.pak` are untouched.
+**No save, base archive or executable has ever been modified.**
+
+Rollback is deleting those files and restoring the backed-up `mods.txt`.
 - retoc is at `D:\Dawnwalker-Modding\tools\retoc\` (SHA256-verified).
 - UE project at `D:\Dawnwalker-Modding\Projects\DawnwalkerWeaponForge`.
 - Game is on build 25232147 (Hotfix 1.0.5) — it has patched three times in a

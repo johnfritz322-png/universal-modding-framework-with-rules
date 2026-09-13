@@ -55,6 +55,8 @@ end
 -- v2 listed every sword component with its owner but never compared against the
 -- real pawn, so it reported cutscene actors and scenery. This asks the only
 -- question that matters: which actor holds the overridden blade.
+local playerHasOverride = false
+
 local function probeEquippedMesh()
     say("")
     local pawn, pawnName = nil, ""
@@ -78,10 +80,29 @@ local function probeEquippedMesh()
                     if mn:find(OVERRIDDEN) or mn:find(ORIGINAL) then
                         local oko, owner = pcall(function() return c:GetOuter() end)
                         local on = (oko and owner) and objName(owner) or "<no outer>"
-                        local isPlayer = (pawnName ~= "" and on == pawnName)
+                        -- Identity, not text. Names can collide (there is a
+                        -- second BP_PlayerCharacter_C inside a cutscene), so
+                        -- compare the objects themselves and fall back to
+                        -- addresses, using the name only as a last resort.
+                        local isPlayer, how = false, "none"
+                        if pawn ~= nil and oko and owner ~= nil then
+                            local oke, eq = pcall(function() return owner == pawn end)
+                            if oke and eq then
+                                isPlayer, how = true, "object-identity"
+                            else
+                                local oka, a1 = pcall(function() return owner:GetAddress() end)
+                                local okb, a2 = pcall(function() return pawn:GetAddress() end)
+                                if oka and okb and a1 ~= nil and a1 == a2 then
+                                    isPlayer, how = true, "address"
+                                elseif pawnName ~= "" and on == pawnName then
+                                    isPlayer, how = true, "name-fallback-AMBIGUOUS"
+                                end
+                            end
+                        end
                         say("  mesh=" .. (mn:find(OVERRIDDEN) and OVERRIDDEN or ORIGINAL))
                         say("    holder=" .. on)
-                        say("    isPlayerPawn=" .. tostring(isPlayer))
+                        say("    isPlayerPawn=" .. tostring(isPlayer) .. "  (via " .. how .. ")")
+                        if isPlayer then playerHasOverride = playerHasOverride or mn:find(OVERRIDDEN) ~= nil end
                         shown = shown + 1
                         if shown >= 10 then return end
                     end
@@ -134,10 +155,20 @@ end
 
 local function verdict()
     say("")
-    if isLoaded(OVERRIDDEN) then
-        say("VERDICT=OVERRIDE_LIVE — our container is winning; the visual comes")
-        say("  from somewhere other than this table. Look at the equip path and")
-        say("  AppearanceSubsystem.ItemAppearanceMap.")
+    -- The holder check is authoritative. Residency alone only proves something
+    -- requested the mesh; it does not prove the player is wearing it. An earlier
+    -- version of this probe concluded "the visual comes from elsewhere" purely
+    -- from residency and was wrong.
+    if playerHasOverride then
+        say("VERDICT=OVERRIDE_ON_PLAYER — the player pawn holds the overridden")
+        say("  blade. The DataTable override is working end to end.")
+        say("  NOTE: this is VISUAL REPLACEMENT of an existing weapon. It does")
+        say("  NOT create a new inventory item.")
+    elseif isLoaded(OVERRIDDEN) then
+        say("VERDICT=LOADED_BUT_NOT_ON_PLAYER — the overridden mesh is resident,")
+        say("  but no component on the player pawn holds it. Something else")
+        say("  requested it (an NPC, or streaming). Check the equip path and")
+        say("  AppearanceSubsystem.ItemAppearanceMap before concluding anything.")
     elseif isLoaded(ORIGINAL) then
         say("VERDICT=ORIGINAL_IN_USE — the game is using the stock blade, so our")
         say("  container is probably not winning. Check load order and packaging.")

@@ -1,4 +1,9 @@
-# The override works. Read this first.
+# Visual replacement works. Read this first.
+
+> **Scope, stated plainly: this replaces the appearance of an EXISTING weapon.**
+> It does **not** create a new inventory item. The additive-item goal is a
+> separate, still-unsolved problem — see `OWN-ITEM-ROUTE-2026-09-12.md` and
+> `REGISTRATION-LEAD-2026-09-12.md`. Do not describe this as solving that.
 
 After six crashing attempts, one route now **works end to end**: a DataTable
 override loads, is honoured, and changes what the game renders.
