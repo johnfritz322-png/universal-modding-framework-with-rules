@@ -102,3 +102,30 @@ add rather than replace.
 
 - Format research: [`../../../../games/blood-of-the-dawnwalker/`](../../../../games/blood-of-the-dawnwalker/)
 - Build fingerprint: [`../../GAME_VERSION.md`](../../GAME_VERSION.md)
+
+## Installed game state (updated 2026-09-12 by Claude)
+
+**`00000000_ForgeTestInventory_P.*` was removed from `~mods`** at the user's
+request, after the live test showed it was inert — the game loads it but never
+lists `ForgeTestSword0000` as an item.
+
+It was **moved, not deleted**, and the three files are intact at:
+
+```text
+D:\Dawnwalker-Modding\removed-test-packages-20260912\
+```
+
+Copy them back into `Content\Paks\~mods\` to resume the registration work. They
+are parked outside the game install on purpose: `DAWNWALKER_RULES.md` §6 leaves
+open whether Unreal scans subfolders of `Content\Paks` recursively, so a backup
+kept inside that tree is not reliably inert.
+
+Audited before removal — 2 chunks, **0 collisions**, unencrypted, mount
+`../../../`, containing only `ITM_Weapon_ForgeTestSword0000.uasset`. It was
+structurally clean; the problem is registration, not the container.
+
+`~mods` now holds only `00000000_SkillsNoTimeCost_P.*` and
+`~JohnRTX5080Quality_P.pak`. `zzz_DualSenseAtlas_v1_1_P.*` remains in the Paks
+root. The current-build UE4SS (v1.2.1-rc6) install is untouched, with its
+rollback copy at
+`Dawnwalker\Binaries\Win64\DawnwalkerWeaponForgeRollback-20260912-2151`.
