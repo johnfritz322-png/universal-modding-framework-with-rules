@@ -33,10 +33,27 @@ Measured from the decrypted pak index:
 
 A 5.4 MB registry is the right order of magnitude for a 260k-entry cook.
 
-**Status: HIGH CONFIDENCE, NOT PROVEN.** The file's existence and role are
-established; that it is what blocks registration is inference from the symptom.
+**Status: CONFIRMED 2026-09-12.** The test below was run and the result is
+unambiguous — see "Test result".
 
-## The test that settles it
+## Test result — CONFIRMED
+
+`AssetRegistry.bin` was extracted byte-exactly (5,426,463 of 5,426,463 bytes) with
+`pak_extract.py` and searched:
+
+| Needle | In the registry? | Appears in game? |
+| --- | --- | --- |
+| `ITM_Weapon_SwordGreatMaster1a` | **FOUND** | yes |
+| `SwordVampiric1a` | **FOUND** | yes |
+| `DW_ItemAsset` (the primary asset type) | **FOUND** | — |
+| **`ForgeTestSword0000`** | **ABSENT** | **no** |
+
+Exactly the predicted pattern. Every item the game lists is in the baked registry;
+the one it refuses to list is not. **The blocker is identified: a mod-added package
+is not in `AssetRegistry.bin`, so primary-asset discovery never sees it.** No
+amount of correct packaging, naming or mounting changes that.
+
+## The original test (kept for the record)
 
 Extract `AssetRegistry.bin`, decompress (Oodle, via Epic's signed
 `oo2core_9_win64.dll` — see `iostore_read.py`), and search it for:
