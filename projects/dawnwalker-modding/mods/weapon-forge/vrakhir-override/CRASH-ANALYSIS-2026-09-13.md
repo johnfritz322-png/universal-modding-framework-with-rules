@@ -57,17 +57,42 @@ explanation for an access violation during rendering.
 no Nanite activity and the cooked mesh got *smaller*. `nanite_settings` appears to
 return a copy, so setting a property on it does not persist to the asset.
 
+## Nanite: tested, and it is NOT the differentiator
+
+Enabled and **verified persisted** — a probe writing to a file (stdout does not
+survive the commandlet pipe) confirmed `readback=True`. Two facts came out of it:
+
+- `StaticMeshEditorSubsystem` is **unavailable in a commandlet**
+  (`subsystem=False`), so `set_nanite_settings` was never running. The plain
+  `mesh.set_editor_property("nanite_settings", fresh_struct)` is what works.
+- With Nanite genuinely enabled, the cook output is **byte-identical**:
+  3,140 + 48,597, exactly as before.
+
+So Nanite changes nothing here, and the 568 KB bulk-data gap almost certainly
+reflects **mesh density**, not Nanite. The game's blade is a production asset with
+thousands of vertices; ours is a 526-vertex prototype. Roughly 48 KB of buffers
+for 526 verts is about right.
+
+**Three hypotheses tested, none confirmed:** null material, missing collision,
+missing Nanite. The cause of the access violation is still unknown.
+
 ## Next step
 
 Enable Nanite so it actually applies, then retest. Options in rough order of
 reliability:
 
-1. Set it in the editor UI and re-save the asset, rather than via Python.
-2. Find the correct Python call that writes back (possibly
-   `set_editor_property` on the whole struct after building a fresh
-   `MeshNaniteSettings`, or an `EditorStaticMeshLibrary` helper).
-3. Compare a cooked Nanite mesh against a cooked non-Nanite one to confirm the
-   bulk-data signature before touching the game again.
+The remaining approach that does not rely on guessing is a **structural diff of
+the two cooked packages** — ours against the game's — using `iostore_read.py` and
+the unversioned decoder already in this folder. Both are readable; nobody has
+actually compared their export properties field by field. That would show what
+the game's mesh has that ours lacks, instead of another hypothesis.
+
+A cheaper intermediate test: override the blade with a **copy of the game's own
+mesh**, unmodified. If that also crashes, the fault is in the packaging or the
+override path rather than the mesh content, and that redirects everything. If it
+loads fine, the fault is definitively in our mesh and the diff is the way in.
+
+That control test should have come first, before any custom mesh.
 
 Confirm the cooked package size is in the same order as the game's ~570 KB
 **before** installing. That is a cheap, offline check and it would have caught
