@@ -8,6 +8,10 @@ matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 **Additive inventory-item test: container format verified; registration/grant is
 not yet verified. Do not install it.**
 
+**The game updated on 2026-09-12.** The test remains collision-free and the
+retail item format still reads correctly, but no loader from the earlier build
+may be used. See `BUILD-RECHECK-2026-09-12.md`.
+
 - [`AUDIT-2026-09-09.md`](AUDIT-2026-09-09.md) — why the cooked build is retired
 - [`ATTACHMENT-FINDINGS-2026-09-09.md`](ATTACHMENT-FINDINGS-2026-09-09.md) — Codex's
   asset paths verified, AES key confirmed valid on 258042, and the mesh-override
@@ -30,6 +34,8 @@ not yet verified. Do not install it.**
 - [`NEXT-STEPS-HANDOFF-2026-09-10.md`](NEXT-STEPS-HANDOFF-2026-09-10.md)
   — exact resume point, finished checks, safety limits, and the first in-game
   test sequence
+- [`BUILD-RECHECK-2026-09-12.md`](BUILD-RECHECK-2026-09-12.md) — current Steam
+  build fingerprint and the tests repeated after the update
 
 ## Where the pieces live
 

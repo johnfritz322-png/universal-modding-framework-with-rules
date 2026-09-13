@@ -8,6 +8,9 @@ previous UE4SS installation back on.
 
 The repository branch is `claude/dawnwalker-weaponforge-audit`.
 
+The game updated on 2026-09-12. Read
+`BUILD-RECHECK-2026-09-12.md` before using any prior loader or package.
+
 ## What is safely finished
 
 - The actual Dawnwalker weapon-item package format is decoded and documented in
@@ -31,6 +34,8 @@ running game to discover and grant that ID on a disposable save.
 The local `Dawnwalker-UE4SS-v1.2.0-rc5-build25129649` download is unsuitable:
 its own log shows signature-resolution failure on the current executable
 (`EngineVersion`, `GUObjectArray`, `GMalloc`, and `FText`).  Do not enable it.
+It also targets the prior Steam build `25129649`, while the installed game is
+now build `25232147`.
 
 Public inventory menus report that they can grant indexed items, but they have
 not proved that they see a newly packed asset.  Do not treat that as proof.
