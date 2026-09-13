@@ -1,5 +1,41 @@
 # Changelog
 
+## Unreleased
+
+- Added Dawnwalker Weapon Forge findings for the requested separate-inventory-item
+  architecture. The feature remains unimplemented and untested.
+
+## Unreleased — 2026-09-09 (claude/dawnwalker-weaponforge-audit) — Weapon Forge audit
+
+Status: **Audited only.** Nothing installed; no game file or save touched.
+
+Adds `projects/dawnwalker-modding/mods/weapon-forge/` for Codex's custom-weapon
+mod, with an independent audit and a reusable pre-install check.
+
+### Findings
+- File hashes match Codex's documentation exactly — integrity claims are honest.
+- The cooked archive carries **392 files of stock Unreal Engine content** against
+  53 weapon assets, and the weapon assets are duplicated across two mount paths.
+- **390 of its 948 chunks replace base-game packages.** For this mod every one is
+  accidental: it adds new swords and should replace nothing.
+- Source meshes are 40-vert boxes with zero UVs and zero normals — blockouts.
+- Nothing yet connects a custom mesh to an equipped weapon. Still the real blocker.
+
+### Correction made during the audit
+Collision counts were nearly reported as damning on their own. They are not —
+collision is the override mechanism, and the two mods already working on this
+install collide on 99.1% and 80% of their chunks respectively. What matters is
+whether a container collides on what its author intended. Recorded in the audit so
+the next reader does not repeat the mistake.
+
+### Also
+- `GAME_VERSION.md` updated: the game patched to `dw1-pc-258042` (Steam build
+  25191761) on 2026-09-09. Container structure is unchanged, so the format research
+  survives; only the identity hashes moved. Codex's build-pinned PowerShell helpers
+  will now refuse to run until their pin is updated.
+- New `verify_container.py`: intersects IoStore chunk-ID tables to report what a mod
+  replaces. Needs no AES key and no Oodle. Validated against two known-good mods.
+
 ## Unreleased — 2026-09-05 (claude/dlss5-second-pass) — DLSS 5 second cross-check
 
 Status unchanged: **Researched only.** Still nothing installed, injected, or run.

@@ -1,0 +1,8 @@
+/Game/_Dawnwalker/Player/BP_PlayerCharacter
+/Game/_Dawnwalker/Blueprints/Items/Equippable/BP_Weapon_GreatSword
+/Game/_Dawnwalker/Inventory/Items/ITM_Weapon_SwordGreatMaster1a
+/Game/_Dawnwalker/Environment/Megascans/3D_Assets/Sword/SM_Sword
+/Game/_Dawnwalker/Characters/Swords/M_Sword_NPC_06/M_Sword_NPC_06
+/Game/_Dawnwalker/Inventory/Items/DT_WeaponAppearances
+/Game/_Dawnwalker/Characters/Swords/M_Sword_NPC_06/M_Sword_NPC_06_Scabbard
+/Game/_Dawnwalker/CONTROL/Fabricated/DoesNotExist

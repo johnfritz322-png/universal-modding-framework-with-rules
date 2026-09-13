@@ -94,3 +94,43 @@ chunk count, block count and flags are **identical** to the values recorded in
 | Base container **flags** | If `Encrypted` ever clears, KNOWN_LIMITATIONS L1 is lifted |
 | `Dawnwalker.exe` hash | Any recovered AES key must be re-checked |
 | Nothing above | Config mods are almost always safe across patches |
+
+---
+
+## Update 2026-09-09 — the game patched, every hash above is stale
+
+Steam updated the install at **2026-09-09 18:43 local**. The fingerprint recorded
+above belongs to the previous build and no longer matches anything on disk.
+
+| | Recorded above | Current |
+| --- | --- | --- |
+| Steam build id | 25129649 | **25191761** |
+| Internal build | `dw1-pc-257186` | **`dw1-pc-258042`** |
+| `Dawnwalker.exe` | `7ad7d096…`, 176,196,472 B | `02d424ed…`, 176,487,800 B |
+| `Dawnwalker-Windows.utoc` | `7cf811c2…`, 70,109,154 B | `b2b250de…`, 70,109,952 B |
+| `global.utoc` | `5c861dd9…` | `3f6fe4c1…` |
+
+Full current hashes, from `tools/gameversion.py`:
+
+```text
+global.utoc              374 B  3f6fe4c1281d72ed6266108d5ec424b67db153568494a89301166f381e7f6e54
+global.ucas        3,837,472 B  a7583a85e4799183247c1e46c1f6ba20856e53cc8b4cfd63d4264341527ef2e1
+Dawnwalker-Windows.utoc
+                  70,109,952 B  b2b250de50fee81c6dd9de76e5583b25c3708922044e35ab57ab59ccda73deb6
+Dawnwalker.exe   176,487,800 B  02d424eddbd364ed25f3777a7a2fa1b0dfe84690ae18f84ec9eb2997b0828c33
+```
+
+**The format research survives this patch.** Container structure is unchanged —
+`Dawnwalker-Windows.utoc` is still TOC v8, flags `0x0b`, container id
+`0x8fc20dab729a0600`, and the chunk count moved only 778,643 → 778,650. The base
+encryption GUID is still all-zero/default. So the parsers and findings in
+`games/blood-of-the-dawnwalker/` still apply; only the identity hashes changed.
+
+**What this breaks.** Anything pinned to the old exe hash now refuses to run — that
+includes Codex's `Grant-Dawnwalker-*.ps1` helpers, which pin `7AD7D096…`. That is
+the safety check doing its job; update the pin deliberately rather than bypassing
+it. Both usmap dumps on the machine predate the patch (2026-09-02 and 2026-09-03),
+so FModel property mappings need re-checking against 258042 before being trusted.
+
+Whether the AES key survived the patch is **UNVERIFIED** — the all-zero GUID is
+suggestive, not proof. FModel loading the base archives is the test.
