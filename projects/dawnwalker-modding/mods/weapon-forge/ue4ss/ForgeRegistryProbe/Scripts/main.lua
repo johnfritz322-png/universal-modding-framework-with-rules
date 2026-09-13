@@ -6,7 +6,10 @@
 -- It reads. It never grants, spawns, equips or writes to the game. The only
 -- side effect is a text file next to this script.
 --
--- Press F10 to run. Result lands in ForgeRegistryProbe/status.txt.
+-- Press F8 to run. Result lands in ForgeRegistryProbe/status.txt.
+--
+-- NOT F10: Codex's ForgeItemLoadProbe already binds F10, and ConsoleEnabler uses
+-- it as a console key. F8 is unclaimed by every installed mod.
 
 local PROBE_OBJECT = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001.M_ForgeRegistryProbe0001"
 local PROBE_PACKAGE = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001"
@@ -15,7 +18,8 @@ local PROBE_PACKAGE = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001"
 local CONTROL_PACKAGE = "/Game/_Dawnwalker/Inventory/Items/ITM_Weapon_SwordGreatMaster1a"
 
 local function writeStatus(lines)
-    local path = "ue4ss/Mods/ForgeRegistryProbe/status.txt"
+    local path = "D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker"
+        .. "\Binaries\Win64\ue4ss\Mods\ForgeRegistryProbe\status.txt"
     local f = io.open(path, "w")
     if not f then
         print("[ForgeRegistryProbe] could not open " .. path .. "\n")
@@ -76,9 +80,9 @@ local function run()
     writeStatus(lines)
 end
 
-RegisterKeyBind(Key.F10, function()
+RegisterKeyBind(Key.F8, function()
     local ok, err = pcall(run)
     if not ok then print("[ForgeRegistryProbe] error: " .. tostring(err) .. "\n") end
 end)
 
-print("[ForgeRegistryProbe] loaded — press F10 to probe the asset registry\n")
+print("[ForgeRegistryProbe] loaded — press F8 to probe the asset registry\n")

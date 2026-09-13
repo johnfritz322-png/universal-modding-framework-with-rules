@@ -34,7 +34,7 @@ save, no existing mod. `~mods` still holds only `SkillsNoTimeCost` and the RTX
 ## Running it
 
 1. Launch on a **disposable save** — a throwaway manual slot, never the main run.
-2. Press **F10**.
+2. Press **F8**.
 3. Read `ue4ss\Mods\ForgeRegistryProbe\status.txt`.
 
 | RESULT | Meaning |
@@ -59,7 +59,17 @@ copy      ue4ss\Mods\mods.txt.bak-before-registryprobe-20260913  ue4ss\Mods\mods
 
 `Dawnwalker\Mods\` itself can also go if empty.
 
+## Keybind — F8, not F10
+
+The first attempt used F10 and would never have worked: Codex's
+`ForgeItemLoadProbe` already binds F10, and `ConsoleEnabler` uses it as a console
+key. Three handlers, one key. Moved to **F8**, which no installed mod claims —
+verified by scanning every `RegisterKeyBind` under `ue4ss\Mods`.
+
+The status file path was also made **absolute**. It was relative, which depends
+on the game's working directory — not something to rely on.
+
 ## Note
 
 Codex's earlier `ForgeItemLoadProbe` is still enabled in `mods.txt`. It is
-read-only too, but it may add its own log noise during this test.
+read-only too, but it may add log noise during this test.
