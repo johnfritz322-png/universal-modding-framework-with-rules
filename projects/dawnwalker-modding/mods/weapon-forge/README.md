@@ -18,6 +18,11 @@ registration route exists.
 retail item format still reads correctly, but no loader from the earlier build
 may be used. See `BUILD-RECHECK-2026-09-12.md`.
 
+The currently buildable, reversible route is visual replacement of existing
+weapons. The first two-row loadout and its checks are documented in
+`appearance-repoint/VISUAL-LOADOUT-BUILD-2026-09-13.md`; it is not a new-item
+inventory mod.
+
 - [`AUDIT-2026-09-09.md`](AUDIT-2026-09-09.md) — why the cooked build is retired
 - [`ATTACHMENT-FINDINGS-2026-09-09.md`](ATTACHMENT-FINDINGS-2026-09-09.md) — Codex's
   asset paths verified, AES key confirmed valid on 258042, and the mesh-override

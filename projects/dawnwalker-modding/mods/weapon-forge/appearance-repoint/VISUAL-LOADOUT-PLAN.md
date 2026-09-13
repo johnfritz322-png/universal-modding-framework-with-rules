@@ -1,7 +1,8 @@
 # Visual loadout set — plan and verified inputs
 
-Next build: a small, individually tested mapping set. **Existing game meshes
-only** — the custom-StaticMesh route is still blocked.
+The first two-row build is now created and has passed container and read-back
+checks. See `VISUAL-LOADOUT-BUILD-2026-09-13.md`. **Existing game meshes only**
+— the custom-StaticMesh route is still blocked.
 
 ## Weapons identified
 
