@@ -50,49 +50,47 @@ local function isLoaded(shortName)
     return okv and v
 end
 
--- 1. What mesh is actually rendering on the equipped weapon.
+-- 1. Who is holding the candidate blades.
+--
+-- v2 listed every sword component with its owner but never compared against the
+-- real pawn, so it reported cutscene actors and scenery. This asks the only
+-- question that matters: which actor holds the overridden blade.
 local function probeEquippedMesh()
     say("")
-    say("[1] equipped weapon's live mesh")
-    local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
-    if pc == nil or not pc:IsValid() then
-        local ok, found = pcall(function()
-            return FindFirstOf("PlayerController")
-        end)
-        pc = (ok and found) or nil
-    end
-    if pc == nil or not pc:IsValid() then
-        say("  playerController=not found (load a save and be in game)")
-        return
-    end
-    say("  playerController=ok")
+    local pawn, pawnName = nil, ""
+    pcall(function()
+        local pc = FindFirstOf("PlayerController")
+        if pc and pc:IsValid() then pawn = pc.Pawn end
+    end)
+    if pawn and pawn:IsValid() then pawnName = objName(pawn) end
+    say("[1] player pawn = " .. (pawnName ~= "" and pawnName or "NOT FOUND"))
 
-    -- Every StaticMeshComponent currently alive whose mesh is one of the sword
-    -- assets. This finds the equipped blade without needing the exact component
-    -- path, which differs per weapon blueprint.
-    local hits = {}
+    say("")
+    say("[1b] holders of the candidate blades")
+    local shown = 0
     local ok = pcall(function()
         local comps = FindAllOf("StaticMeshComponent") or {}
         for _, c in ipairs(comps) do
             if c and c:IsValid() then
                 local okm, m = pcall(function() return c.StaticMesh end)
                 if okm and m and m:IsValid() then
-                    local n = objName(m)
-                    if n:find("Characters/Swords") or n:find("_Sword_") then
-                        hits[#hits + 1] = n
+                    local mn = objName(m)
+                    if mn:find(OVERRIDDEN) or mn:find(ORIGINAL) then
+                        local oko, owner = pcall(function() return c:GetOuter() end)
+                        local on = (oko and owner) and objName(owner) or "<no outer>"
+                        local isPlayer = (pawnName ~= "" and on == pawnName)
+                        say("  mesh=" .. (mn:find(OVERRIDDEN) and OVERRIDDEN or ORIGINAL))
+                        say("    holder=" .. on)
+                        say("    isPlayerPawn=" .. tostring(isPlayer))
+                        shown = shown + 1
+                        if shown >= 10 then return end
                     end
                 end
             end
         end
     end)
-    if not ok then
-        say("  component scan threw")
-        return
-    end
-    if #hits == 0 then
-        say("  no sword StaticMeshComponent found — is the weapon drawn/equipped?")
-    end
-    for i = 1, math.min(#hits, 12) do say("  mesh: " .. hits[i]) end
+    if not ok then say("  scan threw") end
+    if shown == 0 then say("  neither blade is held by any live component") end
 end
 
 -- 2. Which candidate blade packages are resident.

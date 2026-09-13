@@ -1,0 +1,73 @@
+ForgeAppearanceProbe — 2026-09-13 15:35:47
+item=ITM_Weapon_SwordVampiric1a
+original=L_Sword_Vampiric_01  overridden=M_Sword_Gargoyle_01
+control row=ITM_Weapon_SwordErkas1a expects M_Sword_Erka_01
+
+[1] sword meshes in the scene
+  StaticMeshComponents alive: 38817
+  x1  M_Sword_NPC_06
+  x1  M_Sword_NPC_06_Scabbard
+  x3  S_Sword_NPC_08
+  x3  S_Sword_NPC_06
+  x3  S_Sword_NPC_04
+  x1  M_Sword_NPC_09
+  x7  L_Sword_Mercenary_01
+  x5  L_Sword_Mercenary_01_Scabbard
+  x2  L_Sword_NPC_02_Scabbard
+  x1  L_Sword_NPC_03_Scabbard
+  x1  L_Sword_NPC_04_Scabbard
+  x1  L_Sword_NPC_49
+  x1  L_Sword_NPC_49_Scabbard
+  x2  M_Sword_Gargoyle_01
+  x1  M_Sword_Gargoyle_01_Scabbard
+  x1  L_Sword_NPC_03
+  x1  S_Sword_NPC_22
+  x1  S_Sword_NPC_22_Scabbard
+  x1  L_Sword_NPC_19
+  x1  L_Sword_NPC_18
+  x1  L_Sword_NPC_17_Scabbard
+  x1  L_Sword_NPC_17
+  x1  SM_Board_01
+  x1  SM_Hammer_01
+  x1  SM_Pickaxe_01
+  x8  L_Sword_NPC_09
+  x2  SM_Axe_01
+  x4  M_Sword_NPC_03
+  x4  M_Sword_NPC_03_Scabbard
+  x2  L_Sword_NPC_20
+  x2  L_Sword_NPC_20_Scabbard
+  x3  M_Sword_NPC_07
+  x3  M_Sword_NPC_07_Scabbard
+
+[1b] the player pawn's own sword meshes
+  pawn=BP_PlayerCharacter_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BP_PlayerCharacter_C_2147480039
+  comp outer=BP_PlayerCharacter_C /Game/_Dawnwalker/Cutscenes/VS/CS004/CS004_wakeUp_part2_LS.CS004_wakeUp_part2_LS:MovieScene_0.BP_PlayerCharacter_0
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/M_Sword_NPC_06/M_Sword_NPC_06.M_Sword_NPC_06
+  comp outer=BP_PlayerCharacter_C /Game/_Dawnwalker/Cutscenes/VS/CS004/CS004_wakeUp_part2_LS.CS004_wakeUp_part2_LS:MovieScene_0.BP_PlayerCharacter_0
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/M_Sword_NPC_06/M_Sword_NPC_06_Scabbard.M_Sword_NPC_06_Scabbard
+  comp outer=BPP_SwordRack_01_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BPP_SwordRack_01_C_UAID_74563C67682164B202_1883e8a8e970b632_2088904245
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/S_Sword_NPC_08/S_Sword_NPC_08.S_Sword_NPC_08
+  comp outer=BPP_SwordRack_01_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BPP_SwordRack_01_C_UAID_74563C67682164B202_1883e8a8e970b632_2088904245
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/S_Sword_NPC_06/S_Sword_NPC_06.S_Sword_NPC_06
+  comp outer=BPP_SwordRack_01_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BPP_SwordRack_01_C_UAID_74563C67682164B202_1883e8a8e970b632_2088904245
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/S_Sword_NPC_04/S_Sword_NPC_04.S_Sword_NPC_04
+  comp outer=StaticMeshActor /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.StaticMeshActor_UAID_74563C1BD4FB45AA02_1426347248
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/M_Sword_NPC_09/M_Sword_NPC_09.M_Sword_NPC_09
+  comp outer=StaticMeshActor /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.StaticMeshActor_UAID_74563C67682120AD02_1218047171
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/L_Sword_Mercenary_01/L_Sword_Mercenary_01.L_Sword_Mercenary_01
+  comp outer=StaticMeshActor /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.StaticMeshActor_UAID_74563C67682120AD02_1219274172
+     mesh=StaticMesh /Game/_Dawnwalker/Characters/Swords/L_Sword_Mercenary_01/L_Sword_Mercenary_01.L_Sword_Mercenary_01
+
+[2] which candidate blades are loaded in memory
+  L_Sword_Vampiric_01 loaded=false
+  M_Sword_Gargoyle_01 loaded=true
+  (M_Sword_Gargoyle_01=true is strong evidence the override is live)
+
+[3] appearance table
+  table=DataTable /Game/_Dawnwalker/Inventory/Items/DT_WeaponAppearances.DT_WeaponAppearances
+  GetDataTableRowNames unavailable (needs a struct-aware call)
+  rows cannot be read from Lua directly; rely on [1] and [2]
+
+VERDICT=OVERRIDE_LIVE — our container is winning; the visual comes
+  from somewhere other than this table. Look at the equip path and
+  AppearanceSubsystem.ItemAppearanceMap.

@@ -1,7 +1,10 @@
 # Start here
 
-Picking this up fresh? Read this page, then `vrakhir-override/RETOC-RESULT-2026-09-13.md`.
-Nothing else is required reading.
+**Superseded in part — read [`BREAKTHROUGH-2026-09-13.md`](BREAKTHROUGH-2026-09-13.md)
+first.** A DataTable override now works in game; the "nothing loads" framing below
+applies only to custom StaticMesh.
+
+Picking this up fresh? That page, then this one. Nothing else is required reading.
 
 ## The goal
 
