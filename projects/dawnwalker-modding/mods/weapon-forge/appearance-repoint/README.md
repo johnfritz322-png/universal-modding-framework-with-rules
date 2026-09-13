@@ -61,7 +61,11 @@ slashes in paths, and `ExecuteInGameThread` around anything touching UObjects.
 Also untried and free: unequip and re-equip the weapon, in case the appearance is
 resolved once at equip time.
 
-## Currently installed
+## Not installed
 
-`zzz_VrakhirGargoyle_P.{pak,ucas,utoc}` is in `~mods`. It is inert and harmless —
-remove those three files to revert.
+Removed 2026-09-13 at the user's request. `~mods` holds only their own
+`SkillsNoTimeCost` and `~JohnRTX5080Quality_P.pak`.
+
+The built container is kept in this folder as `zzz_VrakhirGargoyle_P.utoc` for
+reference. To reinstall, rebuild the trio with retoc from the patched legacy files
+— see the patch offsets above — and copy all three into `~mods`.
