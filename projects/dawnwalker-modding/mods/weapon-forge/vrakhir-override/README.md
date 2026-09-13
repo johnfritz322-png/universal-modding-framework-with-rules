@@ -27,11 +27,29 @@ This changes The Vrakhir's **appearance**. Its name, stats and identity stay the
 game's. It is not a new inventory item; that still needs the registry work in
 `REGISTRY-OVERRIDE-PROGRESS-2026-09-12.md`.
 
-It is also a **legacy `.pak`, not IoStore**. Every working asset mod here ships
-`.utoc`/`.ucas`, so whether a legacy pak can override an IoStore package is
-**unverified** — this install is the test. If the blade does not change, the
-answer is no and it needs real IoStore packaging (`UnrealPak -iostore` alone did
-not produce containers; it needs the container-spec invocation).
+## ANSWERED: a legacy .pak cannot override an IoStore package
+
+Installed and tested in game 2026-09-13. **The blade did not change.**
+
+That settles a question this project had carried as an assumption. The base
+game resolves packages through the IoDispatcher by chunk id; a legacy `.pak`
+supplies files by path and never gets consulted for a package the IoStore
+container already owns. It is why every working asset mod here —
+`SkillsNoTimeCost`, `DualSenseAtlas` — ships `.utoc`/`.ucas`/`.pak` as a trio and
+not a lone pak.
+
+Recorded as VERIFIED: **an asset override needs a real IoStore container.**
+
+Two UnrealPak invocations that do *not* produce one, so nobody retries them:
+
+```text
+UnrealPak out.pak  -create=resp.txt -iostore    -> legacy pak only
+UnrealPak out.utoc -create=resp.txt -iostore    -> a pak with a .utoc filename,
+                                                   byte-identical to the above
+```
+
+The supported route is UAT staging with `-pak -iostore`, which emits real
+containers.
 
 ## Install
 
