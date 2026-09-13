@@ -36,6 +36,8 @@ may be used. See `BUILD-RECHECK-2026-09-12.md`.
   test sequence
 - [`BUILD-RECHECK-2026-09-12.md`](BUILD-RECHECK-2026-09-12.md) — current Steam
   build fingerprint and the tests repeated after the update
+- [`LOADER-COMPATIBILITY-2026-09-12.md`](LOADER-COMPATIBILITY-2026-09-12.md) —
+  current-build loader check and the conditions required before an in-game test
 
 ## Where the pieces live
 
