@@ -1,0 +1,15 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Forge Registry Probe",
+	"Description": "Single-asset probe: does mounting a plugin append its AssetRegistry?",
+	"Category": "Other",
+	"CreatedBy": "Dawnwalker Weapon Forge",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"ExplicitlyLoaded": false,
+	"Modules": []
+}
