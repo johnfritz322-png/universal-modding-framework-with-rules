@@ -38,6 +38,9 @@ may be used. See `BUILD-RECHECK-2026-09-12.md`.
   build fingerprint and the tests repeated after the update
 - [`LOADER-COMPATIBILITY-2026-09-12.md`](LOADER-COMPATIBILITY-2026-09-12.md) —
   current-build loader check and the conditions required before an in-game test
+- [`NEXUS-INVENTORY-ROUTE-2026-09-12.md`](NEXUS-INVENTORY-ROUTE-2026-09-12.md)
+  — review of the community inventory, save-editor, and transmog approaches;
+  the native-grant test route and its remaining current-build gate
 - [`RIFTFORGED-SLABBLADE-V2-2026-09-12.md`](RIFTFORGED-SLABBLADE-V2-2026-09-12.md)
   — first rebuilt original weapon visual, source, Unreal import, and validation
 
