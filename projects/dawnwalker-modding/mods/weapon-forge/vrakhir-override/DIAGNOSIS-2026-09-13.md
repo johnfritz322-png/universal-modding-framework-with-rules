@@ -64,3 +64,41 @@ Route 1 is the one worth attempting.
   hardlink view of the Paks folder — `DualSenseAtlas` has a different TOC version
   (`PartitionSize` vs `ReplaceIoChunkHashWithIoHash`) and breaks the composite.
 - Extraction and repacking of real game assets both work end to end.
+
+## Nanite: ruled out a second time, properly
+
+Re-enabled with a fresh `MeshNaniteSettings` and **verified by readback from disk**
+(`readback=True`). Cook output: **3,250 + 43,255 — byte-identical** to the
+Nanite-off build. Our project does not emit Nanite data regardless of the asset
+flag, so it cannot be the 1,101-byte difference. Stop testing this.
+
+## Honest scope of the geometry swap
+
+The remaining route is to keep the game's own `.uexp` byte structure and replace
+only its vertex and index buffers. That is not a small edit:
+
+`UStaticMesh`'s cooked body is `FStaticMeshRenderData::Serialize` — per-LOD
+`FStaticMeshLODResources` holding sections, position / tangent / UV / colour
+vertex buffers, index buffers, then distance field data, card representation and
+ray-tracing geometry. Every one of those is length-prefixed and offset-linked, so
+substituting buffers means recomputing sizes and offsets throughout — effectively
+reimplementing that serializer.
+
+**That is a project, not a session's work**, and it should be started with the
+same discipline that finally paid off here: round-trip the game's own mesh through
+a parser and re-serializer **unchanged** until it is byte-identical, before
+altering a single vertex. `iostore_read.py`, `usmap.py` and `unversioned.py`
+already handle the property block; the render data after it is the new part.
+
+## Cheaper alternatives worth weighing first
+
+1. **Scale/transform an existing game mesh.** No new geometry, no serialization
+   work — the appearance table and blueprint already carry transforms.
+2. **Swap which existing mesh an item uses.** `weapon_appearances.csv` maps all
+   206 weapons; pointing one item at another's blade is a data change, not a mesh
+   change, and the DataAsset path is already proven to round-trip.
+3. **Accept the game's meshes and build the mod around item stats/effects**,
+   where the working `SkillsNoTimeCost` precedent shows DataAssets convert fine.
+
+Option 2 in particular would give a visibly different sword with zero new
+geometry, using only mechanisms already proven on this install.

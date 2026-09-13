@@ -101,6 +101,18 @@ def extract(wanted):
         block_size = struct.unpack_from("<I", head, tail_o + 1)[0]
         encrypted = bool(flags & 1)
 
+        # Uncompressed entries have no block table - the payload follows the
+        # header directly. Small files such as the .ini configs are stored this
+        # way, and treating them as compressed makes Oodle return 0 bytes.
+        if not blocks:
+            header_len = 8 * 3 + 4 + 20 + 4 + 1 + 4
+            f.seek(data_off + header_len)
+            padded = (usize + 15) // 16 * 16 if encrypted else usize
+            raw = f.read(padded)
+            if encrypted:
+                raw = AES.new(key, AES.MODE_ECB).decrypt(raw)
+            return bytes(raw[:usize])
+
         out = bytearray()
         for start, end in blocks:
             clen = end - start
