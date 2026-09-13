@@ -18,8 +18,9 @@ local PROBE_PACKAGE = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001"
 local CONTROL_PACKAGE = "/Game/_Dawnwalker/Inventory/Items/ITM_Weapon_SwordGreatMaster1a"
 
 local function writeStatus(lines)
-    local path = "D:\steam\steamapps\common\The Blood of Dawnwalker\Dawnwalker"
-        .. "\Binaries\Win64\ue4ss\Mods\ForgeRegistryProbe\status.txt"
+    -- Forward slashes on purpose: Windows accepts them and Lua has no
+    -- escape-sequence trap, which a backslash path walked straight into.
+    local path = "D:/steam/steamapps/common/The Blood of Dawnwalker/Dawnwalker/Binaries/Win64/ue4ss/Mods/ForgeRegistryProbe/status.txt"
     local f = io.open(path, "w")
     if not f then
         print("[ForgeRegistryProbe] could not open " .. path .. "\n")
