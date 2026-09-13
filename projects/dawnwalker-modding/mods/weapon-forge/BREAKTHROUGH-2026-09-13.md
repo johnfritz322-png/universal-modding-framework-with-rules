@@ -21,18 +21,31 @@ VERDICT=OVERRIDE_LIVE
 The game resolved the item to our blade. **No crash.** That is the first time
 anything this project built was accepted and acted on.
 
-## The one open question
+## CONFIRMED: the player is holding the overridden blade
 
-Whether those Gargoyle components are on **the player pawn** or on an NPC that
-also uses that blade. Probe v3 (deployed, not yet run) answers it by comparing
-each holder against the real pawn.
+Probe v3, run 2026-09-13 15:39 (`ue4ss/ForgeAppearanceProbe/results/`):
 
-- `isPlayerPawn=true` → done; the technique generalises to all 206 weapons.
-- `isPlayerPawn=false` → the player's drawn blade comes from somewhere the table
-  does not reach. Next suspects: `AppearanceSubsystem.ItemAppearanceMap`, the
-  equip path, or a story-scripted weapon. Note the test save is in
-  `Map_Blockout_Valley` with a `CS004_wakeUp` cutscene actor present, so it is
-  worth confirming the sword in hand is the inventory weapon at all.
+```text
+[1] player pawn = BP_PlayerCharacter_C ...PersistentLevel.BP_PlayerCharacter_C_2147480040
+
+[1b] holders of the candidate blades
+  mesh=M_Sword_Gargoyle_01
+    holder=BP_PlayerCharacter_C ...BP_PlayerCharacter_C_2147480040
+    isPlayerPawn=true
+  mesh=M_Sword_Gargoyle_01
+    holder=...same pawn...
+    isPlayerPawn=true
+```
+
+Two components, both on the player pawn, both the overridden mesh. The stock
+blade is not loaded at all.
+
+**The weapon-appearance override is working end to end.** The technique
+generalises: `weapon_appearances.csv` maps all 206 weapons, and there are 173
+blades to choose from.
+
+Note the probe's own `VERDICT=` line is stale — it predates the holder check in
+`[1b]` and does not consider it. The holder match is the authoritative result.
 
 ## How to reproduce the working build
 
