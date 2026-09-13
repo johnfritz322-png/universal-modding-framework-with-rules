@@ -104,3 +104,43 @@ Nothing persists. Both installs were removed within a minute of the crash report
 `~mods` holds only `SkillsNoTimeCost` and the RTX 5080 profile, and no base
 archive, executable or save was ever modified. The crashes were on equip, not on
 load, and no save was harmed.
+
+
+## Control test round 1 — INVALID, contaminated by my own method
+
+Overrode the blade with the game's own mesh, extracted from IoStore and hand-split
+at the header offset into `.uasset`/`.uexp`.
+
+**Result: blade invisible, then the game hung.** Confirmed by the user.
+
+**This did not test what it was meant to.** IoStore packages use a Zen summary,
+not the legacy `.uasset`/`.uexp` layout, so splitting at the header offset
+produces a malformed package. The control introduced a new fault instead of
+isolating the existing one. My error, and worth recording because the extraction
+looked perfectly reasonable.
+
+What it does establish: the override path definitely reaches the renderer — the
+blade changed (to nothing), so the game used our package over its own.
+
+Also note the failure modes differ, which matters:
+
+| Build | Failure |
+| --- | --- |
+| Custom mesh (valid cook) | **Crash** on equip |
+| Hand-split game mesh (malformed) | **Invisible**, then hang |
+
+Different faults, so the crash is still unexplained.
+
+## Control test round 2 — engine cube, running now
+
+An `/Engine/BasicShapes/Cube` duplicated to the target path and cooked through the
+ordinary pipeline. No custom geometry, no hand-splitting. The only remaining
+variable is the pipeline itself.
+
+- **Cube appears** → pipeline is sound, fault is specific to the custom mesh, and
+  the next step is a field-by-field diff of the two cooked packages.
+- **Invisible** → pipeline is broken, and material/collision/Nanite were all the
+  wrong layer.
+- **Crash** → even a trivial valid mesh cannot be overridden this way.
+
+Result pending as of this commit.
