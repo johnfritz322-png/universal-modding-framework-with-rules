@@ -53,6 +53,14 @@ chunk collisions; the unverified missing link is registration, not the native
 inventory grant call or the visual mesh.  Continue from the game configuration
 and asset-registry path rather than guessing an ID.
 
+## Direct runtime-load result
+
+The follow-up direct `LoadAsset` probe also failed to resolve the exact custom
+package in the running game. This confirms the missing gate is actual package
+registration/discovery rather than only the item menu's first scan. See
+`RUNTIME-LOAD-PROBE-2026-09-12.md` and the preserved probe source under
+`ue4ss/ForgeItemLoadProbe/`.
+
 ## Required safe test, in order
 
 The first six steps have now been performed and step 6 stopped the test.  Do

@@ -8,6 +8,10 @@ matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 **Additive inventory-item test: container format verified; registration/grant is
 not yet verified. Do not install it.**
 
+The direct runtime-load probe also could not discover the additive test package.
+See `RUNTIME-LOAD-PROBE-2026-09-12.md`. Do not grant any item until a verified
+registration route exists.
+
 **The game updated on 2026-09-12.** The test remains collision-free and the
 retail item format still reads correctly, but no loader from the earlier build
 may be used. See `BUILD-RECHECK-2026-09-12.md`.
