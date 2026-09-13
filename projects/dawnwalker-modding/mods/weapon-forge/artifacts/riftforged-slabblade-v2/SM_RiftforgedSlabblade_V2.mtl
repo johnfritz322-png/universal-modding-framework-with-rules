@@ -1,0 +1,24 @@
+newmtl RiftSteel
+Kd 0.055 0.070 0.090
+Ks 0.45 0.55 0.62
+Ns 620
+
+newmtl ForgePlate
+Kd 0.11 0.12 0.14
+Ks 0.30 0.34 0.40
+Ns 420
+
+newmtl RiftGlow
+Kd 0.02 0.18 0.30
+Ke 0.00 0.28 0.72
+Ns 850
+
+newmtl Leather
+Kd 0.025 0.020 0.019
+Ks 0.05 0.04 0.03
+Ns 90
+
+newmtl Bronze
+Kd 0.18 0.10 0.035
+Ks 0.45 0.25 0.06
+Ns 300
