@@ -46,4 +46,40 @@ The Lua is read-only — it queries the asset registry and writes one text file.
 never grants, spawns or equips anything, and touches no save. Test on a disposable
 save regardless.
 
-**Nothing here is installed yet.**
+## Cook result — the plugin registry names the asset
+
+The cook ran in 19 seconds (scoped with `-CookDir`, so it did not drag in engine
+content the way the earlier 432-package cook did) and produced:
+
+```
+Plugins/ForgeRegistryProbe/Content/M_ForgeRegistryProbe0001.uasset + .uexp
+AssetRegistry.bin                                      126,790 bytes
+```
+
+That registry **contains the probe asset**, in the same three-name shape the
+shipped registry uses for items:
+
+```
+[661] /ForgeRegistryProbe
+[662] /ForgeRegistryProbe/M_ForgeRegistryProbe0001
+[663] M_ForgeRegistryProbe0001
+```
+
+It also independently validated `assetregistry.py`: a second, unrelated registry
+(1,105 names) parsed byte-exactly, same version 17, same `0x12345679` body magic.
+
+So a cook **does** emit a registry naming plugin assets. The one remaining
+unknown is whether the game loads it on mount.
+
+## Staged, not installed
+
+```text
+D:\Dawnwalker-Modding\staged-ForgeRegistryProbe\ForgeRegistryProbe    ForgeRegistryProbe.uplugin      (ExplicitlyLoaded = true, for runtime mounting)
+    AssetRegistry.bin
+    Content\M_ForgeRegistryProbe0001.uasset + .uexp
+```
+
+Installing means copying that folder into `Dawnwalker\Mods\` and the Lua mod into
+the UE4SS `Mods` folder, then launching on a disposable save and pressing F10.
+**That step needs the user's go-ahead** — it is the first thing in this project
+that would put new files into the game.
