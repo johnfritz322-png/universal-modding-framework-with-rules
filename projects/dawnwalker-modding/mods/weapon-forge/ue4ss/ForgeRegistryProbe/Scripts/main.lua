@@ -1,89 +1,88 @@
 -- Forge Registry Probe — read-only.
 --
--- Answers one question: after a plugin is mounted, does the live AssetRegistry
--- know about an asset that only exists inside that plugin?
+-- Question: after a plugin is mounted, can the game load and see an asset that
+-- exists only inside that plugin?
 --
--- It reads. It never grants, spawns, equips or writes to the game. The only
--- side effect is a text file next to this script.
+-- Reads only. Never grants, spawns, equips, or writes to a save. The single
+-- side effect is one text file next to this script.
 --
--- Press F8 to run. Result lands in ForgeRegistryProbe/status.txt.
+-- Press F8. Result: ForgeRegistryProbe/status.txt
 --
--- NOT F10: Codex's ForgeItemLoadProbe already binds F10, and ConsoleEnabler uses
--- it as a console key. F8 is unclaimed by every installed mod.
+-- Notes from earlier runs, kept so they are not rediscovered:
+--   * Not F10 - ForgeItemLoadProbe and ConsoleEnabler both bind it.
+--   * Forward slashes in paths - Lua has no escape trap there, "D:\s" does.
+--   * LoadAsset and the asset-registry calls must run on the GAME THREAD, or
+--     they throw "can only be called from within the game". Hence
+--     ExecuteInGameThread around everything.
 
-local PROBE_OBJECT = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001.M_ForgeRegistryProbe0001"
-local PROBE_PACKAGE = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001"
--- A retail asset that is definitely registered, as a positive control. If the
--- control fails too, the probe itself is broken rather than the plugin route.
-local CONTROL_PACKAGE = "/Game/_Dawnwalker/Inventory/Items/ITM_Weapon_SwordGreatMaster1a"
+local PROBE_OBJ = "/ForgeRegistryProbe/M_ForgeRegistryProbe0001.M_ForgeRegistryProbe0001"
+local CTRL_OBJ  = "/Game/_Dawnwalker/Inventory/Items/ITM_Weapon_SwordGreatMaster1a.ITM_Weapon_SwordGreatMaster1a"
+local STATUS    = "D:/steam/steamapps/common/The Blood of Dawnwalker/Dawnwalker/Binaries/Win64/ue4ss/Mods/ForgeRegistryProbe/status.txt"
 
-local function writeStatus(lines)
-    -- Forward slashes on purpose: Windows accepts them and Lua has no
-    -- escape-sequence trap, which a backslash path walked straight into.
-    local path = "D:/steam/steamapps/common/The Blood of Dawnwalker/Dawnwalker/Binaries/Win64/ue4ss/Mods/ForgeRegistryProbe/status.txt"
-    local f = io.open(path, "w")
-    if not f then
-        print("[ForgeRegistryProbe] could not open " .. path .. "\n")
-        return
+local out = {}
+local function say(s) out[#out + 1] = s end
+
+local function findState(path)
+    local ok, obj = pcall(StaticFindObject, path)
+    if not ok or obj == nil then return "absent" end
+    local okv, valid = pcall(function() return obj:IsValid() end)
+    return (okv and valid) and "present" or "absent"
+end
+
+local function probeOne(label, path)
+    say("[" .. label .. "] " .. path)
+    say("  beforeLoad=" .. findState(path))
+    local ok, err = pcall(function() return LoadAsset(path) end)
+    if ok then
+        say("  loadAsset=ok")
+    else
+        say("  loadAsset=threw: " .. tostring(err):sub(1, 70))
     end
-    for _, l in ipairs(lines) do f:write(l .. "\n") end
-    f:close()
-    print("[ForgeRegistryProbe] wrote " .. path .. "\n")
-end
-
-local function getAssetRegistry()
-    local helpers = StaticFindObject("/Script/AssetRegistry.Default__AssetRegistryHelpers")
-    if not helpers or not helpers:IsValid() then return nil, "AssetRegistryHelpers not found" end
-    local ok, reg = pcall(function() return helpers:GetAssetRegistry() end)
-    if not ok or not reg or not reg:IsValid() then return nil, "GetAssetRegistry failed" end
-    return reg, nil
-end
-
-local function packageKnown(reg, pkg)
-    local ok, result = pcall(function()
-        local assets = reg:GetAssetsByPackageName(FName(pkg), false, false)
-        if assets and assets.Num then return assets:Num() end
-        return 0
-    end)
-    if not ok then return -1 end
-    return result or 0
+    say("  afterLoad=" .. findState(path))
 end
 
 local function run()
-    local lines = { "ForgeRegistryProbe — " .. os.date("%Y-%m-%d %H:%M:%S") }
+    out = {}
+    say("ForgeRegistryProbe — " .. os.date("%Y-%m-%d %H:%M:%S"))
+    say("(LoadAsset pulls the asset in if the game can resolve it at all;")
+    say(" afterLoad=present means the plugin content is reachable.)")
+    say("")
+    probeOne("control", CTRL_OBJ)
+    say("")
+    probeOne("probe", PROBE_OBJ)
+    say("")
 
-    local reg, err = getAssetRegistry()
-    if not reg then
-        lines[#lines + 1] = "RESULT=ERROR"
-        lines[#lines + 1] = "reason=" .. tostring(err)
-        writeStatus(lines)
-        return
+    local before = nil
+    for _, l in ipairs(out) do
+        if l:find("%[probe%]") then before = true end
     end
-    lines[#lines + 1] = "assetRegistry=ok"
+    -- verdict from the probe's afterLoad line
+    local verdict = "UNCLEAR"
+    for i, l in ipairs(out) do
+        if l == "[probe] " .. PROBE_OBJ then
+            local after = out[i + 3] or ""
+            if after:find("present") then verdict = "PLUGIN_CONTENT_REACHABLE"
+            else verdict = "PLUGIN_CONTENT_NOT_REACHABLE" end
+        end
+    end
+    say("RESULT=" .. verdict)
 
-    local control = packageKnown(reg, CONTROL_PACKAGE)
-    local probe = packageKnown(reg, PROBE_PACKAGE)
-    lines[#lines + 1] = "controlPackage=" .. CONTROL_PACKAGE
-    lines[#lines + 1] = "controlAssets=" .. tostring(control)
-    lines[#lines + 1] = "probePackage=" .. PROBE_PACKAGE
-    lines[#lines + 1] = "probeAssets=" .. tostring(probe)
-
-    local obj = StaticFindObject(PROBE_OBJECT)
-    lines[#lines + 1] = "staticFindObject=" .. tostring(obj ~= nil and obj:IsValid())
-
-    if control <= 0 then
-        lines[#lines + 1] = "RESULT=PROBE_BROKEN"       -- control failed; test says nothing
-    elseif probe > 0 then
-        lines[#lines + 1] = "RESULT=REGISTERED"         -- plugin registry was appended
+    local f = io.open(STATUS, "w")
+    if f then
+        for _, l in ipairs(out) do f:write(l .. "\n") end
+        f:close()
+        print("[ForgeRegistryProbe] wrote status.txt\n")
     else
-        lines[#lines + 1] = "RESULT=NOT_REGISTERED"     -- mounting does not append
+        print("[ForgeRegistryProbe] could not write status.txt\n")
     end
-    writeStatus(lines)
 end
 
 RegisterKeyBind(Key.F8, function()
-    local ok, err = pcall(run)
-    if not ok then print("[ForgeRegistryProbe] error: " .. tostring(err) .. "\n") end
+    -- everything that touches UObjects must be on the game thread
+    ExecuteInGameThread(function()
+        local ok, err = pcall(run)
+        if not ok then print("[ForgeRegistryProbe] error: " .. tostring(err) .. "\n") end
+    end)
 end)
 
-print("[ForgeRegistryProbe] loaded — press F8 to probe the asset registry\n")
+print("[ForgeRegistryProbe] loaded — press F8 to probe\n")
