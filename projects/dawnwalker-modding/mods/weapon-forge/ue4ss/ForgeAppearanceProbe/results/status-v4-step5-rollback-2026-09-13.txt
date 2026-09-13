@@ -1,0 +1,30 @@
+ForgeAppearanceProbe — 2026-09-13 15:49:33
+item=ITM_Weapon_SwordVampiric1a
+original=L_Sword_Vampiric_01  overridden=M_Sword_Gargoyle_01
+control row=ITM_Weapon_SwordErkas1a expects M_Sword_Erka_01
+
+[1] player pawn = BP_PlayerCharacter_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BP_PlayerCharacter_C_2147480039
+
+[1b] holders of the candidate blades
+  mesh=L_Sword_Vampiric_01
+    holder=BP_PlayerCharacter_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BP_PlayerCharacter_C_2147480039
+    isPlayerPawn=true  (via address)
+  mesh=L_Sword_Vampiric_01
+    holder=BP_PlayerCharacter_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BP_PlayerCharacter_C_2147480039
+    isPlayerPawn=true  (via address)
+  mesh=L_Sword_Vampiric_01
+    holder=BP_Weapon_StraightSword_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BP_Weapon_StraightSword_C_2147432563
+    isPlayerPawn=false  (via none)
+
+[2] which candidate blades are loaded in memory
+  L_Sword_Vampiric_01 loaded=true
+  M_Sword_Gargoyle_01 loaded=false
+  (M_Sword_Gargoyle_01=true is strong evidence the override is live)
+
+[3] appearance table
+  table=DataTable /Game/_Dawnwalker/Inventory/Items/DT_WeaponAppearances.DT_WeaponAppearances
+  GetDataTableRowNames unavailable (needs a struct-aware call)
+  rows cannot be read from Lua directly; rely on [1] and [2]
+
+VERDICT=ORIGINAL_IN_USE — the game is using the stock blade, so our
+  container is probably not winning. Check load order and packaging.
