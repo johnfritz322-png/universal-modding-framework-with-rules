@@ -3,6 +3,8 @@
 Custom weapon visuals for The Blood of Dawnwalker — five original swords with
 matching scabbards, authored by Codex in an Unreal 5.5.4 content-only plugin.
 
+> **Resuming? Read [`START-HERE-TOMORROW.md`](START-HERE-TOMORROW.md) first.**
+
 **Status: NOT SHIPPABLE. Do not install the current build.**
 
 **Additive inventory-item test: container format verified; registration/grant is
