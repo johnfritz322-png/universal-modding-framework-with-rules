@@ -55,9 +55,11 @@ and asset-registry path rather than guessing an ID.
 
 ## Direct runtime-load result
 
-The follow-up direct `LoadAsset` probe also failed to resolve the exact custom
-package in the running game. This confirms the missing gate is actual package
-registration/discovery rather than only the item menu's first scan. See
+The follow-up direct `LoadAsset` probe failed to resolve the exact custom
+package by either package or complete object path, including after the container
+was renamed to the working community `_P` convention. This confirms the missing
+gate is actual package registration/discovery rather than only the item menu's
+first scan. See
 `RUNTIME-LOAD-PROBE-2026-09-12.md` and the preserved probe source under
 `ue4ss/ForgeItemLoadProbe/`.
 

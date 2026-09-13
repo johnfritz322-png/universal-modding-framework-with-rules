@@ -11,20 +11,21 @@ end
 
 RegisterKeyBind(Key.F10, function()
     ExecuteInGameThread(function()
-        print("[ForgeItemLoadProbe] Loading " .. assetPath .. "\n")
-        local ok, err = pcall(function()
-            LoadAsset(assetPath)
-        end)
-        if not ok then
-            print("[ForgeItemLoadProbe] LoadAsset error: " .. tostring(err) .. "\n")
-            return
-        end
-
-        local item = StaticFindObject(objectPath)
-        if valid(item) then
-            print("[ForgeItemLoadProbe] LOADED " .. item:GetFullName() .. "\n")
-        else
-            print("[ForgeItemLoadProbe] NOT_FOUND after LoadAsset\n")
+        for _, path in ipairs({assetPath, objectPath}) do
+            print("[ForgeItemLoadProbe] Loading " .. path .. "\n")
+            local ok, err = pcall(function()
+                LoadAsset(path)
+            end)
+            if not ok then
+                print("[ForgeItemLoadProbe] LoadAsset error: " .. tostring(err) .. "\n")
+            else
+                local item = StaticFindObject(objectPath)
+                if valid(item) then
+                    print("[ForgeItemLoadProbe] LOADED " .. item:GetFullName() .. "\n")
+                    return
+                end
+                print("[ForgeItemLoadProbe] NOT_FOUND after LoadAsset\n")
+            end
         end
     end)
 end)
