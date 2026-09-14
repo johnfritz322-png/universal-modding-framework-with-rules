@@ -23,7 +23,7 @@ local STATUS = "D:/steam/steamapps/common/The Blood of Dawnwalker/Dawnwalker/Bin
 
 -- label, stock blade, blade we repointed it to
 local SET = {
-    { "The Vrakhir",              "L_Sword_Vampiric_01",   "M_Sword_Ancient_Hero_01" },
+    { "The Vrakhir",              "L_Sword_Vampiric_01",   "M_Sword_Gargoyle_01"     },
     { "Imbued Sword of St Mihai", "S_Sword_Dawnwalker_01", "M_Sword_Matron_01"       },
     { "Sword Great Master 1a",    "L_Sword_NPC_07",        "M_Sword_Skender_01"      },
 }
