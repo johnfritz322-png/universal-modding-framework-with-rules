@@ -1,0 +1,23 @@
+ForgeAppearanceProbe — 2026-09-13 18:12:34
+VISUAL REPLACEMENT of existing weapons. Does NOT create new items.
+
+player pawn = BP_PlayerCharacter_C /Game/Map_Blockout_Valley/Blockout_Valley.Blockout_Valley:PersistentLevel.BP_PlayerCharacter_C_2147480039
+StaticMeshComponents alive: 37720
+
+[The Vrakhir]  L_Sword_Vampiric_01 -> M_Sword_Ancient_Hero_01
+  overridden resident=true  held=true  onPlayer=true  (via address)
+  stock      resident=false  held=false  onPlayer=false
+  => OVERRIDE_ON_PLAYER
+
+[Imbued Sword of St Mihai]  S_Sword_Dawnwalker_01 -> M_Sword_Matron_01
+  overridden resident=false  held=false  onPlayer=false
+  stock      resident=false  held=false  onPlayer=false
+  => INCONCLUSIVE — not equipped/drawn right now
+
+[Sword Great Master 1a]  L_Sword_NPC_07 -> M_Sword_Skender_01
+  overridden resident=false  held=false  onPlayer=false
+  stock      resident=false  held=false  onPlayer=false
+  => INCONCLUSIVE — not equipped/drawn right now
+
+SUMMARY  confirmed=1  stock-still-showing=0  not-tested=2
+Equip and DRAW each weapon in turn, pressing F8 for each, to confirm all three.

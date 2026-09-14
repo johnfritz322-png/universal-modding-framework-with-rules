@@ -1,33 +1,32 @@
 -- Forge Appearance Probe — read-only.
 --
--- Question: when the appearance table is overridden, does the game use the
--- override? Answers it three independent ways so one broken method cannot be
--- mistaken for a real result.
+-- Checks a SET of weapon visual overrides: for each, is the overridden blade
+-- held by the player, or is the original still in use?
 --
--- Reads only. Never grants, spawns, equips, or writes to a save. The single side
--- effect is one text file next to this script.
+-- Reads only. Never grants, spawns, equips, or writes to a save. One text file
+-- is its only side effect.
 --
--- Press F8 while IN GAME with the weapon under test EQUIPPED.
+-- Press F8 with the weapon DRAWN. Sheathed gives INCONCLUSIVE, correctly.
 -- Result: ForgeAppearanceProbe/status.txt
 --
--- Conventions learned the hard way on this project - keep them:
---   * F8, not F10. ForgeItemLoadProbe and ConsoleEnabler both bind F10.
---   * Forward slashes in paths. A backslash path is an invalid Lua escape and
---     kills the whole script at load, silently binding nothing.
---   * Anything touching UObjects must run inside ExecuteInGameThread, or it
---     throws "can only be called from within the game".
---   * unreal.log / print do NOT reliably reach the log. Write to a file.
+-- Conventions, each learned by losing a run — keep them:
+--   * F8, not F10 (ForgeItemLoadProbe and ConsoleEnabler both bind F10).
+--   * Forward slashes in paths. A Windows path is an invalid Lua escape and
+--     kills the script at load, silently binding nothing.
+--   * ExecuteInGameThread around anything touching UObjects.
+--   * Write results to a FILE; print does not reliably reach the log.
+--   * Compare owners by OBJECT IDENTITY, not name — a second
+--     BP_PlayerCharacter_C exists inside a cutscene, so names collide.
+--   * UE4SS loads Lua at startup only: editing this needs a game restart.
 
 local STATUS = "D:/steam/steamapps/common/The Blood of Dawnwalker/Dawnwalker/Binaries/Win64/ue4ss/Mods/ForgeAppearanceProbe/status.txt"
 
--- The item under test and the two candidate blades.
-local TABLE_PATH   = "/Game/_Dawnwalker/Inventory/Items/DT_WeaponAppearances"
-local ROW_NAME     = "ITM_Weapon_SwordVampiric1a"
-local ORIGINAL     = "L_Sword_Vampiric_01"        -- what the unmodified table says
-local OVERRIDDEN   = "M_Sword_Gargoyle_01"        -- what our patched table says
--- Control: a row nobody modified. If this reads wrong, the probe is broken.
-local CTRL_ROW     = "ITM_Weapon_SwordErkas1a"
-local CTRL_EXPECT  = "M_Sword_Erka_01"
+-- label, stock blade, blade we repointed it to
+local SET = {
+    { "The Vrakhir",              "L_Sword_Vampiric_01",   "M_Sword_Ancient_Hero_01" },
+    { "Imbued Sword of St Mihai", "S_Sword_Dawnwalker_01", "M_Sword_Matron_01"       },
+    { "Sword Great Master 1a",    "L_Sword_NPC_07",        "M_Sword_Skender_01"      },
+}
 
 local out = {}
 local function say(s) out[#out + 1] = tostring(s) end
@@ -35,159 +34,93 @@ local function say(s) out[#out + 1] = tostring(s) end
 local function objName(o)
     if o == nil then return "nil" end
     local ok, n = pcall(function() return o:GetFullName() end)
-    if ok and n then return tostring(n) end
-    return "<unnamed>"
+    return (ok and n) and tostring(n) or "<unnamed>"
 end
 
-local function isLoaded(shortName)
-    -- StaticFindObject only sees what is already in memory, so a miss here is
-    -- not proof of absence - it is only meaningful alongside the other checks.
-    local p = "/Game/_Dawnwalker/Characters/Swords/" .. shortName .. "/" .. shortName
-                .. "." .. shortName
+local function isLoaded(short)
+    local p = "/Game/_Dawnwalker/Characters/Swords/" .. short .. "/" .. short .. "." .. short
     local ok, o = pcall(StaticFindObject, p)
     if not ok or o == nil then return false end
     local okv, v = pcall(function() return o:IsValid() end)
     return okv and v
 end
 
--- 1. Who is holding the candidate blades.
---
--- v2 listed every sword component with its owner but never compared against the
--- real pawn, so it reported cutscene actors and scenery. This asks the only
--- question that matters: which actor holds the overridden blade.
-local playerHasOverride = false
-
-local function probeEquippedMesh()
-    say("")
-    local pawn, pawnName = nil, ""
-    pcall(function()
-        local pc = FindFirstOf("PlayerController")
-        if pc and pc:IsValid() then pawn = pc.Pawn end
-    end)
-    if pawn and pawn:IsValid() then pawnName = objName(pawn) end
-    say("[1] player pawn = " .. (pawnName ~= "" and pawnName or "NOT FOUND"))
-
-    say("")
-    say("[1b] holders of the candidate blades")
-    local shown = 0
-    local ok = pcall(function()
-        local comps = FindAllOf("StaticMeshComponent") or {}
-        for _, c in ipairs(comps) do
-            if c and c:IsValid() then
-                local okm, m = pcall(function() return c.StaticMesh end)
-                if okm and m and m:IsValid() then
-                    local mn = objName(m)
-                    if mn:find(OVERRIDDEN) or mn:find(ORIGINAL) then
-                        local oko, owner = pcall(function() return c:GetOuter() end)
-                        local on = (oko and owner) and objName(owner) or "<no outer>"
-                        -- Identity, not text. Names can collide (there is a
-                        -- second BP_PlayerCharacter_C inside a cutscene), so
-                        -- compare the objects themselves and fall back to
-                        -- addresses, using the name only as a last resort.
-                        local isPlayer, how = false, "none"
-                        if pawn ~= nil and oko and owner ~= nil then
-                            local oke, eq = pcall(function() return owner == pawn end)
-                            if oke and eq then
-                                isPlayer, how = true, "object-identity"
-                            else
-                                local oka, a1 = pcall(function() return owner:GetAddress() end)
-                                local okb, a2 = pcall(function() return pawn:GetAddress() end)
-                                if oka and okb and a1 ~= nil and a1 == a2 then
-                                    isPlayer, how = true, "address"
-                                elseif pawnName ~= "" and on == pawnName then
-                                    isPlayer, how = true, "name-fallback-AMBIGUOUS"
-                                end
-                            end
-                        end
-                        say("  mesh=" .. (mn:find(OVERRIDDEN) and OVERRIDDEN or ORIGINAL))
-                        say("    holder=" .. on)
-                        say("    isPlayerPawn=" .. tostring(isPlayer) .. "  (via " .. how .. ")")
-                        if isPlayer then playerHasOverride = playerHasOverride or mn:find(OVERRIDDEN) ~= nil end
-                        shown = shown + 1
-                        if shown >= 10 then return end
-                    end
-                end
-            end
-        end
-    end)
-    if not ok then say("  scan threw") end
-    if shown == 0 then say("  neither blade is held by any live component") end
-end
-
--- 2. Which candidate blade packages are resident.
-local function probeResident()
-    say("")
-    say("[2] which candidate blades are loaded in memory")
-    say("  " .. ORIGINAL .. " loaded=" .. tostring(isLoaded(ORIGINAL)))
-    say("  " .. OVERRIDDEN .. " loaded=" .. tostring(isLoaded(OVERRIDDEN)))
-    say("  (" .. OVERRIDDEN .. "=true is strong evidence the override is live)")
-end
-
--- 3. The appearance table object itself, and whether our row exists in it.
-local function probeTable()
-    say("")
-    say("[3] appearance table")
-    local ok, tbl = pcall(StaticFindObject, TABLE_PATH .. "." .. "DT_WeaponAppearances")
-    if not ok or tbl == nil or not tbl:IsValid() then
-        say("  table not resident — it may load on demand; this is not conclusive")
-        return
-    end
-    say("  table=" .. objName(tbl))
-    local okn, names = pcall(function()
-        return UDataTableFunctionLibrary:GetDataTableRowNames(tbl)
-    end)
-    if not okn or names == nil then
-        say("  GetDataTableRowNames unavailable (needs a struct-aware call)")
-        say("  rows cannot be read from Lua directly; rely on [1] and [2]")
-        return
-    end
-    local count, found, ctrl = 0, false, false
-    for _, n in ipairs(names) do
-        count = count + 1
-        local s = tostring(n)
-        if s == ROW_NAME then found = true end
-        if s == CTRL_ROW then ctrl = true end
-    end
-    say("  rowCount=" .. count)
-    say("  hasRow(" .. ROW_NAME .. ")=" .. tostring(found))
-    say("  hasControlRow(" .. CTRL_ROW .. ")=" .. tostring(ctrl))
-end
-
-local function verdict()
-    say("")
-    -- The holder check is authoritative. Residency alone only proves something
-    -- requested the mesh; it does not prove the player is wearing it. An earlier
-    -- version of this probe concluded "the visual comes from elsewhere" purely
-    -- from residency and was wrong.
-    if playerHasOverride then
-        say("VERDICT=OVERRIDE_ON_PLAYER — the player pawn holds the overridden")
-        say("  blade. The DataTable override is working end to end.")
-        say("  NOTE: this is VISUAL REPLACEMENT of an existing weapon. It does")
-        say("  NOT create a new inventory item.")
-    elseif isLoaded(OVERRIDDEN) then
-        say("VERDICT=LOADED_BUT_NOT_ON_PLAYER — the overridden mesh is resident,")
-        say("  but no component on the player pawn holds it. Something else")
-        say("  requested it (an NPC, or streaming). Check the equip path and")
-        say("  AppearanceSubsystem.ItemAppearanceMap before concluding anything.")
-    elseif isLoaded(ORIGINAL) then
-        say("VERDICT=ORIGINAL_IN_USE — the game is using the stock blade, so our")
-        say("  container is probably not winning. Check load order and packaging.")
-    else
-        say("VERDICT=INCONCLUSIVE — neither blade is resident. Equip the weapon,")
-        say("  make sure it is drawn, then press F8 again.")
-    end
+local function sameObject(a, b)
+    if a == nil or b == nil then return false, "none" end
+    local ok, eq = pcall(function() return a == b end)
+    if ok and eq then return true, "object-identity" end
+    local oka, x = pcall(function() return a:GetAddress() end)
+    local okb, y = pcall(function() return b:GetAddress() end)
+    if oka and okb and x ~= nil and x == y then return true, "address" end
+    return false, "none"
 end
 
 local function run()
     out = {}
     say("ForgeAppearanceProbe — " .. os.date("%Y-%m-%d %H:%M:%S"))
-    say("item=" .. ROW_NAME)
-    say("original=" .. ORIGINAL .. "  overridden=" .. OVERRIDDEN)
-    say("control row=" .. CTRL_ROW .. " expects " .. CTRL_EXPECT)
-    probeEquippedMesh()
-    probeResident()
-    probeTable()
-    verdict()
+    say("VISUAL REPLACEMENT of existing weapons. Does NOT create new items.")
+    say("")
+
+    local pawn = nil
+    pcall(function()
+        local pc = FindFirstOf("PlayerController")
+        if pc and pc:IsValid() then pawn = pc.Pawn end
+    end)
+    say("player pawn = " .. (pawn and objName(pawn) or "NOT FOUND"))
+
+    -- one scan of the world, reused for every weapon in the set
+    local held = {}          -- short mesh name -> { onPlayer=bool, how=string }
+    pcall(function()
+        local comps = FindAllOf("StaticMeshComponent") or {}
+        say("StaticMeshComponents alive: " .. tostring(#comps))
+        for _, c in ipairs(comps) do
+            if c and c:IsValid() then
+                local okm, m = pcall(function() return c.StaticMesh end)
+                if okm and m and m:IsValid() then
+                    local mn = objName(m)
+                    local short = mn:match("Characters/Swords/[^/]+/([^/.]+)%.")
+                    if short then
+                        local oko, owner = pcall(function() return c:GetOuter() end)
+                        local onPlayer, how = false, "none"
+                        if oko then onPlayer, how = sameObject(owner, pawn) end
+                        local e = held[short]
+                        if e == nil then
+                            held[short] = { onPlayer = onPlayer, how = how }
+                        elseif onPlayer and not e.onPlayer then
+                            e.onPlayer, e.how = true, how
+                        end
+                    end
+                end
+            end
+        end
+    end)
+
+    local pass, fail, unclear = 0, 0, 0
+    for _, row in ipairs(SET) do
+        local label, stock, want = row[1], row[2], row[3]
+        say("")
+        say("[" .. label .. "]  " .. stock .. " -> " .. want)
+        local w, s = held[want], held[stock]
+        say("  overridden resident=" .. tostring(isLoaded(want))
+            .. "  held=" .. tostring(w ~= nil)
+            .. "  onPlayer=" .. tostring(w ~= nil and w.onPlayer or false)
+            .. (w and ("  (via " .. w.how .. ")") or ""))
+        say("  stock      resident=" .. tostring(isLoaded(stock))
+            .. "  held=" .. tostring(s ~= nil)
+            .. "  onPlayer=" .. tostring(s ~= nil and s.onPlayer or false))
+        if w ~= nil and w.onPlayer then
+            say("  => OVERRIDE_ON_PLAYER"); pass = pass + 1
+        elseif s ~= nil and s.onPlayer then
+            say("  => STOCK_ON_PLAYER — override not applied to this weapon"); fail = fail + 1
+        else
+            say("  => INCONCLUSIVE — not equipped/drawn right now"); unclear = unclear + 1
+        end
+    end
+
+    say("")
+    say("SUMMARY  confirmed=" .. pass .. "  stock-still-showing=" .. fail
+        .. "  not-tested=" .. unclear)
+    say("Equip and DRAW each weapon in turn, pressing F8 for each, to confirm all three.")
 
     local f = io.open(STATUS, "w")
     if f then
@@ -206,4 +139,4 @@ RegisterKeyBind(Key.F8, function()
     end)
 end)
 
-print("[ForgeAppearanceProbe] loaded — equip the weapon, then press F8\n")
+print("[ForgeAppearanceProbe] loaded — draw a weapon, then press F8\n")
