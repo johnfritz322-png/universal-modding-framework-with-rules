@@ -10,6 +10,11 @@
 > The wrong technique and why it failed are written out below, because the failure
 > is more useful than the recipe was. **Do not open a Corvette interior by bulk
 > rule.** Sections 1, 3, 5, 6, 7 and 8 are still sound.
+>
+> **The ship was later made unboardable a third time**, by placing an amenity
+> 1.73 units in front of an airlock. See section 9 and
+> `OUTCOME-AND-LESSONS.md`. Three interior edits, three failures, three different
+> causes - the conclusion there is to make interior changes in game instead.
 
 ## 1. Objects sit ON the deck, not AT it - STILL VALID
 
@@ -134,3 +139,24 @@ fitted technology items and the rest of the save intact.
 
 **Take a fresh four-file backup before every single write.** Twenty-one were taken
 during this session, and the last one is what saved the ship.
+
+
+## 9. Keep placed objects clear of the airlocks - LEARNED THE HARD WAY
+
+Six amenities were placed on the deck. Two landed in the doorway:
+
+| | Distance to `B_ALK_Z_A` |
+|---|---|
+| `^TELEPORTER` | **1.73** |
+| `^BUILDTERMINAL` | **3.18** |
+
+The ship became unboardable. The placement code checked for collisions with other
+*objects* and for a floor panel underneath, but never for proximity to a door.
+
+**Assert a minimum clearance of 4 units from every airlock before writing**, and
+remember a door opens along its `At` vector, so the space on that side matters
+most:
+
+    for a in airlocks:
+        for placed in new_objects:
+            assert dist(a["Position"], placed["Position"]) >= 4.0
