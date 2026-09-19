@@ -90,3 +90,36 @@ The technology fitted here **survived a full build restore**. The build (@ZJ) wa
 rolled back to a backup while @Cs[7].PMT was left untouched, and all 38 items
 remained. Build and technology are genuinely independent, so a bad build edit does
 not require refitting the ship.
+
+
+---
+
+## Upgrading modules to S - VERIFIED 2026-09-18
+
+### Class ranking
+
+`1` C, `2` B, `3` A, `4` S, and **`X` ranks above S** - X-class modules roll a
+wider range and can exceed an S-class roll.
+
+### The 3-module cap is per TECHNOLOGY, not per family
+
+`UP_LAUN*` and `CV_LAUN*` both count toward the launch thruster's limit. On this
+ship the launch system already held 4 modules (2x `UP_LAUN4`, 2x `CV_LAUN2`), so
+swapping the low ones for better launch modules would have deepened the penalty.
+Count by the system in the id, across both `UP_` and `CV_` prefixes.
+
+When a system is at cap, spend the freed slot on a technology that has room **and
+is actually installed**. Upgrade modules for a weapon the ship does not carry are
+dead weight - this ship has `SHIPGUN1` and `SHIPLAS1`, so `UP_SGUN*` and
+`UP_SLASR*` were the useful choices, and `UP_SMINI*` / `UP_SBLOB*` were not.
+
+### Some families have no S-class version in a given save
+
+`CV_FIT` tops out at A and `CV_INV` at B in this save. There is no S-class variant
+to swap to, and **inventing a `#seed` would fabricate a module that was never
+generated**. Report the ceiling instead of manufacturing one.
+
+### Result
+
+38 items: 21 base technologies, 17 modules at 3 X-class, 11 S-class, 2 A, 1 B,
+with no technology over the cap.
