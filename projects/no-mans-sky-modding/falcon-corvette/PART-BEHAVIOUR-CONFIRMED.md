@@ -67,3 +67,61 @@ blocking core parts were relocated onto the hull flanks at y 10.5 as surface det
 
 Still unconfirmed: whether the `^M_FLOOR` skin reads as solid plating from outside,
 and whether the airlock now opens.
+
+---
+
+# 5. The airlock needs clearance on the INSIDE - CONFIRMED 2026-09-18
+
+Second in-game test. User: *"i can't access the door at all something is blocking
+it"*, with a screenshot of the airlock sealed and showing **two red indicator
+lights**. Red on a Corvette door means obstructed.
+
+## Cause
+
+`^B_ALK_A` on Darth Fritz sits at `(0, 3, -9)` with `At = [0, 0, 1]`. **`At` is the
+facing direction, so the door opens toward +Z - into the ship, not out of it.**
+
+The first fix only cleared the *approach* (z from -21 to -9, outside the door). The
+side the door actually opens into was packed solid. Inspection found
+`^B_STR_S_N` at `(0, 3, -6)`: three units directly in front of the door at exactly
+door height.
+
+Clearing the outside approach is therefore necessary but **not sufficient**. Both
+sides of an airlock need clearance, and which side is "inside" is given by `At`.
+
+## Second, larger cause
+
+The hab core `^B_HAB_B` at `(0, 3, -3)` is a large walkable room - measured minimum
+gap between habs elsewhere is 14.5 units. The hull generator had been filling every
+cell of the ship's footprint at four heights, so the hab's interior was packed with
+floor panels and frame. The ship was a solid brick with a room's worth of geometry
+jammed through it.
+
+**Rule: a Corvette hull must be generated as a shell with a hollow interior.** Keep
+the roof so it still reads solid from above, and void everything below it inside the
+hab volume and the corridor.
+
+## The test that catches this
+
+Rather than guessing at clearances, assert that the volume the player walks through
+contains **only objects the working ship also has at those same coordinates**:
+
+```
+player volume = (corridor OR hab footprint) AND 0 < y < roof height
+every object in it must match (ObjectID, position) on the known-good Corvette
+```
+
+On the current build that volume holds 23 objects and all 23 are Darth Fritz's own,
+at Darth Fritz's own coordinates. Roof panels and the under-belly turret are
+correctly excluded by the `0 < y < roof` bound - an early version of the check
+included them and produced 59 false positives.
+
+## Also corrected
+
+Relocation of blocking core parts must key off the **corridor only**, never the hab.
+Keying it off the whole cleared footprint threw the ship's own interior furniture -
+kitchen, tech walls, cargo panels - out onto the roof.
+
+## Status
+
+Installed at 467 parts. Not yet confirmed in game.
