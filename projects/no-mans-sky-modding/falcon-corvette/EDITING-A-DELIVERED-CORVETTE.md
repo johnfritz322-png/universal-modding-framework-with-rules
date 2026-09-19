@@ -99,3 +99,48 @@ station, hazard station, room scanner, save point, two archives, weapon rack, de
 chairs, beds. The weapon rack had to be brought down from a wall mount at 4.55.
 
 Envelope unchanged from delivery at 35.9 x 8.5 x 47.7, so the exterior is intact.
+
+---
+
+# Making a variation while keeping someone else's exterior
+
+The user asked for their own interior on the delivered exterior. The method that
+worked:
+
+## Assert the exterior by identity, not by count
+
+A count is not enough. The first attempt asserted that the number of objects
+outside the walking band was unchanged, and it **failed on a false positive**: four
+staircase steps added at y 0.05-2.40 are below the deck, so they counted as new
+"exterior" objects.
+
+Capture a set of `(ObjectID, rounded position)` signatures for everything outside
+the band before editing, then assert **none of them are missing** afterwards.
+Additions are fine; losses are not.
+
+```python
+sig = lambda o: (o["ObjectID"], tuple(round(v, 2) for v in o["Position"]))
+ext_before = {sig(o) for o in objs if o["Position"][1] < 3.0 or o["Position"][1] > 5.35}
+...
+lost = ext_before - {sig(o) for o in kept}
+assert not lost
+```
+
+On the finished variation: **all 742 exterior objects still present.**
+
+## Reaching a hab's built-in fittings
+
+`^B_HAB1_C` on this ship sits at y=0 while the creator's deck is at y=3.1 - so the
+hab's own floor, and the **Refiner Unit built into that part**, were sealed under
+the deck with no stairs anywhere in the build.
+
+A hab's fittings are **part of its mesh**, not separate save objects. They cannot
+be moved or re-seated. The only way to reach them is to open the deck above and
+provide a way down.
+
+What was done: cut 11 floor panels over the hab's forward half (keeping the airlock
+approach solid so you do not walk in and drop), then build a staircase out of
+`^L_FLOOR_Q` panels at 2.40 / 1.60 / 0.80 / 0.05.
+
+**Use floor panels as steps rather than a ramp part** unless the ramp's geometry
+has been measured - step heights are then known exactly.
