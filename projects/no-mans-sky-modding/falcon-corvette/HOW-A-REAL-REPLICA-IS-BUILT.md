@@ -94,3 +94,46 @@ the player's friend code and an open multiplayer session. There is no file route
 Charon (<https://charon.gg>) does offer `.nmsship` file downloads with no bot, but
 its catalogue of 308 builds contains no Falcon - all 16 of its Star Wars ships were
 checked.
+
+---
+
+# Preparing a Corvette to RECEIVE a bot delivery - CONFIRMED 2026-09-18
+
+The delivery landed and the ship could not be boarded. Cause, found by inspection:
+
+**Slot 7 contained two `^U_PARAGON` root objects**, both at `(0, 0, 0)` with
+identical UserData. One was the delivered build's; the other was left over from the
+minimal canvas prepared beforehand.
+
+Every healthy Corvette in the save has exactly **one** root. Removing the duplicate
+restored access, and the part count then matched the listing's `All:1495` exactly -
+a good confirmation the build had arrived intact.
+
+**Rule: leave NO `^U_PARAGON` in a Corvette before a bot delivery.** The incoming
+build brings its own. The temptation is to keep one so the record stays valid, but
+that is precisely what collides.
+
+Also confirmed, from the same episode: **stripping a Corvette to only its root makes
+it unsummonable.** It shows in the ship list with a blank preview and does nothing
+when selected - there is no landing gear, cockpit or hab for the game to spawn. If a
+canvas is wanted that is still flyable, keep the functional skeleton
+(`B_LND_*`, `B_HAB*`, `B_COK_*`, `B_ALK_*`, `B_GEN_*`, plus structure) and accept
+that the delivery will replace it.
+
+## Health of a delivered build
+
+Worth checking after any delivery, all of which the delivered Falcon passed:
+
+- exactly one `^U_PARAGON`
+- no non-finite or zero transform vectors
+- `At` unit length and perpendicular to `Up` on every object
+- no strays far outside the hull envelope
+- functional parts present: cockpit, landing gear, airlock, hab, generator, turret
+- structural (`^B_*`) count under the 100 cap - this one uses 45
+
+## What a delivered build may NOT include
+
+The Falcon advertises "full interior" but shipped with only an Archive, a Save Point
+and a Weapon Rack. No teleporter, trade terminal, mission table, health or hazard
+station. With 45 of 100 structural slots used there is ample room to add them, and
+doing so does not disturb the shape.
