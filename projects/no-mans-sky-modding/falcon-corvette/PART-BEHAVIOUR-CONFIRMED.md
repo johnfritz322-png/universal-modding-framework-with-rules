@@ -122,6 +122,49 @@ Relocation of blocking core parts must key off the **corridor only**, never the 
 Keying it off the whole cleared footprint threw the ship's own interior furniture -
 kitchen, tech walls, cargo panels - out onto the roof.
 
-## Status
+## Status: FIX CONFIRMED 2026-09-18
 
-Installed at 467 parts. Not yet confirmed in game.
+User: *"the door opens now"*. Hollowing the hull and clearing the inside face of
+the airlock resolved it. The assertion above is the regression test.
+
+---
+
+# 6. Moving the cockpit strands it - CONFIRMED 2026-09-18
+
+Same test: *"NOW I CAN'T ACCESS THE COCKPIT"*.
+
+`^B_COK_D` had been relocated from its stock `(0, 3, 3)` out to a starboard pod at
+`(24, 3, 3)`. The pod was built from hull tiles with no walkable route from the hab,
+so the cockpit was unreachable.
+
+**Rule: treat the cockpit like the airlock - it is only reachable if it sits inside
+the hollow interior.** Leave it at its stock position and put a second, purely
+decorative `^B_COK_D` wherever the silhouette needs a canopy. Two cockpits in one
+build is valid: Corvette-1 shipped with two.
+
+# 7. Fine placement and free rotation ARE available
+
+Measured in Corvette-1, so these are real placements the game accepted:
+
+| Part | Copies | Pitch | Rotations seen |
+|---|---|---|---|
+| `^C_TRIFLOOR_Q` | 32 | **1.54** | 5 distinct `At`, including 60 and 120 degrees |
+| `^M_FLOOR_Q` | 28 | ~0.94 | includes `(0, -0.7, -0.7)`, a 45 degree tilt |
+| `^M_WALL_Q` | 17 | 5.33 | 6 distinct |
+| `^M_ARCH` | 20 | 3.77 | 4 distinct |
+
+So a Corvette is **not** restricted to the 3.0 structural grid or to axis-aligned
+placement. Curved and sloped surfaces can be built by stepping a quarter-floor
+around an arc with its `At` set to the local tangent. The current build uses 210
+`^C_TRIFLOOR_Q` at 3-degree steps around the hull edge.
+
+There are 171 distinct part IDs proven valid in this save, drawn from both
+Corvettes - including base-building parts, so the palette is not Corvette-only.
+
+## Hard ceiling worth recording
+
+A save edit can only place geometry the game already ships. However finely it is
+placed, the result is an assembly of NMS parts, not an arbitrary mesh. Matching a
+specific real-world silhouette exactly requires a custom model shipped in a `.pak`,
+which is a different piece of work with its own risk: replacing a shared part's mesh
+changes every ship that uses it.
