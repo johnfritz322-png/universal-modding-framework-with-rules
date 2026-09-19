@@ -80,3 +80,13 @@ Added alongside: `UT_QUICKWARP`, `UT_LAUNCHER`, `UT_PULSESPEED`, `UT_PULSEFUEL`,
 `UT_SHIPDRIFT`, `UT_SHIPSHIELD`, `CARGOSHIELD`, `SHIP_TELEPORT`, `SHIPSCAN_ECON`,
 `SHIPSCAN_COMBAT`, plus seven tier-4 modules: 2x `UP_HYP4`, 2x `UP_LAUN4`,
 2x `UP_PULSE4`, 1x `UP_S_SHL4`, each with a distinct seed.
+
+
+---
+
+## Status note
+
+The technology fitted here **survived a full build restore**. The build (@ZJ) was
+rolled back to a backup while @Cs[7].PMT was left untouched, and all 38 items
+remained. Build and technology are genuinely independent, so a bad build edit does
+not require refitting the ship.
