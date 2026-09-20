@@ -74,3 +74,60 @@ will refuse an invalid removal and show the result immediately; a save edit will
 **The standing rule from `OUTCOME-AND-LESSONS.md` applies: interior changes go through
 the in-game build menu.** Three of three save-edit interior changes failed, and one of
 those three was placing a teleporter beside this very airlock.
+
+---
+
+## Answered: `CorvettePartCategory` is the gate — VERIFIED
+
+Diffing the `B_ALK_C` product against the `TELEPORTER` product in
+`nms_basepartproducts` showed one field that decides everything:
+
+    <Property name="CorvettePartCategory" value="GcCorvettePartCategory">
+      <Property name="CorvettePartCategory" value="Access" />   B_ALK_C
+      <Property name="CorvettePartCategory" value="None" />     TELEPORTER
+    </Property>
+
+Counting the whole table: 1,185 products are `None`, and the rest carry a Corvette
+category — Hull 486, Engine 26, Wing 24, Connector 24, Interior 22, Decor 15, Hab 6,
+Gun 6, Shield 5, Access 5, Gear 4, Reactor 4, Cockpit 3, TractorBeam 2, plus two
+combined values (`Gear, Engine` and `Hab, Access`), which shows the field accepts
+comma-separated flags.
+
+**But `None` does not mean "cannot be placed in a Corvette".** Every part already
+sitting inside the Falcon — `BUILDSAVE`, `ARCHIVE`, `STORAGEPANEL`, `L_FLOOR_Q`,
+`WALLLIGHTBLUE`, `S_CHAIR0` — is `None`. The category marks *structural ship parts*
+for the ship builder; ordinary base objects are placed through the normal build menu
+while aboard. So the teleporter may already be placeable with no mod at all.
+
+## The mod — BUILT AND INSTALLED, NOT TESTED
+
+`tools/build_corvette_teleporter_mod.py` sets `TELEPORTER`'s category to `Interior`,
+which lists it as a first-class Corvette part in the ship builder.
+
+**It deliberately reuses the existing `TELEPORTER` id instead of adding a new part.**
+`OUTCOME-AND-LESSONS.md` warned that a save holding a modded part depends on that mod
+staying installed. Reusing a vanilla id removes that risk entirely: uninstall the mod
+and any placed teleporter still resolves to a real vanilla object.
+
+Two forms are built:
+
+| Form | Path | Notes |
+|---|---|---|
+| EXML patch | `mods/CorvetteTeleporter/METADATA/REALITY/TABLES/NMS_BASEPARTPRODUCTS.EXML` | 436 bytes, touches one field, coexists with other mods. **Installed.** |
+| MBIN replacement | built on demand by the script | 1,752,856 bytes, fallback if the patch form is not picked up |
+
+Readback of the replacement confirms 1,820 products preserved, `TELEPORTER` now
+`Interior`, and the controls unchanged (`B_ALK_C` still `Access`, `BUILDSAVE` still
+`None`).
+
+The EXML partial-patch form was copied from a working 7.03 patch already on this
+machine — Corvette Overhaul Ultimate's `GCSPACESHIPGLOBALS.GLOBAL.EXML` — which uses
+a `<Data template="...">` root containing only the changed properties.
+
+No conflict: the only other installed mod edits `GCCAMERAGLOBALS` and
+`GCSPACESHIPGLOBALS`, not this table.
+
+**UNVERIFIED:** whether the game lists it, whether a teleporter aboard a Corvette
+joins the teleport network, and whether setting a Corvette category removes it from
+the ordinary base build menu (the base menu is driven by a separate `WikiCategory`
+field, which is untouched, but that has not been confirmed in game).

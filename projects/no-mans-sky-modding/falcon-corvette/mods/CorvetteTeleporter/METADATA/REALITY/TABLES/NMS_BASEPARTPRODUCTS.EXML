@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Makes the base teleporter buildable inside a Corvette-->
+<Data template="cGcProductTable">
+  <Property name="Table">
+    <Property name="Table" value="GcProductData" _id="TELEPORTER">
+      <Property name="CorvettePartCategory" value="GcCorvettePartCategory">
+        <Property name="CorvettePartCategory" value="Interior" />
+      </Property>
+    </Property>
+  </Property>
+</Data>
