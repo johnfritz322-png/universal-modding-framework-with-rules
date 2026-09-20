@@ -14,7 +14,8 @@ Date opened: 2026-09-19. Status: **research only, nothing built, nothing install
 |---|---|---|
 | Game version | No Man's Sky 7.03.1 "Cosmos" | Steam `appmanifest_275850.acf` buildid `25351301`, cross-checked against a Nexus mod that names build 25351301 as 7.03.1 |
 | Install path | `D:\steam\steamapps\common\No Man's Sky` | on disk |
-| Mods enabled | yes | `GAMEDATA\PCBANKS\ENABLEMODS.TXT` present; `GAMEDATA\MODS\` exists and holds no mods |
+| Mods enabled | yes | `GAMEDATA\PCBANKS\ENABLEMODS.TXT` present |
+| Existing mods | Corvette Overhaul Ultimate, Buy All Corvette Parts, deployed by Vortex from `d:\Vortex Mods\nomanssky` | `GAMEDATA\MODS\` contents and `vortex.deployment.json` |
 | Player freighter | capital, industrial | save key `/vLc/6f=/bIR/93M` = `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN` |
 
 ## Mod format for 7.x — VERIFIED
@@ -128,6 +129,72 @@ Star Destroyer is modelled.** Modelling first and discovering the exporter is br
 would repeat the mistake made on the Falcon build.
 
 ---
+
+## No global overrides the model scale — VERIFIED
+
+Extracted and decompiled `gcspaceshipglobals.global.mbin` from `NMSARC.globals.pak`
+and searched every freighter and scale field. There is **no scale or size multiplier
+for the capital freighter**. The per-type block that looks like one (`Freighter 2.0`,
+`CapitalFreighter 5.0`, `SmallFreighter 4.0`) is `WarpFadeInTime` — animation timing,
+not geometry. So the ship's size really is set by the scene node and nothing else
+re-imposes it at runtime.
+
+Fields in that file that **are** tuned to the vanilla ship's size, and are the most
+likely things to break at 3.4x:
+
+| Field | Value | Why it matters |
+|---|---|---|
+| `FreighterApproachDistanceMin` / `Max` | 50 / 300 | where your ship is placed when approaching. Tuned for a ~700 m hull |
+| `FreighterApproachExtraMarginCombat` | -800 | approach margin during battles |
+| `PlayerFreighterClearSpaceRadius` | 3000 | space kept clear around the parked freighter |
+| `NoBoostFreighterDistance` | 800 | boost cut-off near the hull |
+| `WarpInRangeFreighter` | 5000 | warp-in distance |
+
+**Conflict note:** `GCSPACESHIPGLOBALS.GLOBAL.EXML` is already patched by the
+installed Corvette Overhaul Ultimate mod. If any of the fields above need changing,
+it must be done as an EXML patch that coexists with that mod, not a replacement.
+
+## Measured size — VERIFIED (approximate)
+
+Decompiled `capitalfreighter_proc.geometry.mbin.pc` and took the union of every
+`MeshAABBMin`/`MeshAABBMax`/`BoundHullVerts` point in it:
+
+    local extent (W x H x L) = 34.9 x 4.5 x 236.2
+
+At the shipped net hull scale of 3 (6 x 0.5) that is roughly **105 x 14 x 708 m**,
+which matches the commonly quoted ~700 m capital freighter length.
+
+This is the root scene's own geometry only; referenced sub-scenes (hull plates,
+thrusters, bridge) carry their own geometry files, so treat 708 m as a close
+approximation rather than an exact hull length.
+
+    Xyston-class canon length     2,400 m
+    required factor               2400 / 708 = 3.39x
+    hull scale                    6 x 3.39 = 20.34
+
+## Build 1: the scale test — BUILT, NOT YET TESTED
+
+`tools/build_scale_mod.py` rebuilds the scene with a new hull scale and recomputes
+the compensation so the player-facing nodes stay at world scale 1.0.
+
+Built at hull scale 20.34:
+
+| Node | Vanilla | Modded | Effect |
+|---|---|---|---|
+| `_Hull_A3` | 6.0 | 20.34 | hull 3.39x larger |
+| `HANGARROOTB` | 0.333333 | 0.098328 | hangar stays world scale 1.0 |
+| `Freighter_Medium` / `_Medium1` | 0.333333 | 0.098328 | inventory volume stays 1.0 |
+| `MaintenanceSlot0` / `1` | z = -343 | z = -1163.7 | moved out onto the bigger hull |
+
+Readback of the compiled MBIN confirms `20.34 x 0.5 x 0.098328 = 1.0` exactly.
+
+Installed to `GAMEDATA\MODS\XystonFreighterScale\`. A 2x variant is kept unbuilt-into-
+the-game at `variants/XystonFreighterScale_2x/`.
+
+**MBIN round-trip is safe — VERIFIED.** Decompiling and recompiling the untouched
+scene produces a file of identical length differing in exactly 5 bytes: offset 10 and
+offsets 24-27, which hold MBINCompiler's own version stamp (`07 03 02 01` = 7.03.2.1).
+The template GUID and all payload bytes are preserved.
 
 ## Plan, in dependency order
 
