@@ -110,6 +110,33 @@ def add_uvs(obj):
             uv_layer.data[loop_index].uv = (u / TILE, v / TILE)
 
 
+def triangulate(mesh):
+    """Triangulate every face before export.
+
+    NMSDK's own documentation (docs/exporting/exporting.md) warns:
+
+        "When exporting an object it may be exported with edges and faces messed
+        up. This happens when the mesh is improperly triangulated. Whilst NMSDK
+        should triangulate a mesh properly it sometimes doesn't work as well as
+        it should."
+
+    and prescribes triangulating in Blender before exporting. Every face this
+    script builds is a quad — boxes, the hull's flanks and stern, every greeble —
+    so the entire model was relying on that unreliable path. "Edges and faces
+    messed up" is exactly the torn, shredded hull seen in game.
+    """
+    bm = bmesh.new()
+    bm.from_mesh(mesh)
+    # Degenerate triangles first — the cylinder cap fans produce a few zero-area
+    # faces, and a zero-area triangle has no usable normal, which is a classic
+    # source of rendering artefacts.
+    bmesh.ops.dissolve_degenerate(bm, dist=1e-5, edges=bm.edges)
+    bmesh.ops.triangulate(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
+
+
 def recalculate_normals(mesh):
     """Force every face to point outward.
 
@@ -147,7 +174,11 @@ def mesh_from_geometry(name, verts, faces):
     mesh.from_pydata(verts, [], faces)
     mesh.validate()
     mesh.update()
+    triangulate(mesh)
     recalculate_normals(mesh)
+    if any(len(p.vertices) != 3 for p in mesh.polygons):
+        raise SystemExit("%s still has non-triangular faces after triangulation"
+                         % name)
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.scene.collection.objects.link(obj)
     add_uvs(obj)
