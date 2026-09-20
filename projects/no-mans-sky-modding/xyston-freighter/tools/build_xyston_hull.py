@@ -16,6 +16,7 @@ Nothing here has been seen in game. Treat every claim about how it looks or beha
 as NEEDS TESTING.
 """
 import math
+import random
 import os
 import sys
 
@@ -157,7 +158,210 @@ def make_sphere(name, cx, cy, cz, radius, rings=8, segments=12):
     return mesh_from_geometry(name, verts, faces)
 
 
+class Greebler:
+    """Accumulates many small boxes into ONE mesh.
+
+    Surface detail has to be thousands of faces to stop the hull reading as flat,
+    but it must not become thousands of scene nodes — the vanilla freighter carries
+    76,996 faces across only 334 meshes. Every greeble field here collapses into a
+    single mesh with many disconnected islands.
+    """
+
+    def __init__(self):
+        self.verts = []
+        self.faces = []
+
+    def box(self, cx, cy, cz, sx, sy, sz, taper=1.0):
+        hx, hy, hz = sx / 2.0, sy / 2.0, sz / 2.0
+        tx, ty = hx * taper, hy * taper
+        base = len(self.verts)
+        self.verts += [
+            (cx - hx, cy - hy, cz - hz), (cx + hx, cy - hy, cz - hz),
+            (cx + hx, cy + hy, cz - hz), (cx - hx, cy + hy, cz - hz),
+            (cx - tx, cy - ty, cz + hz), (cx + tx, cy - ty, cz + hz),
+            (cx + tx, cy + ty, cz + hz), (cx - tx, cy + ty, cz + hz),
+        ]
+        for f in ((0, 3, 2, 1), (4, 5, 6, 7), (0, 1, 5, 4),
+                  (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)):
+            self.faces.append(tuple(base + i for i in f))
+
+    def emit(self, name):
+        if not self.faces:
+            return None
+        return mesh_from_geometry(name, self.verts, self.faces)
+
+
+# --- where the hull surface actually is, so detail sits on it ---------------
+
+def dorsal_z(y):
+    """Height of the sloped top surface at a given point along the ship."""
+    half_l = LENGTH / 2.0
+    t = (half_l - y) / LENGTH          # 0 at the bow, 1 at the stern
+    return DRAUGHT * 0.06 + (DRAUGHT - DRAUGHT * 0.06) * t
+
+
+def dorsal_half_width(y):
+    """Half width of the top surface at a given point. Zero at the bow."""
+    half_l = LENGTH / 2.0
+    return (BEAM / 2.0) * 0.82 * (half_l - y) / LENGTH
+
+
+def ventral_half_width(y):
+    half_l = LENGTH / 2.0
+    return (BEAM / 2.0) * (half_l - y) / LENGTH
+
+
+def dorsal_greebles(rng):
+    """Panel clutter across the top surface, thinning towards the bow."""
+    g = Greebler()
+    half_l = LENGTH / 2.0
+    # keep clear of the command block so detail does not poke through it
+    block_y0, block_y1 = -LENGTH * 0.42, -LENGTH * 0.17
+    block_x = BEAM * 0.20
+
+    y = -half_l + LENGTH * 0.02
+    while y < half_l - LENGTH * 0.06:
+        row_depth = LENGTH * rng.uniform(0.008, 0.020)
+        limit = dorsal_half_width(y) * 0.94
+        if limit > BEAM * 0.02:
+            x = -limit
+            while x < limit:
+                w = BEAM * rng.uniform(0.009, 0.034)
+                if x + w > limit:
+                    break
+                inside_block = (block_y0 < y < block_y1 and abs(x) < block_x)
+                if not inside_block and rng.random() < 0.80:
+                    h = DRAUGHT * rng.uniform(0.018, 0.085)
+                    g.box(x + w / 2.0, y + row_depth / 2.0,
+                          dorsal_z(y) + h / 2.0 - DRAUGHT * 0.012,
+                          w, row_depth * rng.uniform(0.55, 0.95), h,
+                          taper=rng.choice((1.0, 1.0, 0.86)))
+                x += w + BEAM * rng.uniform(0.004, 0.016)
+        y += row_depth + LENGTH * rng.uniform(0.004, 0.012)
+    return g.emit("DorsalGreebles")
+
+
+def dorsal_trenches():
+    """The long channels either side of the command block.
+
+    Built as segments rather than one long box: the top surface slopes and the
+    hull narrows towards the bow, so a single box would rise out of the deck and
+    shoot past the hull edge near the nose.
+    """
+    g = Greebler()
+    half_l = LENGTH / 2.0
+    for side in (-1, 1):
+        for i in range(3):
+            offset = BEAM * (0.11 + i * 0.055)
+            y0, y1 = -half_l + LENGTH * 0.06, half_l - LENGTH * 0.06
+            steps = 34
+            for s in range(steps):
+                y = y0 + (y1 - y0) * s / steps
+                seg = (y1 - y0) / steps
+                if offset > dorsal_half_width(y) * 0.88:
+                    continue                       # past the hull edge here
+                g.box(side * offset, y + seg / 2.0,
+                      dorsal_z(y) - DRAUGHT * 0.015,
+                      BEAM * 0.016, seg * 0.94, DRAUGHT * 0.05)
+    return g.emit("DorsalTrenches")
+
+
+def flank_x(y, frac):
+    """X on the sloped flank at a fraction of the way up it.
+
+    The flank runs from the ventral edge at z=0 to the narrower dorsal edge at
+    z=dorsal_z(y), so it leans inward. Interpolating between the two widths is
+    what keeps detail flush against it instead of floating off in mid air.
+    """
+    return (ventral_half_width(y)
+            + (dorsal_half_width(y) - ventral_half_width(y)) * frac)
+
+
+def flank_ridges():
+    """Horizontal strakes down both sloped flanks, sunk flush into the plating."""
+    g = Greebler()
+    half_l = LENGTH / 2.0
+    for side in (-1, 1):
+        for i in range(5):
+            frac = 0.14 + i * 0.18
+            y0, y1 = -half_l + LENGTH * 0.03, half_l - LENGTH * 0.10
+            steps = 30
+            for s in range(steps):
+                y = y0 + (y1 - y0) * s / steps
+                seg = (y1 - y0) / steps
+                x = flank_x(y, frac) * 0.975      # slightly inside the surface
+                if x < BEAM * 0.01:
+                    continue
+                g.box(side * x, y + seg / 2.0, dorsal_z(y) * frac,
+                      BEAM * 0.010, seg * 0.90, DRAUGHT * 0.030)
+    return g.emit("FlankRidges")
+
+
+def flank_bays():
+    """Recessed bay blocks along the flanks, the big shapes that break up a slab."""
+    g = Greebler()
+    half_l = LENGTH / 2.0
+    for side in (-1, 1):
+        for i in range(6):
+            y = -half_l + LENGTH * (0.10 + i * 0.12)
+            frac = 0.30 if i % 2 else 0.58
+            x = flank_x(y, frac) * 0.96
+            if x < BEAM * 0.02:
+                continue
+            g.box(side * x, y, dorsal_z(y) * frac,
+                  BEAM * 0.022, LENGTH * 0.055, DRAUGHT * 0.16, taper=0.9)
+    return g.emit("FlankBays")
+
+
+def command_tiers():
+    """Stepped tiers on the command block, the way a real Star Destroyer steps up."""
+    g = Greebler()
+    base_z = DRAUGHT + DRAUGHT * 0.5
+    for i, (w, d, h, taper) in enumerate((
+            (0.30, 0.185, 0.10, 0.92),
+            (0.24, 0.150, 0.10, 0.90),
+            (0.185, 0.115, 0.10, 0.88))):
+        g.box(0.0, -LENGTH * (0.305 + i * 0.012), base_z + DRAUGHT * (0.05 + i * 0.10),
+              BEAM * w, LENGTH * d, DRAUGHT * h, taper=taper)
+    # sensor and comms clutter on the tower deck
+    for side in (-1, 1):
+        for i in range(3):
+            g.box(side * BEAM * (0.03 + i * 0.022), -LENGTH * 0.335,
+                  base_z + DRAUGHT * 0.36, BEAM * 0.012,
+                  LENGTH * 0.012, DRAUGHT * (0.10 + i * 0.04))
+    return g.emit("CommandTiers")
+
+
+def ventral_detail(rng):
+    """Hangar bays and belly plating."""
+    g = Greebler()
+    # the main ventral hangar recess, aft of centre
+    g.box(0.0, -LENGTH * 0.335, DRAUGHT * 0.03,
+          BEAM * 0.30, LENGTH * 0.11, DRAUGHT * 0.06)
+    for side in (-1, 1):
+        g.box(side * BEAM * 0.20, -LENGTH * 0.30, DRAUGHT * 0.03,
+              BEAM * 0.08, LENGTH * 0.07, DRAUGHT * 0.05)
+    half_l = LENGTH / 2.0
+    y = -half_l + LENGTH * 0.06
+    while y < half_l - LENGTH * 0.10:
+        depth = LENGTH * rng.uniform(0.02, 0.04)
+        limit = ventral_half_width(y) * 0.90
+        if limit > BEAM * 0.05:
+            x = -limit
+            while x < limit:
+                w = BEAM * rng.uniform(0.03, 0.07)
+                if x + w > limit:
+                    break
+                if rng.random() < 0.45 and abs(x + w / 2.0) > BEAM * 0.06:
+                    g.box(x + w / 2.0, y + depth / 2.0, DRAUGHT * 0.012,
+                          w, depth * 0.85, DRAUGHT * 0.028)
+                x += w + BEAM * rng.uniform(0.01, 0.03)
+        y += depth + LENGTH * rng.uniform(0.01, 0.03)
+    return g.emit("VentralDetail")
+
+
 def build():
+    rng = random.Random(24601)      # fixed, so the ship is the same every build
     parts = [make_hull()]
 
     # Command superstructure: the raised block across the stern third.
@@ -195,6 +399,13 @@ def build():
         "AxialCannonMuzzle",
         0.0, LENGTH * 0.40, DRAUGHT * 0.12,
         DRAUGHT * 0.11, LENGTH * 0.06))
+
+    # Surface detail. Without this the hull is 503 faces of flat plane and reads
+    # as a blocky primitive next to the vanilla freighter's 76,996.
+    for detail in (dorsal_greebles(rng), dorsal_trenches(), flank_ridges(),
+                   flank_bays(), command_tiers(), ventral_detail(rng)):
+        if detail is not None:
+            parts.append(detail)
 
     return parts
 
