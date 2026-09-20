@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Freighter upgrade modules always roll their maximum stat-->
+<Data template="cGcProceduralTechnologyTable">
+  <Property name="Table">
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRHYP1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="100.000000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRHYP2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="150.000000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRHYP3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="200.000000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRHYP4">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="250.000000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRSPE1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.050000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRSPE2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.100000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRSPE3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.140000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRFUE1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="0.990000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRFUE2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="0.950000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRFUE3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="0.900000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRFUE4">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="0.850000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRCOM1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.050000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRCOM2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.100000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRCOM3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.140000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRTRA1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.050000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRTRA2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.100000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRTRA3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.140000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FREXP1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.050000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FREXP2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.100000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FREXP3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.140000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRMIN1">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.050000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRMIN2">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.100000" />
+        </Property>
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProceduralTechnologyData" _id="UP_FRMIN3">
+      <Property name="StatLevels">
+        <Property name="StatLevels" value="GcProceduralTechnologyStatLevel" _index="0">
+          <Property name="ValueMin" value="1.140000" />
+        </Property>
+      </Property>
+    </Property>
+  </Property>
+</Data>

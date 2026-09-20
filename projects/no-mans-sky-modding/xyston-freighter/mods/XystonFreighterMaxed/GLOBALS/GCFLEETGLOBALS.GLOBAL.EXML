@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Double the ships parked in the freighter hangar-->
+<Data template="cGcFleetGlobals">
+  <Property name="MaxNumberOfPlayerShipsInFreighterHangar" value="12" />
+</Data>

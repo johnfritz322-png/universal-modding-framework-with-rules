@@ -24,9 +24,10 @@ import bmesh
 import bpy
 
 # --- proportions -----------------------------------------------------------
-# Xyston-class: 2,400 m long. Beam and draught follow the Imperial wedge.
+# Xyston-class: 2,400 m long. Beam 1,450 m gives the 0.60 width-to-length ratio
+# an Imperial Star Destroyer actually has - 1,150 read far too narrow from above.
 LENGTH = 2400.0
-BEAM = 1150.0
+BEAM = 1450.0
 DRAUGHT = 300.0
 
 HULL_SCALE = 4.0          # 2,400 m x 4 = 9,600 m, the size asked for
