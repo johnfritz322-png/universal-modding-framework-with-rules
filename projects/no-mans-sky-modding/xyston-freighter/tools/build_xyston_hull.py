@@ -38,7 +38,7 @@ LENGTH = 2400.0
 BEAM = 1450.0
 DRAUGHT = 300.0
 
-HULL_SCALE = 4.0          # 2,400 m x 4 = 9,600 m, the size asked for
+HULL_SCALE = 2.0          # 2,400 m x 2 = 4,800 m. 4.0 filled the whole screen in game
 MATERIAL = ("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/"
             "CAPITALFREIGHTER_PROC/FREIGHTERPROC_MAT.MATERIAL.MBIN")
 # Red emissive, shipped with the mod. Built by build_cannon_material.py from the
@@ -48,8 +48,21 @@ GLOW_MATERIAL = ("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/"
 # Any part whose name contains this gets the glow material instead of hull plating.
 GLOW_TAG = "Glow"
 
-OUT_DIR = sys.argv[-1] if sys.argv[-1].endswith("nmsexport") else os.path.join(
-    os.path.expanduser("~"), "xyston_out")
+def _out_dir():
+    """Output directory: whatever follows `--` on the Blender command line.
+
+    This used to test `endswith("nmsexport")` and silently fall back to a home
+    directory for any other name, which made variant builds write nothing where
+    they were expected and fail only at the copy step.
+    """
+    if "--" in sys.argv:
+        tail = sys.argv[sys.argv.index("--") + 1:]
+        if tail:
+            return tail[0]
+    return os.path.join(os.path.expanduser("~"), "xyston_out")
+
+
+OUT_DIR = _out_dir()
 
 
 def clear_scene():
@@ -58,7 +71,16 @@ def clear_scene():
         bpy.data.objects.remove(obj, do_unlink=True)
 
 
-TILE = 60.0   # metres per texture repeat, so the hull plating reads at ship scale
+# Metres of FINISHED SHIP per texture repeat. The borrowed freighter texture is
+# hull plating, which needs to repeat every few metres to read as plating at all.
+# UVs are generated in model units and the whole mesh is then multiplied by
+# HULL_SCALE, so the divide is what keeps the plating the same physical size no
+# matter how big the ship is set to.
+#
+# This was 60 model units with no divide, i.e. a 240 m repeat at HULL_SCALE 4 —
+# stretched roughly fifty-fold, which is why the hull rendered as flat grey.
+TILE_WORLD_METRES = 5.0
+TILE = TILE_WORLD_METRES / HULL_SCALE
 
 
 def add_uvs(obj):
