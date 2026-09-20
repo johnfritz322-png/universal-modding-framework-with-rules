@@ -188,8 +188,24 @@ Built at hull scale 20.34:
 
 Readback of the compiled MBIN confirms `20.34 x 0.5 x 0.098328 = 1.0` exactly.
 
-Installed to `GAMEDATA\MODS\XystonFreighterScale\`. A 2x variant is kept unbuilt-into-
-the-game at `variants/XystonFreighterScale_2x/`.
+### Sizes built
+
+| Variant | Hull scale | Factor vs vanilla | Hull length | Status |
+|---|---|---|---|---|
+| `XystonFreighterScale_2x` | 12.0 | 2.00x | ~1,417 m | fallback, never installed |
+| `XystonFreighterScale_2400m` | 20.34 | 3.39x | ~2,403 m | canon Xyston length; installed then replaced |
+| `XystonFreighterScale_4800m` | 40.68 | 6.78x | ~4,803 m | **currently installed** |
+
+The user asked for 100% more than the canon size before seeing the first one in game,
+so the installed build is double the Xyston's real length. Readback of the installed
+MBIN: hull scale 40.68, hangar compensation 0.049164, hangar world scale 0.999996.
+
+Installed at `GAMEDATA\MODS\XystonFreighterScale\`, md5 `4425b0250fec241a333785cb2efb5303`.
+
+**Watch at this size:** `PlayerFreighterClearSpaceRadius` is 3000 and the hull is now
+2,400 m from centre to bow, so the ship very nearly fills the space the game keeps
+clear around it. `FreighterApproachDistanceMax` of 300 is far inside the hull, so the
+landing approach is the most likely thing to break first.
 
 **MBIN round-trip is safe — VERIFIED.** Decompiling and recompiling the untouched
 scene produces a file of identical length differing in exactly 5 bytes: offset 10 and
