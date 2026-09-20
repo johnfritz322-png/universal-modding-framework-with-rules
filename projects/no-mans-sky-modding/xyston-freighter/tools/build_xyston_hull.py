@@ -645,9 +645,27 @@ def normalise_scene_guid():
     # means the geometry never loads and the ship renders as nothing at all.
     text = open(mxml, "r", encoding="utf-8").read()
     fixed, count = _backslash_paths(text)
-    if count:
-        open(mxml, "w", encoding="utf-8").write(fixed)
+
+    # NMSDK always nests its output in a folder named after the scene, so the
+    # scene ends up calling itself
+    #
+    #   MODELS\...\INDUSTRIAL\CAPITALFREIGHTER_PROC\CAPITALFREIGHTER_PROC
+    #
+    # where vanilla is simply MODELS\...\INDUSTRIAL\CAPITALFREIGHTER_PROC. The
+    # scene's Name is its identity to the engine and the GEOMETRY attribute is how
+    # it finds its mesh data, so both have to match vanilla exactly. Collapsing the
+    # doubled segment fixes both at once.
+    #
+    # Material paths are deliberately untouched: those really do live in a
+    # subfolder named after the model, in vanilla too.
+    doubled = "INDUSTRIAL\\CAPITALFREIGHTER_PROC\\CAPITALFREIGHTER_PROC"
+    flat = "INDUSTRIAL\\CAPITALFREIGHTER_PROC"
+    collapsed = fixed.count(doubled)
+    fixed = fixed.replace(doubled, flat)
+
+    open(mxml, "w", encoding="utf-8").write(fixed)
     print("  paths normalised to backslashes: %d" % count)
+    print("  doubled scene-name segments collapsed: %d" % collapsed)
 
     # MBINCompiler will not overwrite an existing MBIN, so the NMSDK one has to
     # go before the recompile. This is why an earlier attempt silently no-opped.

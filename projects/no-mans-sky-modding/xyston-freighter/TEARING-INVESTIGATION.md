@@ -81,3 +81,52 @@ rather than a damaged hull.
 That also means the normals fix, the texture-tile fix and the scale change were all
 made while the model could not load properly. They were real bugs and worth fixing,
 but none of them could have been evaluated until this one was found.
+
+---
+
+## Still invisible after the path fix — the scene's own identity was wrong
+
+Backslashes alone were not enough. Comparing the installed scene against vanilla
+field by field found a second, deeper fault:
+
+| | Scene `Name` |
+|---|---|
+| vanilla | `MODELS\COMMON\SPACECRAFT\INDUSTRIAL\CAPITALFREIGHTER_PROC` |
+| ours | `MODELS\COMMON\SPACECRAFT\INDUSTRIAL\CAPITALFREIGHTER_PROC\CAPITALFREIGHTER_PROC` |
+
+**NMSDK always nests its output in a folder named after the scene**, so the scene
+declared itself one level deeper than it actually sits, and its `GEOMETRY` attribute
+pointed into that same phantom subfolder.
+
+The scene's `Name` is its identity to the engine. The file was at the right path on
+disk, so the game found and loaded it — which is why the stock freighter never came
+back — but everything it referenced internally pointed somewhere that does not exist.
+
+### Vanilla's actual layout
+
+    INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN
+    INDUSTRIAL/CAPITALFREIGHTER_PROC.GEOMETRY.MBIN.PC        <- beside the scene
+    INDUSTRIAL/CAPITALFREIGHTER_PROC.GEOMETRY.DATA.MBIN.PC   <- beside the scene
+    INDUSTRIAL/CAPITALFREIGHTER_PROC/<materials>             <- only materials nest
+
+Geometry sits **beside** the scene. Only materials live in the subfolder. Ours had
+the geometry in the subfolder, matching the broken internal reference.
+
+### Fixed
+
+- The round trip collapses the doubled `CAPITALFREIGHTER_PROC\CAPITALFREIGHTER_PROC`
+  segment, correcting both `Name` and `GEOMETRY` at once. Material paths are left
+  alone — those legitimately nest, in vanilla too.
+- `tools/install_freighter.py` now owns the layout, lifts the geometry out of the
+  subfolder, and **verifies every file after copying**, including failing if any
+  geometry is left in the subfolder.
+
+Verified against vanilla after install: `Name` identical, `GEOMETRY` identical, the
+referenced geometry file present at that exact path, no forward slashes remaining.
+
+### Why hand-installing had to stop
+
+Three separate install faults in this project — a glob that missed the geometry
+index, geometry in the wrong folder, and a scene naming itself wrongly — none of
+which were visible in a directory listing. The install step is now code that checks
+itself.
