@@ -1,9 +1,16 @@
 # No Man's Sky work — handoff
 
-Written 2026-09-19. Everything below is either verified against the game's own files
-or explicitly marked as untested. **The single most important fact: the game has
-never been launched with any of this installed.** Every visual is a Blender render.
-Nothing about in-game behaviour is known.
+Written 2026-09-19, updated the same evening after the first in-game test.
+
+**Status: the Star Destroyer loads and renders in game.** The game labels it
+`YOUR CAPITAL SHIP`. The pipeline works end to end — Blender to NMSDK to a scene the
+engine accepts.
+
+**It looked bad on that first showing, and three causes were found and fixed since.
+Those fixes have not themselves been seen in game yet.** See section 4a.
+
+Everything below is either verified against the game's own files or explicitly
+marked as untested.
 
 Two projects: a Xyston-class Sith Star Destroyer replacing the capital freighter, and
 some Corvette work on an existing ship called the Millennium Falcon.
@@ -61,7 +68,7 @@ line reports `already`. Without patch 1 nothing exports at all.
 
 | Folder | Contents | Purpose |
 |---|---|---|
-| `XystonFreighter` | scene 21,583 B, geometry 13,136 + 702,879 B, material 990 B | the Star Destroyer hull |
+| `XystonFreighter` | scene 21,605 B, geometry 13,136 + 702,879 B, material 990 B | the Star Destroyer hull, **4,800 m** |
 | `XystonFreighterMaxed` | 2 EXML patches | max freighter upgrade rolls, ship parking 6 -> 12 |
 | `CorvetteExtras` | 1 EXML patch, 900 B | teleporter + flush hatch in the Corvette builder |
 
@@ -98,9 +105,11 @@ ventral axial cannon (housing + glow strip + muzzle + emitter blisters), and fiv
 procedural detail passes: dorsal greebles, dorsal trenches, flank ridges, flank bays,
 command tiers, ventral plating.
 
-Modelled at the canon 2,400 m, `HULL_SCALE = 4.0` gives **9,600 m**. One constant
-changes the size. Measured extents 10,032 x 5,800 x 2,810 m — the extra length is the
-muzzle projecting past the bow.
+Modelled at the canon 2,400 m. `HULL_SCALE` is the one constant that changes size;
+it is now **2.0**, giving **4,800 m**. Prebuilt variants at 1.0x, 2.0x and 4.0x sit in
+`xyston-freighter/variants/` and swapping is a folder copy — each holds four files
+(scene, two geometry, material), and a variant with three files is missing its
+geometry index.
 
 ### Geometry rules that were learned by getting them wrong
 
@@ -166,6 +175,40 @@ no file can prove the game honours the locator when it does. This is the largest
 open unknown.
 
 ---
+
+## 4a. First in-game result, and what it exposed
+
+The ship rendered, and looked terrible. Three causes, all found in the numbers rather
+than by staring at the screenshot. Full detail in
+`xyston-freighter/FIRST-IN-GAME-RESULT.md`.
+
+1. **The texture was stretched about fiftyfold.** UVs are built in model units and
+   the mesh is then multiplied by `HULL_SCALE`; `TILE` was a flat 60 with no
+   compensation, giving a 240 m repeat on a plating texture. Now
+   `TILE = TILE_WORLD_METRES / HULL_SCALE` with `TILE_WORLD_METRES = 5.0`, so plating
+   stays the same physical size at any ship size. **This is the likely reason the
+   hull read as featureless despite 5,723 faces of detail.**
+2. **9,600 m was too big to look at.** Stock is 4,301 m; at more than double that the
+   silhouette never fits on screen. Default is now `HULL_SCALE = 2.0`, **4,800 m**.
+3. **Two build bugs that failed silently.** `OUT_DIR` only accepted paths ending in
+   `nmsexport` and quietly wrote elsewhere otherwise. And the staging glob
+   `*.GEOMETRY.*.MBIN.PC` never matched `CAPITALFREIGHTER_PROC.GEOMETRY.MBIN.PC`,
+   so variants were staged **without the geometry index** while the larger `.DATA.`
+   file made the folder look correct.
+
+### Why it had not loaded before that
+
+Two faults, in `xyston-freighter/WHY-MODS-DID-NOT-LOAD.md`:
+
+- `Binaries\SETTINGS\GCMODSETTINGS.MXML` carried `DisableAllMods = true`, so **no
+  mod on the machine had ever loaded**, including the user's own Corvette Overhaul.
+  Now `false`; original backed up. The game does not rewrite this file on exit, but
+  set it with the game closed.
+- NMSDK stamps the wrong template GUID into scene MBIN headers. An MBINCompiler
+  round trip fixes it and the build now does that automatically. **MBINCompiler will
+  not overwrite an existing MBIN**, so the file must be deleted between decompile and
+  recompile — the first attempt at this fix silently did nothing.
+
 
 ## 5. Freighter stats, storage and parking
 
@@ -233,16 +276,17 @@ Rule carried over from the Falcon work: four-file backup (`save.hg`, `save2.hg`,
 
 ## 8. What to do next
 
-1. **Launch the game.** Everything is blocked on this. Summon the freighter and look.
-   Watch for: does it load at all; is the hangar approach usable (the globals still
-   place you 300 m out, deep inside a 10 km hull); can you land; is the hangar
-   human-sized; do 12 ships fit without overlapping.
-2. If it loads, fix the hangar locator height — currently a guess.
-3. If it does not load, suspect the geometry size (703 KB against the vanilla's own)
-   or the borrowed material paths, and bisect by reinstalling the earlier scale-only
-   variants in `variants/`.
+1. **Launch and look at the hull surface.** The plating fix in 4a is the one expected
+   to matter most. If the hull still reads as flat grey, the borrowed material is not
+   resolving and should be pointed at a different vanilla material.
+2. **Then check the things size affects**: can you fly into the hangar, or does the
+   300 m approach distance put you inside the hull; is the hangar human-sized; do 12
+   parked ships overlap.
+3. Fix the hangar locator height — still a guess, never corrected against reality.
 4. Surface detail is at 7% of vanilla density. More would help up close: panel insets
    on the flanks, stepped bays, finer clutter near the bow.
+5. The axial cannon glow has never been seen lit. It uses a `GlowTranslucent` material
+   which may read as see-through rather than emissive.
 
 ## 9. Branches
 
