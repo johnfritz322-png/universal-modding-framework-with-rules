@@ -590,6 +590,27 @@ def main():
     print("EXPORT_DONE")
 
 
+def _backslash_paths(text):
+    """Rewrite every MODELS/... attribute value to use backslashes.
+
+    Only touches values that look like internal asset paths, so the rest of the
+    XML is left alone. Returns the text and how many values were changed.
+    """
+    import re
+
+    changed = [0]
+
+    def fix(match):
+        value = match.group(1)
+        if "MODELS" not in value.upper() or "/" not in value:
+            return match.group(0)
+        changed[0] += 1
+        return 'value="%s"' % value.replace("/", "\\")
+
+    out = re.sub(r'value="([^"]*)"', fix, text)
+    return out, changed[0]
+
+
 def normalise_scene_guid():
     """Round-trip the exported scene through MBINCompiler to fix its header.
 
@@ -613,6 +634,21 @@ def normalise_scene_guid():
     if not os.path.exists(mxml):
         print("  GUID normalise: decompile produced no MXML, leaving scene as is")
         return
+
+    # Every internal path must use backslashes. NMSDK keeps whatever separator it
+    # was handed for `export_directory` and `material_path`, and joins the rest with
+    # backslashes, producing hybrids like
+    #
+    #   MODELS/COMMON/SPACECRAFT/INDUSTRIAL\CAPITALFREIGHTER_PROC\...GEOMETRY.MBIN
+    #
+    # Vanilla scenes are backslash throughout. A path the engine cannot resolve
+    # means the geometry never loads and the ship renders as nothing at all.
+    text = open(mxml, "r", encoding="utf-8").read()
+    fixed, count = _backslash_paths(text)
+    if count:
+        open(mxml, "w", encoding="utf-8").write(fixed)
+    print("  paths normalised to backslashes: %d" % count)
+
     # MBINCompiler will not overwrite an existing MBIN, so the NMSDK one has to
     # go before the recompile. This is why an earlier attempt silently no-opped.
     os.remove(scene)

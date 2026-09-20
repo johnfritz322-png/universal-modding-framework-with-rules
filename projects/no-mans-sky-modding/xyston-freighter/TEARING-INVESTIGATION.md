@@ -38,3 +38,46 @@ No greebles, no spheres, no cylinders, no segmented strips.
 
 Either answer is worth more than more guessing. Set `XYSTON_DETAIL=plain` to rebuild
 it; unset for the full ship.
+
+---
+
+## The bisect answered it: mixed path separators
+
+The 23-face plain hull rendered as **nothing at all**. That ruled out greeble
+density, LOD and every other detail-geometry theory in one launch, and pointed
+straight at something structural.
+
+Diffing the scene's node attributes against vanilla found it immediately:
+
+```
+vanilla  GEOMETRY  MODELS\COMMON\SPACECRAFT\INDUSTRIAL\CAPITALFREIGHTER_PROC.GEOMETRY.MBIN
+ours     GEOMETRY  MODELS/COMMON/SPACECRAFT/INDUSTRIAL\CAPITALFREIGHTER_PROC\CAPITALFREIGHTER_PROC.GEOMETRY.MBIN
+```
+
+**Mixed separators.** NMSDK keeps whatever separator it is handed for
+`export_directory` and `NMSMesh_props.material_path`, then joins the rest with
+backslashes. Both were passed with forward slashes, so every geometry and material
+reference in the scene was a hybrid the engine cannot resolve.
+
+Vanilla scenes are backslash throughout.
+
+- **Unresolvable GEOMETRY path → the mesh data never loads → the ship is invisible.**
+- **Unresolvable MATERIAL path → no texture → this is also the likely cause of the
+  black, untextured hull**, which had been blamed on lighting and then on normals.
+
+### Fixed
+
+`_backslash_paths()` rewrites every value containing `MODELS` and a forward slash,
+during the MBINCompiler round trip that was already happening for the GUID. It
+reports how many it changed — 6 on the plain build, **22 on the full ship**.
+
+### What this says about the earlier screenshots
+
+The torn, shredded ship was most likely never a torn mesh. With the geometry
+reference broken, what rendered was whatever the engine could still resolve, which
+is why it looked like fragments floating in the silhouette of a Star Destroyer
+rather than a damaged hull.
+
+That also means the normals fix, the texture-tile fix and the scale change were all
+made while the model could not load properly. They were real bugs and worth fixing,
+but none of them could have been evaluated until this one was found.
