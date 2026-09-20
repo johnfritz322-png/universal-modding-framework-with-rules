@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Corvette build menu additions-->
+<Data template="cGcProductTable">
+  <Property name="Table">
+    <Property name="Table" value="GcProductData" _id="TELEPORTER">
+      <Property name="CorvettePartCategory" value="GcCorvettePartCategory">
+        <Property name="CorvettePartCategory" value="Interior" />
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProductData" _id="B_ALK_D">
+      <Property name="CorvettePartCategory" value="GcCorvettePartCategory">
+        <Property name="CorvettePartCategory" value="Access" />
+      </Property>
+    </Property>
+    <Property name="Table" value="GcProductData" _id="B_ALK_Z_D">
+      <Property name="CorvettePartCategory" value="GcCorvettePartCategory">
+        <Property name="CorvettePartCategory" value="Access" />
+      </Property>
+    </Property>
+  </Property>
+</Data>

@@ -27,8 +27,13 @@ import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-PART_ID = "TELEPORTER"
-NEW_CATEGORY = "Interior"
+# part id -> Corvette category to give it
+CHANGES = {
+    "TELEPORTER": "Interior",   # base teleporter, so it can be built aboard
+    "B_ALK_D": "Access",        # flush hatch, no ramp and no lift. Not exposed by HG
+    "B_ALK_Z_D": "Access",      # the Z variant of the same hatch
+}
+MOD_NAME = "CorvetteExtras"
 GAME_PATH = "METADATA/REALITY/TABLES/NMS_BASEPARTPRODUCTS"
 MBINCOMPILER = Path(
     r"C:\Users\johnf\Documents\Codex\2026-09-07"
@@ -36,16 +41,18 @@ MBINCOMPILER = Path(
     r"\MBINCompiler-v7.03.2-pre1\MBINCompiler.exe"
 )
 
-PATCH = """<?xml version="1.0" encoding="utf-8"?>
-<!--Makes the base teleporter buildable inside a Corvette-->
+PATCH_HEAD = """<?xml version="1.0" encoding="utf-8"?>
+<!--Corvette build menu additions-->
 <Data template="cGcProductTable">
   <Property name="Table">
-    <Property name="Table" value="GcProductData" _id="{part}">
+"""
+PATCH_ENTRY = """    <Property name="Table" value="GcProductData" _id="{part}">
       <Property name="CorvettePartCategory" value="GcCorvettePartCategory">
         <Property name="CorvettePartCategory" value="{category}" />
       </Property>
     </Property>
-  </Property>
+"""
+PATCH_TAIL = """  </Property>
 </Data>
 """
 
@@ -67,51 +74,57 @@ def find_product(root, part_id):
     raise SystemExit("product %s not found" % part_id)
 
 
-def verify_target(source_mxml):
-    """Confirm the patch targets exactly one real entry, shaped as expected."""
+def verify_targets(source_mxml):
+    """Confirm every patch target exists exactly once and is shaped as expected."""
     root = ET.parse(source_mxml).getroot()
     if root.get("template") != "cGcProductTable":
         raise SystemExit("unexpected root template: %s" % root.get("template"))
 
     table = prop(root, "Table")
-    matches = [e for e in table.findall("Property") if e.get("_id") == PART_ID]
-    if len(matches) != 1:
-        raise SystemExit("expected exactly 1 %s entry, found %d" % (PART_ID, len(matches)))
-
-    entry = matches[0]
-    cat = prop(entry, "CorvettePartCategory")
-    if cat is None:
-        raise SystemExit("%s has no CorvettePartCategory field" % PART_ID)
-    inner = prop(cat, "CorvettePartCategory")
-    print("  target found: %s, CorvettePartCategory currently %r"
-          % (PART_ID, inner.get("value")))
-    return root, entry, inner
+    for part_id in CHANGES:
+        matches = [e for e in table.findall("Property") if e.get("_id") == part_id]
+        if len(matches) != 1:
+            raise SystemExit("expected exactly 1 %s entry, found %d"
+                             % (part_id, len(matches)))
+        cat = prop(matches[0], "CorvettePartCategory")
+        if cat is None:
+            raise SystemExit("%s has no CorvettePartCategory field" % part_id)
+        inner = prop(cat, "CorvettePartCategory")
+        print("  %-12s currently %-8r -> %s"
+              % (part_id, inner.get("value"), CHANGES[part_id]))
+    return root
 
 
 def build_patch(out_dir):
-    staged = Path(out_dir) / "CorvetteTeleporter" / Path(GAME_PATH).parent
+    staged = Path(out_dir) / MOD_NAME / Path(GAME_PATH).parent
     staged.mkdir(parents=True, exist_ok=True)
     target = staged / (Path(GAME_PATH).name + ".EXML")
-    text = PATCH.format(part=PART_ID, category=NEW_CATEGORY)
+
+    text = PATCH_HEAD
+    for part, category in CHANGES.items():
+        text += PATCH_ENTRY.format(part=part, category=category)
+    text += PATCH_TAIL
     target.write_text(text, encoding="utf-8")
 
     # The patch must be well formed, and must describe the same shape as the
     # real table, or the game has nothing to match against.
     patched = ET.fromstring(text)
-    entry = find_product(patched, PART_ID)
-    inner = prop(prop(entry, "CorvettePartCategory"), "CorvettePartCategory")
-    assert inner.get("value") == NEW_CATEGORY, "patch does not set the category"
+    for part, category in CHANGES.items():
+        entry = find_product(patched, part)
+        inner = prop(prop(entry, "CorvettePartCategory"), "CorvettePartCategory")
+        assert inner.get("value") == category, "patch does not set %s" % part
     return target
 
 
 def build_replacement(source_mxml, out_dir):
-    staged = Path(out_dir) / "CorvetteTeleporter_Replacement" / Path(GAME_PATH).parent
+    staged = Path(out_dir) / (MOD_NAME + "_Replacement") / Path(GAME_PATH).parent
     staged.mkdir(parents=True, exist_ok=True)
 
     tree = ET.parse(source_mxml)
-    entry = find_product(tree.getroot(), PART_ID)
-    inner = prop(prop(entry, "CorvettePartCategory"), "CorvettePartCategory")
-    inner.set("value", NEW_CATEGORY)
+    for part, category in CHANGES.items():
+        entry = find_product(tree.getroot(), part)
+        inner = prop(prop(entry, "CorvettePartCategory"), "CorvettePartCategory")
+        inner.set("value", category)
 
     mxml = staged / (Path(GAME_PATH).name + ".MXML")
     tree.write(mxml, encoding="utf-8", xml_declaration=True)
@@ -135,8 +148,8 @@ def main():
         raise SystemExit(__doc__)
     source_mxml, out_dir = sys.argv[1], sys.argv[2]
 
-    print("verifying the patch target against the real table...")
-    verify_target(source_mxml)
+    print("verifying patch targets against the real table...")
+    verify_targets(source_mxml)
 
     patch = build_patch(out_dir)
     print("\npatch mod     : %s (%d bytes)" % (patch, patch.stat().st_size))
