@@ -48,6 +48,15 @@ GLOW_MATERIAL = ("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/"
 # Any part whose name contains this gets the glow material instead of hull plating.
 GLOW_TAG = "Glow"
 
+# "full"  = every detail pass, ~5,700 faces across 20 meshes
+# "plain" = hull, superstructure and tower only, 4 meshes of flat boxes
+#
+# The plain build exists to bisect in-game rendering faults. If a four-box ship
+# renders solid and clean, the fault is in the detail geometry; if it still tears,
+# the fault is structural — the scene, the export or the engine's handling of a
+# mesh this size — and no amount of adjusting greebles will touch it.
+DETAIL_LEVEL = os.environ.get("XYSTON_DETAIL", "full")
+
 def _out_dir():
     """Output directory: whatever follows `--` on the Blender command line.
 
@@ -437,6 +446,21 @@ def ventral_detail(rng):
 def build():
     rng = random.Random(24601)      # fixed, so the ship is the same every build
     parts = [make_hull()]
+
+    if DETAIL_LEVEL == "plain":
+        parts.append(make_box(
+            "Superstructure",
+            0.0, -LENGTH * 0.30, DRAUGHT + DRAUGHT * 0.25,
+            BEAM * 0.34, LENGTH * 0.22, DRAUGHT * 0.5, taper=0.78))
+        parts.append(make_box(
+            "BridgeTower",
+            0.0, -LENGTH * 0.355, DRAUGHT + DRAUGHT * 0.5 + DRAUGHT * 0.30,
+            BEAM * 0.13, LENGTH * 0.05, DRAUGHT * 0.6, taper=0.85))
+        parts.append(make_box(
+            "AxialCannonHousing",
+            0.0, LENGTH * 0.04, -DRAUGHT * 0.045,
+            BEAM * 0.075, LENGTH * 0.76, DRAUGHT * 0.09))
+        return parts
 
     # Command superstructure: the raised block across the stern third.
     parts.append(make_box(
