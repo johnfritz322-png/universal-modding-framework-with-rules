@@ -89,3 +89,58 @@ attributes, an empty `InstanceTransforms`, and a `MESH` child.
 
 **Still unverified:** that the game loads and renders such a scene. Producing a valid
 file and the engine accepting it are different claims. That is the next test.
+
+---
+
+## The hull — BUILT, EXPORTED, INSTALLED, NOT SEEN IN GAME
+
+`tools/build_xyston_hull.py` generates the ship procedurally and exports it. 12 parts,
+503 faces:
+
+| Part | What it is |
+|---|---|
+| `XystonHull` | the wedge: flat ventral triangle, narrower dorsal triangle, blade bow |
+| `Superstructure` | tapered block across the stern third |
+| `BridgeTower` | tower on the superstructure |
+| `ShieldGlobePort` / `Starboard` | the twin domes |
+| `Engine0`-`4` | engine bank, centre bell larger, protruding aft of the stern face |
+| `AxialCannonTrench` | the Xyston's ventral cannon channel |
+| `AxialCannonMuzzle` | the bow aperture |
+
+Modelled at the canon 2,400 m, then `HULL_SCALE = 4.0` on each mesh node gives a
+**9,600 m** ship. Changing that one constant changes the size.
+
+**The scale sits on the mesh nodes, not the root.** That leaves `HANGARROOTB` and both
+maintenance locators at world scale 1.0 with no compensation arithmetic — the thing the
+vanilla scene achieved with its 6 x 0.5 x 0.333333 chain.
+
+Two further gotchas found while exporting:
+
+- **Every mesh needs a UV map** or the export dies with `Object <name> missing UV map`.
+  The script box-projects UVs at 60 m per repeat, which suits the borrowed tiled hull
+  texture.
+- **NMSDK names output files after the root object**, minus the `NMS_` prefix — not
+  after the `scene_name` argument. Renaming the root to `NMS_CAPITALFREIGHTER_PROC` is
+  what makes the file land as `CAPITALFREIGHTER_PROC.SCENE.MBIN`.
+
+Installed as `GAMEDATA\MODS\XystonFreighter\`, replacing the scale-only mod:
+
+    MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN       13,193
+    MODELS/.../CAPITALFREIGHTER_PROC/CAPITALFREIGHTER_PROC.GEOMETRY.MBIN.PC     8,128
+    MODELS/.../CAPITALFREIGHTER_PROC/CAPITALFREIGHTER_PROC.GEOMETRY.DATA.MBIN.PC 33,207
+
+MBINCompiler 7.03.2 decompiles the scene cleanly. Structure verified: a `MODEL` root
+named `CAPITALFREIGHTER_PROC` carrying the geometry attribute, 12 `MESH` children at
+scale 4, and the three `LOCATOR` nodes at scale 1.
+
+Renders of the hull are in `renders/`. **These are Blender renders, not screenshots.**
+The game has never been launched with this installed. Whether it loads, renders,
+collides or lets a ship land is entirely untested.
+
+### Known rough edges, for the next pass
+
+- Beam is 1,150 m against the Xyston's ~1,270 m, so it reads slightly narrow from above
+- The axial cannon has no red emissive material yet — it is geometry only, because every
+  part currently borrows the one vanilla freighter material
+- The hangar locator's height offset is a guess and will likely need moving once the
+  ship is seen in game
