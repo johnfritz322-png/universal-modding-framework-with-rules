@@ -34,6 +34,12 @@ DRAUGHT = 300.0
 HULL_SCALE = 4.0          # 2,400 m x 4 = 9,600 m, the size asked for
 MATERIAL = ("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/"
             "CAPITALFREIGHTER_PROC/FREIGHTERPROC_MAT.MATERIAL.MBIN")
+# Red emissive, shipped with the mod. Built by build_cannon_material.py from the
+# Corvette's own hull-light material, which is unlit and does not billboard.
+GLOW_MATERIAL = ("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/"
+                 "CAPITALFREIGHTER_PROC/XYSTON_CANNON_GLOW.MATERIAL.MBIN")
+# Any part whose name contains this gets the glow material instead of hull plating.
+GLOW_TAG = "Glow"
 
 OUT_DIR = sys.argv[-1] if sys.argv[-1].endswith("nmsexport") else os.path.join(
     os.path.expanduser("~"), "xyston_out")
@@ -333,14 +339,20 @@ def command_tiers():
 
 
 def ventral_detail(rng):
-    """Hangar bays and belly plating."""
+    """Hangar bays and belly plating.
+
+    The belly is the plane z = 0 and the hull occupies z > 0, so anything meant to
+    be seen from underneath has to sit at NEGATIVE z. Detail placed at positive z
+    is entirely swallowed by the hull — which is exactly what happened to the first
+    version of this function, the cannon trench and the glow strip.
+    """
     g = Greebler()
-    # the main ventral hangar recess, aft of centre
-    g.box(0.0, -LENGTH * 0.335, DRAUGHT * 0.03,
-          BEAM * 0.30, LENGTH * 0.11, DRAUGHT * 0.06)
+    # main ventral hangar bay, hanging proud of the belly
+    g.box(0.0, -LENGTH * 0.335, -DRAUGHT * 0.030,
+          BEAM * 0.30, LENGTH * 0.11, DRAUGHT * 0.060)
     for side in (-1, 1):
-        g.box(side * BEAM * 0.20, -LENGTH * 0.30, DRAUGHT * 0.03,
-              BEAM * 0.08, LENGTH * 0.07, DRAUGHT * 0.05)
+        g.box(side * BEAM * 0.20, -LENGTH * 0.30, -DRAUGHT * 0.026,
+              BEAM * 0.08, LENGTH * 0.07, DRAUGHT * 0.052)
     half_l = LENGTH / 2.0
     y = -half_l + LENGTH * 0.06
     while y < half_l - LENGTH * 0.10:
@@ -352,8 +364,8 @@ def ventral_detail(rng):
                 w = BEAM * rng.uniform(0.03, 0.07)
                 if x + w > limit:
                     break
-                if rng.random() < 0.45 and abs(x + w / 2.0) > BEAM * 0.06:
-                    g.box(x + w / 2.0, y + depth / 2.0, DRAUGHT * 0.012,
+                if rng.random() < 0.55 and abs(x + w / 2.0) > BEAM * 0.06:
+                    g.box(x + w / 2.0, y + depth / 2.0, -DRAUGHT * 0.014,
                           w, depth * 0.85, DRAUGHT * 0.028)
                 x += w + BEAM * rng.uniform(0.01, 0.03)
         y += depth + LENGTH * rng.uniform(0.01, 0.03)
@@ -390,15 +402,42 @@ def build():
             offset * BEAM, -LENGTH * 0.5 - DRAUGHT * 0.18,
             DRAUGHT * 0.55, radius, DRAUGHT * 0.36))
 
-    # The Xyston's signature: the axial cannon trench along the belly.
+    # The Xyston's signature: the axial cannon along the belly. The housing hangs
+    # below the hull (negative z) and the glowing channel hangs lower still, so the
+    # red is the lowest surface and is actually visible from underneath.
     parts.append(make_box(
-        "AxialCannonTrench",
-        0.0, LENGTH * 0.06, DRAUGHT * 0.12,
-        BEAM * 0.07, LENGTH * 0.72, DRAUGHT * 0.24, taper=1.0))
+        "AxialCannonHousing",
+        0.0, LENGTH * 0.04, -DRAUGHT * 0.045,
+        BEAM * 0.075, LENGTH * 0.76, DRAUGHT * 0.09, taper=1.0))
+
+    glow = Greebler()
+    y0, y1 = -LENGTH * 0.33, LENGTH * 0.44
+    steps = 44
+    for s in range(steps):
+        y = y0 + (y1 - y0) * s / steps
+        seg = (y1 - y0) / steps
+        glow.box(0.0, y + seg / 2.0, -DRAUGHT * 0.080,
+                 BEAM * 0.032, seg * 0.96, DRAUGHT * 0.060)
+    strip = glow.emit("AxialCannonGlowStrip")
+    if strip is not None:
+        parts.append(strip)
+
+    # The muzzle, projecting forward past the bow blade.
     parts.append(make_cylinder(
-        "AxialCannonMuzzle",
-        0.0, LENGTH * 0.40, DRAUGHT * 0.12,
-        DRAUGHT * 0.11, LENGTH * 0.06))
+        "AxialCannonMuzzleGlow",
+        0.0, LENGTH * 0.50, -DRAUGHT * 0.045,
+        DRAUGHT * 0.075, LENGTH * 0.055))
+
+    # Emitter blisters flanking the channel, so the belly reads as charged.
+    blisters = Greebler()
+    for side in (-1, 1):
+        for i in range(5):
+            blisters.box(side * BEAM * (0.055 + i * 0.013),
+                         LENGTH * (0.34 - i * 0.075), -DRAUGHT * 0.055,
+                         BEAM * 0.014, LENGTH * 0.035, DRAUGHT * 0.050)
+    blister = blisters.emit("AxialCannonEmitterGlow")
+    if blister is not None:
+        parts.append(blister)
 
     # Surface detail. Without this the hull is 503 faces of flat plane and reads
     # as a blocky primitive next to the vanilla freighter's 76,996.
@@ -426,11 +465,13 @@ def main():
     for obj in parts:
         obj.parent = root
         obj.NMSNode_props.node_types = "Mesh"
-        obj.NMSMesh_props.material_path = MATERIAL
+        glowing = GLOW_TAG in obj.name
+        obj.NMSMesh_props.material_path = GLOW_MATERIAL if glowing else MATERIAL
         obj.scale = (HULL_SCALE, HULL_SCALE, HULL_SCALE)
         total_faces += len(obj.data.polygons)
-        print("  part %-22s %4d verts %4d faces"
-              % (obj.name, len(obj.data.vertices), len(obj.data.polygons)))
+        print("  part %-26s %5d verts %5d faces %s"
+              % (obj.name, len(obj.data.vertices), len(obj.data.polygons),
+                 "GLOW" if glowing else ""))
 
     # Locators the game attaches things to. Left at scale 1.0 deliberately, so
     # the hangar the player lands in stays human sized however big the hull is.
