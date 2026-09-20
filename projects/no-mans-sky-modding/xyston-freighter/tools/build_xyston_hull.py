@@ -20,9 +20,16 @@ import random
 import os
 import sys
 
+import subprocess
+
 import addon_utils
 import bmesh
 import bpy
+
+MBINCOMPILER = os.path.join(
+    r"C:\Users\johnf\Documents\Codex\2026-09-07",
+    "referenced-chatgpt-conversation-this-is-an", "work", "nms-toolchain",
+    "MBINCompiler-v7.03.2-pre1", "MBINCompiler.exe")
 
 # --- proportions -----------------------------------------------------------
 # Xyston-class: 2,400 m long. Beam 1,450 m gives the 0.60 width-to-length ratio
@@ -495,7 +502,44 @@ def main():
         group_name="",
         scene_name="CAPITALFREIGHTER_PROC",
     )
+    normalise_scene_guid()
     print("EXPORT_DONE")
+
+
+def normalise_scene_guid():
+    """Round-trip the exported scene through MBINCompiler to fix its header.
+
+    NMSDK stamps its own template GUID into the MBIN header. The vanilla capital
+    freighter scene carries `d8 02 1f 59 63 a8 96 ad` at offset 0x10; NMSDK writes
+    something else. Decompiling and recompiling with MBINCompiler restores the
+    correct value, because MBINCompiler resolves the template by name.
+
+    The geometry files are unaffected — their GUIDs already match vanilla, so this
+    is specific to the scene.
+    """
+    scene = os.path.join(OUT_DIR, "MODELS", "COMMON", "SPACECRAFT", "INDUSTRIAL",
+                         "CAPITALFREIGHTER_PROC", "CAPITALFREIGHTER_PROC.SCENE.MBIN")
+    if not os.path.exists(scene):
+        print("  GUID normalise: no scene at %s" % scene)
+        return
+    before = open(scene, "rb").read()[16:24].hex(" ")
+    mxml = scene[:-len(".MBIN")] + ".MXML"
+
+    subprocess.run([MBINCOMPILER, scene], capture_output=True, text=True)
+    if not os.path.exists(mxml):
+        print("  GUID normalise: decompile produced no MXML, leaving scene as is")
+        return
+    # MBINCompiler will not overwrite an existing MBIN, so the NMSDK one has to
+    # go before the recompile. This is why an earlier attempt silently no-opped.
+    os.remove(scene)
+    subprocess.run([MBINCOMPILER, mxml], capture_output=True, text=True)
+    os.remove(mxml)
+
+    if not os.path.exists(scene):
+        raise SystemExit("recompile did not produce %s" % scene)
+    after = open(scene, "rb").read()[16:24].hex(" ")
+    print("  scene GUID %s -> %s%s"
+          % (before, after, "" if before != after else "   UNCHANGED, check this"))
 
 
 if __name__ == "__main__":
