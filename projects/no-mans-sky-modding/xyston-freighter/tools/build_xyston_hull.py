@@ -101,11 +101,44 @@ def add_uvs(obj):
             uv_layer.data[loop_index].uv = (u / TILE, v / TILE)
 
 
+def recalculate_normals(mesh):
+    """Force every face to point outward.
+
+    Face winding here is written by hand, and `make_sphere` and `make_cylinder`
+    both had it backwards — their signed volumes came out negative, meaning every
+    polygon faced inward. Blender's Workbench render does not backface cull, so
+    they looked perfectly fine in every preview while the game, which does cull,
+    rendered them inside out.
+
+    Checking signed volume is the reliable test: positive is outward. Counting
+    faces that point away from the mesh centroid is not, because a greeble field
+    is hundreds of separate islands and roughly half of any island's faces point
+    towards the middle of the ship quite correctly.
+    """
+    bm = bmesh.new()
+    bm.from_mesh(mesh)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
+
+
+def signed_volume(mesh):
+    """Positive means the normals face outward."""
+    total = 0.0
+    for poly in mesh.polygons:
+        pts = [mesh.vertices[i].co for i in poly.vertices]
+        for i in range(1, len(pts) - 1):
+            total += pts[0].dot(pts[i].cross(pts[i + 1])) / 6.0
+    return total
+
+
 def mesh_from_geometry(name, verts, faces):
     mesh = bpy.data.meshes.new(name)
     mesh.from_pydata(verts, [], faces)
     mesh.validate()
     mesh.update()
+    recalculate_normals(mesh)
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.scene.collection.objects.link(obj)
     add_uvs(obj)
@@ -498,8 +531,13 @@ def main():
         obj.NMSMesh_props.material_path = GLOW_MATERIAL if glowing else MATERIAL
         obj.scale = (HULL_SCALE, HULL_SCALE, HULL_SCALE)
         total_faces += len(obj.data.polygons)
-        print("  part %-26s %5d verts %5d faces %s"
-              % (obj.name, len(obj.data.vertices), len(obj.data.polygons),
+        vol = signed_volume(obj.data)
+        if vol <= 0:
+            raise SystemExit(
+                "%s has inward normals after recalculation (volume %.0f)"
+                % (obj.name, vol))
+        print("  part %-26s %5d verts %5d faces  vol %+12.0f %s"
+              % (obj.name, len(obj.data.vertices), len(obj.data.polygons), vol,
                  "GLOW" if glowing else ""))
 
     # Locators the game attaches things to. Left at scale 1.0 deliberately, so

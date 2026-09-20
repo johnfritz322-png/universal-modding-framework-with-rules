@@ -55,3 +55,49 @@ Installed: 4,800 m, correct scene GUID, all four files present, mods enabled.
 
 **Not yet seen with any of these fixes applied.** The only thing confirmed is that
 the model loads and renders at all.
+
+---
+
+## Second in-game look: normals were inside out
+
+The ship rendered as a near-black silhouette with parts that looked detached.
+Testing rather than guessing found the cause.
+
+### 16 of 20 meshes had inward-facing normals
+
+Signed volume is the orientation test that actually works — positive means outward:
+
+| Mesh | Signed volume | Verdict |
+|---|---|---|
+| `XystonHull` | +326,180,400 | fine |
+| `Superstructure`, `BridgeTower`, `AxialCannonHousing` | positive | fine |
+| `ShieldGlobePort` / `Starboard` | **-425,544** | every face inward |
+| `Engine0`–`Engine4` | **-1,440,267** each | every face inward |
+| `AxialCannonMuzzleGlow` | **-204,583** | every face inward |
+
+So `make_sphere` and `make_cylinder` had their winding backwards — the shield
+globes, all five engine bells and the cannon muzzle were built inside out. The
+hull and every box-built part were correct.
+
+### Why no render ever showed it
+
+**Blender's Workbench engine does not backface cull.** An inside-out mesh renders
+exactly like a correct one in every preview produced so far. The game does cull, so
+those parts showed their interiors — which is what makes a hull read as black.
+
+### The wrong test, and the right one
+
+Counting faces whose normal points away from the mesh centroid **is not a valid
+test** for these meshes. A greeble field is hundreds of separate islands, and
+roughly half of any island's faces correctly point towards the middle of the ship.
+That test flagged `DorsalGreebles` as 910 of 1,932 "inward" when it was perfectly
+fine, and it would have sent the fix in the wrong direction.
+
+Signed volume via the divergence theorem is orientation-correct regardless of
+island layout.
+
+### Fixed
+
+`recalculate_normals()` runs `bmesh.ops.recalc_face_normals` on every mesh at
+creation, and the build now **asserts positive signed volume per part and aborts**
+if any mesh comes out inward. All 20 parts report positive.
