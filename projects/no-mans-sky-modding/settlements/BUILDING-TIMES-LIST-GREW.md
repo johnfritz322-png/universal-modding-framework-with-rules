@@ -37,7 +37,12 @@ dead. That does not follow, and it is false.
 
 Gumsk's gSettlement Timers ships fourteen entries named `Settlement_LandingZone`
 through `Settlement_Builders_RoboArm`. Installed unmodified on 7.03.1, **it
-works.** Confirmed in game by the user.
+works.** Confirmed in game by the user: **building renovations complete
+essentially immediately**, which is the specific behaviour row 48 governs.
+
+That is the decisive observation. Renovation duration provably comes from
+`SettlementBuildingTimes`, and a fourteen-entry named list reaches it on a
+sixty-three-entry table. Name matching is therefore confirmed, not assumed.
 
 So the loose-EXML patcher matches array children **by name**. Position is
 irrelevant, and an entry count that differs from vanilla is not a defect.
