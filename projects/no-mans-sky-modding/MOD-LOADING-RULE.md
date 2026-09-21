@@ -47,8 +47,32 @@ MODS\BetterSettlements\GCSETTLEMENTGLOBALS.EXML
 MODS\GLOBALS\GCCAMERAGLOBALS.GLOBAL.EXML
 ```
 
-Do not invent a `GLOBALS\` subfolder inside the mod, and do not add `.GLOBAL`
-to a name that does not have it. `gcsettlementglobals` is the odd one out.
+Do not add `.GLOBAL` to a name that does not have it - `gcsettlementglobals`
+is the odd one out.
+
+### CORRECTION: the `GLOBALS\` subfolder question is NOT settled
+
+An earlier version of this file said not to use a `GLOBALS\` subfolder. That
+was reasoning from the pak layout alone, and the evidence points the other way:
+
+- **Two independent mods both ship one.** Gumsk's gSettlement Timers (13,898
+  unique downloads, titled "EXML", so built for exactly this loose-file system)
+  ships `GLOBALS\GCSETTLEMENTGLOBALS.EXML`. CorvetteOverhaul_Ultimate ships
+  `GLOBALS\GCCAMERAGLOBALS.GLOBAL.EXML`.
+- **The pak really does keep globals at its root.** Confirmed that HGPAKtool
+  preserves directories by extracting from `NMSARC.MetadataEtc.pak`, which came
+  out as `metadata/effects/particletables.mbin`. So the flat layout is real,
+  not an artefact of the tool.
+- **Neither mod has ever been observed working on this machine**, because
+  `DisableAllMods` was `true` until 2026-09-19. So their layout cannot be
+  treated as proven either.
+- `FullLog.txt` is 145 bytes and logs nothing about mod file resolution.
+
+So the loose-file loader may use a different path mapping than the pak VFS.
+Until someone observes which path actually takes effect, **install to both**:
+the same file at the mod folder's root and inside `GLOBALS\`. The contents are
+identical, so if the loader reads both it applies the same values twice, which
+is idempotent.
 
 ## `.EXML` is a partial patch
 
