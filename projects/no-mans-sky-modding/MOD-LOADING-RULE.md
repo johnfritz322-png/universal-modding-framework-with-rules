@@ -50,38 +50,20 @@ MODS\GLOBALS\GCCAMERAGLOBALS.GLOBAL.EXML
 Do not add `.GLOBAL` to a name that does not have it - `gcsettlementglobals`
 is the odd one out.
 
-### CORRECTION: the `GLOBALS\` subfolder question is NOT settled
+### SETTLED: globals mods DO go in a `GLOBALS\` subfolder
 
-An earlier version of this file said not to use a `GLOBALS\` subfolder. That
-was reasoning from the pak layout alone, and the evidence points the other way:
+An earlier version of this file said not to use one, reasoning from the pak
+layout. That was wrong.
 
-- **Two independent mods both ship one.** Gumsk's gSettlement Timers (13,898
-  unique downloads, titled "EXML", so built for exactly this loose-file system)
-  ships `GLOBALS\GCSETTLEMENTGLOBALS.EXML`. CorvetteOverhaul_Ultimate ships
-  `GLOBALS\GCCAMERAGLOBALS.GLOBAL.EXML`.
-- **The pak really does keep globals at its root.** Confirmed that HGPAKtool
-  preserves directories by extracting from `NMSARC.MetadataEtc.pak`, which came
-  out as `metadata/effects/particletables.mbin`. So the flat layout is real,
-  not an artefact of the tool.
-- **Neither mod has ever been observed working on this machine**, because
-  `DisableAllMods` was `true` until 2026-09-19. So their layout cannot be
-  treated as proven either.
-- `FullLog.txt` is 145 bytes and logs nothing about mod file resolution.
+Confirmed in game on 7.03.1: `MODS\gSettlementTimers\GLOBALS\GCSETTLEMENTGLOBALS.EXML`
+loads and takes effect. Gumsk's gSettlement Timers and CorvetteOverhaul_Ultimate
+both ship this layout.
 
-So the loose-file loader may use a different path mapping than the pak VFS.
-Until someone observes which path actually takes effect, **install to both**:
-the same file at the mod folder's root and inside `GLOBALS\`. The contents are
-identical, so if the loader reads both it applies the same values twice, which
-is idempotent.
+The pak layout genuinely is flat - verified that HGPAKtool preserves directories
+by extracting `metadata/effects/particletables.mbin` from
+`NMSARC.MetadataEtc.pak`. So **the loose-file mod loader uses a different path
+mapping than the pak VFS.** Do not derive mod paths from pak paths.
 
-## `.EXML` is a partial patch
-
-A known-working mod (`GCCAMERAGLOBALS.GLOBAL.EXML`, 26 lines) sets a single
-property and leaves the other ~40 alone. Root element is
-`<Data template="cGcCameraGlobals">` — the `c` prefix is required and matches
-the struct name, not the `GcModSettingsInfo`-style name used elsewhere.
-
-## Don't put files in a Vortex-managed folder
-
-A folder containing `__folder_managed_by_vortex` may be purged or reverted on
-Vortex's next deploy. Hand-made mods get their own folder.
+Do not place the same file at two paths inside one mod folder, and do not put
+readme or reference files inside one. A launch with both of those present, plus
+a rewritten array, crashed the game.
