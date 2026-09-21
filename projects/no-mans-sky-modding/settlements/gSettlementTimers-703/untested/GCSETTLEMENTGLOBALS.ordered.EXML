@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  gSettlement Timers - Instant, by Gumsk (nexusmods.com/nomanssky/mods/2067)
+  Extra timers added for 7.03.1.
+
+  Properties are in the SAME ORDER as the game's own cGcSettlementGlobals struct
+  (indices 3, 4, 5, 6, 11, 12, 15, 23, 54). Two earlier attempts put them out of order and both crashed at
+  the identical address, 0x41FC98.
+
+  Building rows are Gumsk's originals, unchanged.
+-->
+<Data template="cGcSettlementGlobals">
+	<Property name="BuildingUpgradeTimeInSeconds" value="1" />
+	<Property name="BuildingFreeUpgradeTimeInSeconds" value="1" />
+	<Property name="JudgementWaitTimeMin" value="1" />
+	<Property name="JudgementWaitTimeMax" value="1" />
+	<Property name="TowerRechargeTime" value="1" />
+	<Property name="TowerPowerRechargeTime">
+		<Property name="EarnNavigationData" value="1" />
+		<Property name="ScanForBuildings" value="1" />
+		<Property name="ScanForAnomalies" value="1" />
+		<Property name="ScanForCrashedShips" value="1" />
+	</Property>
+	<Property name="SettlementMiniExpeditionTime" value="1" />
+	<Property name="SettlementBuildingTimes">
+		<Property name="Settlement_LandingZone" value="1" />
+		<Property name="Settlement_Bar" value="1" />
+		<Property name="Settlement_Tower" value="1" />
+		<Property name="Settlement_Market" value="1" />
+		<Property name="Settlement_Small" value="1" />
+		<Property name="Settlement_SmallIndustrial" value="1" />
+		<Property name="Settlement_Medium" value="1" />
+		<Property name="Settlement_Large" value="1" />
+		<Property name="Settlement_SheriffsOffice" value="1" />
+		<Property name="Settlement_Double" value="1" />
+		<Property name="Settlement_Farm" value="1" />
+		<Property name="Settlement_Factory" value="1" />
+		<Property name="Settlement_FishPond" value="1" />
+		<Property name="Settlement_Builders_RoboArm" value="1" />
+	</Property>
+	<Property name="ProductionCycleDurationInSeconds" value="1" />
+</Data>

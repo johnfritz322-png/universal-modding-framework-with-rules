@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+File created using MBINCompiler version (5.71.0.1)
+Author: Gumsk
+ModName: gSettlement Timers
+-->
+<Data template="cGcSettlementGlobals">
+	<Property name="BuildingUpgradeTimeInSeconds" value="1" />
+	<Property name="BuildingFreeUpgradeTimeInSeconds" value="1" />
+	<Property name="JudgementWaitTimeMin" value="1" />
+	<Property name="JudgementWaitTimeMax" value="1" />
+	<Property name="ProductionCycleDurationInSeconds" value="1" />
+	<Property name="SettlementMiniExpeditionTime" value="1" />
+	<Property name="TowerRechargeTime" value="1" />
+	<Property name="TowerPowerRechargeTime">
+		<Property name="EarnNavigationData" value="1" />
+		<Property name="ScanForBuildings" value="1" />
+		<Property name="ScanForAnomalies" value="1" />
+		<Property name="ScanForCrashedShips" value="1" />
+	</Property>
+	<Property name="SettlementBuildingTimes">
+		<Property name="Settlement_LandingZone" value="1" />
+		<Property name="Settlement_Bar" value="1" />
+		<Property name="Settlement_Tower" value="1" />
+		<Property name="Settlement_Market" value="1" />
+		<Property name="Settlement_Small" value="1" />
+		<Property name="Settlement_SmallIndustrial" value="1" />
+		<Property name="Settlement_Medium" value="1" />
+		<Property name="Settlement_Large" value="1" />
+		<Property name="Settlement_SheriffsOffice" value="1" />
+		<Property name="Settlement_Double" value="1" />
+		<Property name="Settlement_Farm" value="1" />
+		<Property name="Settlement_Factory" value="1" />
+		<Property name="Settlement_FishPond" value="1" />
+		<Property name="Settlement_Builders_RoboArm" value="1" />
+	</Property>
+</Data>
