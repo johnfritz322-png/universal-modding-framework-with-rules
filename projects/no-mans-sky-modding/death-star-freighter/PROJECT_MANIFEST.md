@@ -60,8 +60,9 @@ here and are never casually regenerated afterward, per framework rule 7.
 None yet. Planned (pending verification, see feasibility doc gate 2):
 - one **added** freighter hull/model table entry (exact MBIN not yet
   confirmed);
-- one freighter's save-data seed field, and possibly its class/stat fields
-  if the save-edit S-class path is chosen instead of the legitimate grind.
+- one freighter's save-data hull-seed field, on the user's existing
+  already-owned S-class freighter. Nothing else in that freighter's record
+  (class, stats, name, crew) is planned to change.
 
 No vanilla table row is planned to be overwritten — only added to, matching
 the non-destructive precedent found in the gFreighter mod.
@@ -85,7 +86,6 @@ Corvette project used for its Corvette core.
 |---|---|---|---|
 | Spherical Death Star exterior mesh | Designed only | Not yet modeled | Build in Blender/NMSDK, inspect locally |
 | Additive freighter-hull table entry, seed-selected | HIGH CONFIDENCE architecture, UNVERIFIED specifics | Exact MBIN table + save field names unconfirmed | Inspect user's unpacked game files directly |
-| S-class via save-edited class field | UNVERIFIED whether cosmetic-only | Stat block fields needed for a "real" S-class not yet identified | Research NMSSaveEditor's freighter stat fields, or take the legitimate-grind path instead |
 
 ## Compatibility
 - Known compatible mods: none checked yet.
@@ -110,11 +110,13 @@ Corvette project used for its Corvette core.
 None yet — nothing has been built.
 
 ## Test procedure
-- Test save/profile: not yet chosen. The Falcon Corvette project's active
-  save uses slot 8 (`Darth Fritz`, must never be touched) and slot 7 for
-  build testing; this freighter project needs its own explicit slot
-  decision from the user before any write, independent of those Corvette
-  slots.
+- Test save/profile: target is the user's existing, already-owned S-class
+  freighter (decision recorded 2026-09-25 — see
+  `FREIGHTER-MODDING-FEASIBILITY.md`). The exact save slot/freighter name
+  is still needed from the user before any write, the same way the sibling
+  Falcon Corvette project names its exact slot (7) and its never-touch
+  freighter/ship (`Darth Fritz`, slot 8) — those Corvette slots are
+  unrelated to this freighter and must not be confused with it.
 - Launch steps: TBD, pending toolchain re-verification.
 - Feature test steps: summon/warp to the freighter, dock, walk the stock
   interior, exit, save, reload, repeat — per the boardability rule in the

@@ -69,25 +69,29 @@ It is the **smallest compatible change** available (Rule 6):
   fields — getting an S-class freighter and giving it the Death Star hull
   are two independent changes that can be verified separately.
 
-## Getting to S-class — two legitimate paths, needs a decision
-These are independent of the visual mod and change project scope
-differently, so this is flagged as an open decision rather than assumed:
+## Getting to S-class — resolved: reuse the existing freighter, touch nothing but the hull
+**Decision (2026-09-25): the target is the user's own already-owned S-class
+freighter.** This removes the class/stat question entirely rather than
+choosing between the two paths below — no class field, hyperdrive tier, or
+any other stat is touched by this mod at all. The only planned save write
+is the one field this project already needed: that freighter's hull-seed
+value, changed to select the added Death Star hull entry. Class, stats,
+name, and crew stay exactly as they already are.
 
-1. **Legitimate in-game grind.** Save-scum capital-freighter rescue events
-   in wealthy (three-star economy) systems, ideally with an Economy Scanner
-   installed to find them; community guides put capital-freighter S-class
-   odds around 2% per roll, ballpark 2-3 hours of rerolling in a
-   three-star system. Zero save-integrity risk, no editor needed, but the
-   freighter that ends up S-class is whichever one the rescue event rolls —
-   not necessarily one already owned.
-2. **Save-edit the class field** on an already-owned freighter, the same
-   general tool (NMSSaveEditor) already used elsewhere in this framework's
-   NMS work. Research turned up an important caveat: editing only the class
-   letter does **not** automatically correct the underlying stat block (for
-   example hyperdrive-range tier) — without also setting the matching
-   stats, the freighter is only cosmetically S-class. If this path is
-   chosen, the exact stat fields that must accompany the class change are
-   an open research item, not yet verified.
+This is a strictly smaller change than either alternative previously
+considered:
+1. ~~Legitimate in-game grind~~ — unnecessary, no new freighter is being
+   acquired.
+2. ~~Save-edit the class field~~ — unnecessary, and it drops the stat-block
+   caveat that path carried (editing only the class letter risks a
+   cosmetic-only S-class). Not touching the class field at all avoids that
+   risk outright.
+
+**Still needed from the user before gate 3 below can be done:** which save
+slot/freighter this is (name and slot number), the same way the sibling
+Falcon Corvette project tracks its target as "slot 7" and its
+never-touch freighter as "Darth Fritz in slot 8". Nothing here assumes an
+identity for it yet.
 
 **Needs a decision from the user** before this step is executed: grind for
 a real S-class roll, or save-edit a specific already-owned freighter (and

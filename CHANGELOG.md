@@ -40,6 +40,15 @@ Death-Star-styled spherical hull.
   are confirmed — the same standard already applied to the Falcon Corvette
   and BG3 projects in this framework.
 
+### Resolved same day
+- User decision: the mod targets the **existing, already-owned S-class
+  freighter**, not a newly-grinded or save-edited-to-S-class one. This
+  removes the S-class question from the project entirely — the only
+  planned save write stays the single hull-seed field; class, stats, name,
+  and crew on that freighter are untouched. `FREIGHTER-MODDING-FEASIBILITY.md`
+  and `PROJECT_MANIFEST.md` updated accordingly. Still needed from the user:
+  which save slot/freighter this is.
+
 - Added Dawnwalker Weapon Forge findings for the requested separate-inventory-item
   architecture. The feature remains unimplemented and untested.
 
