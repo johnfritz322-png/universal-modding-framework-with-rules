@@ -71,11 +71,33 @@ not absolute size:
 freighter") is an elongated Venator-family wedge, not a rounder shape — a
 sphere cannot hug it, only enclose it. The rule: **sphere diameter equals
 the stock hull's full length**, its largest dimension, so nothing pokes
-through the shell at bow or stern. Where the dish and trench land relative
-to the stock hangar mouth is a placement choice that still depends on
-knowing exactly where that hangar mouth sits on the real hull — an open
-item, tracked as gate 5/6 in `FREIGHTER-MODDING-FEASIBILITY.md` and
-`TOOLCHAIN-CHECK.md`, not assumed here.
+through the shell at bow or stern. Community estimates put capital
+freighter length around 200-400m (**HIGH CONFIDENCE**, not an official
+published spec) — that is roughly the sphere's real-world scale under this
+rule.
+
+### Hangar placement: in the trench, not under the dish
+**Decision (2026-09-25):** the stock hangar mouth is placed inside the
+**equatorial trench**, not centered under the superlaser dish. Two reasons:
+- **Canonical fit.** Source material places the Death Star's major landing
+  bays in the trench; the dish is a weapon aperture, not an entrance.
+  Trench placement is the more accurate choice, not a compromise.
+- **Build and boardability risk.** The trench is a full ring at one fixed
+  height, so lining it up with the real hangar mouth only needs one
+  coordinate (height) to match. Centering the hangar under the dish would
+  need an exact point-match in two directions, and cutting a flight-safe
+  opening through the middle of a concave crater risks the opening's edges
+  brushing the crater's own geometry — the kind of collision-near-the-door
+  risk the boardability rule exists to rule out.
+
+What's still open: the hangar's exact position *around* the trench ring
+(not which band it's in) depends on the real hull geometry — tracked as
+gate 5/6 in `FREIGHTER-MODDING-FEASIBILITY.md` and `TOOLCHAIN-CHECK.md`,
+not assumed here.
+
+A visual reference for both the envelope rule and the trench-hangar
+decision is in the concept-reference artifact linked above (republished
+2026-09-25 to reflect this decision).
 
 ## Boardability rule (same discipline as the Falcon Corvette project)
 
