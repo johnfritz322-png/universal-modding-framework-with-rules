@@ -8,6 +8,29 @@ session has no No Man's Sky install, no Blender, and no unpacked game files
 own machine, the same way the Falcon Corvette project's toolchain work did
 (see `../falcon-corvette/TOOLCHAIN-CHECK-2026-09-18.md`).
 
+## Scope of this document
+This document covers **verified/researched technical capability only** —
+what the game and its modding tools can actually do. It deliberately does
+**not** cover what the mod should look like: that is design intent, tracked
+separately in `DEATH-STAR-BUILD-BRIEF.md` (sphere silhouette, dish/trench
+placement, surface treatment). Keeping the two apart matters because a
+design goal being desirable says nothing about whether the engine supports
+it — see this framework's `AGENTS.md` rule 4 ("player-facing goals are not
+proof of technical feasibility").
+
+Every conclusion below is labelled one of:
+- **VERIFIED** — confirmed against primary evidence (the user's own
+  screenshots, this repo's own prior toolchain work, or a directly read
+  primary source).
+- **HIGH CONFIDENCE** — a `WebSearch` summary of a known-working example
+  (an existing shipped mod, a wiki page), not independently re-fetched or
+  tested in this session.
+- **UNVERIFIED** — a working hypothesis only, not checked against real
+  files or tested.
+- **NEEDS TESTING** — the mechanism is plausible/designed but has no
+  evidence yet either way; only a real test on the user's machine resolves
+  it.
+
 ## What this is not
 This is **not** the same problem as the Falcon Corvette. Corvettes can be
 assembled part-by-part directly in a save's `Objects[]` layout (in-game

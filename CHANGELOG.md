@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — Death Star freighter consolidated for handoff
+
+Status: **Researched only.** No game file, save, or mod package touched.
+
+Consolidates the Death Star freighter work from `claude/death-star-freighter-mod-itel2i`
+onto this new branch, at the user's explicit request, into a fixed set of
+files another agent can inspect without private links: `README.md`,
+`PROJECT_MANIFEST.md`, `FEASIBILITY.md` (renamed from
+`FREIGHTER-MODDING-FEASIBILITY.md`), `TOOLCHAIN.md` (renamed from
+`TOOLCHAIN-CHECK.md`), `HANDOFF.md`, and `concept-reference.html` (the
+visual concept page, exported as a real repo file instead of only a
+private Claude artifact link). `DEATH-STAR-BUILD-BRIEF.md` is unchanged in
+substance, kept explicitly separate from `FEASIBILITY.md` as this
+project's design-vs-capability split.
+
+### Notes
+- `PROJECT_MANIFEST.md` gained an explicit rollback commit
+  (`origin/main` at `abde3fbb925c263b31aa252e78aa80dc7b3aef7a`) and a
+  `Risks` section.
+- `FEASIBILITY.md` now states its labelling convention up front
+  (VERIFIED / HIGH CONFIDENCE / UNVERIFIED / NEEDS TESTING) and explicitly
+  scopes itself to technical capability only, pointing design intent at
+  `DEATH-STAR-BUILD-BRIEF.md`.
+- Highest verified status remains **Designed** — nothing implemented,
+  compiled, loaded, or tested in game.
+
 ## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-itel2i) — Death Star freighter design + feasibility
 
 Status: **Researched only.** No game file, save, or mod package touched.

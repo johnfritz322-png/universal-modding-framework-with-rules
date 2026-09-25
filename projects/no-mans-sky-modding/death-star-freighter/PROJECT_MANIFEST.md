@@ -24,7 +24,7 @@
 - Packaging tool: none beyond the mod-folder convention above.
 - Other required tools: NMS save editor (e.g. goatfungus NMSSaveEditor) for
   the freighter seed/class fields, per
-  `FREIGHTER-MODDING-FEASIBILITY.md`.
+  `FEASIBILITY.md`.
 
 ## Dependencies
 | Dependency | Version / range | Required? | Verified source |
@@ -37,13 +37,21 @@
 ## Repository state
 - Project root: `projects/no-mans-sky-modding/death-star-freighter/`
 - Default branch: `main`
-- Current work branch: `claude/death-star-freighter-mod-itel2i`
-- Last known-good commit/build: none — no build exists yet.
+- Current work branch: `claude/death-star-freighter-mod-iteration`
+  (this project's work started on `claude/death-star-freighter-mod-itel2i`
+  and was consolidated onto this branch on 2026-09-25 at the user's
+  request, so another agent has one canonical branch to inspect).
+- Rollback commit: `origin/main` at `abde3fbb925c263b31aa252e78aa80dc7b3aef7a`
+  — since no game file, save, or mod package has been touched, "rollback"
+  for this project only ever means discarding/not merging this branch;
+  nothing outside git needs to be undone.
+- Last known-good commit/build: none — no game build/mod package exists
+  yet, only documentation.
 - Current milestone: design brief + feasibility research complete;
-  `TOOLCHAIN-CHECK.md` written and handed to the user to run; visual
-  concept reference published (silhouette schematic + hull-envelope fit —
-  <https://claude.ai/artifact/HXVQFaWVzMVHtzaxj68zEH>).
-- Next milestone: results of `TOOLCHAIN-CHECK.md` (build match, real
+  `TOOLCHAIN.md` written and handed to the user to run; visual concept
+  reference published as a Claude artifact and exported into this repo as
+  `concept-reference.html` (see `README.md`).
+- Next milestone: results of `TOOLCHAIN.md` (build match, real
   freighter model path, `Mothership`'s save slot/seed field).
 
 ## Target freighter
@@ -58,7 +66,7 @@ search material everywhere else in these docs:
 - Fleet Coordination: 55.0
 - Hull silhouette in the screenshot: an elongated, flat, angular-bowed
   wedge — visually matches the **Venator-family** description in
-  `FREIGHTER-MODDING-FEASIBILITY.md`, not the rounder Sentinel-Design
+  `FEASIBILITY.md`, not the rounder Sentinel-Design
   family. This confirms (rather than just assumes) that the Death Star hull
   has to be a full custom exterior shell over this donor, not a retexture.
 
@@ -68,10 +76,14 @@ in the save JSON, but the slot is the same belt-and-suspenders identifier
 the sibling Falcon Corvette project records for its own ships).
 
 ## Owned files
-- `DEATH-STAR-BUILD-BRIEF.md`
-- `FREIGHTER-MODDING-FEASIBILITY.md`
-- `TOOLCHAIN-CHECK.md`
+- `README.md` — goal, status, how to continue, concept-reference link/description
+- `DEATH-STAR-BUILD-BRIEF.md` — desired visual/design (kept separate from feasibility)
+- `FEASIBILITY.md` — verified/researched technical capability
+- `TOOLCHAIN.md` — environment, tools, and the re-verification checklist
+- `HANDOFF.md` — completed work, remaining work, blockers, next step
 - `PROJECT_MANIFEST.md` (this file)
+- `concept-reference.html` — the visual concept page, exported as a repo
+  file (not just a private Claude artifact link)
 
 No game asset, save file, or mod package exists yet.
 
@@ -93,7 +105,7 @@ No vanilla table row is planned to be overwritten — only added to, matching
 the non-destructive precedent found in the gFreighter mod.
 
 ## Architecture
-See `FREIGHTER-MODDING-FEASIBILITY.md` in full. Summary: a fully custom
+See `FEASIBILITY.md` in full. Summary: a fully custom
 NMSDK-built spherical exterior mesh, added as a new freighter hull table
 entry (not a replacement of any stock entry), selected on the target save
 by setting that freighter's seed field. The stock freighter core (hangar,
@@ -112,6 +124,28 @@ Corvette project used for its Corvette core.
 | Spherical Death Star exterior mesh | Designed only | Not yet modeled | Build in Blender/NMSDK, inspect locally |
 | Additive freighter-hull table entry, seed-selected | HIGH CONFIDENCE architecture, UNVERIFIED specifics | Exact MBIN table + save field names unconfirmed | Inspect user's unpacked game files directly |
 
+## Risks
+- **Save corruption / lost freighter or progress**: mitigated by never
+  writing to the target save without a fresh four-file backup first
+  (framework rule 14); no write has happened yet.
+- **Wrong freighter/slot edited**: mitigated by confirming `Mothership`'s
+  exact save slot before any write (open item, see `HANDOFF.md`).
+- **Toolchain mismatch with the current game build**: the Falcon Corvette
+  project's toolchain versions are a week old and not re-verified for this
+  project; using them unverified risks a build that doesn't load. Mitigated
+  by `TOOLCHAIN.md`'s Step 1/2/4 (build check + round-trip proof) before
+  anything is built for real.
+- **Mod conflicts with other freighter-hull mods**: unknown until the real
+  hull table is located (gate 2); any other mod editing the same table is a
+  likely conflict.
+- **Hangar/collision risk to boardability**: mitigated by the hangar-in-
+  trench design decision (see `DEATH-STAR-BUILD-BRIEF.md`) and by the rule
+  that the custom exterior mesh must add no collision over the stock
+  hangar, ramp, or interior volumes.
+- **Legal/asset-rights risk**: mitigated by using only original geometry
+  and textures; a previously deleted "Death Star Capital Freighter" Nexus
+  mod is not a source for this project (see `DEATH-STAR-BUILD-BRIEF.md`).
+
 ## Compatibility
 - Known compatible mods: none checked yet.
 - Known conflicts: any other mod that also adds/overwrites freighter hull
@@ -126,7 +160,7 @@ Corvette project used for its Corvette core.
 - Safe to update mid-save?: unknown.
 - Safe to uninstall mid-save?: unknown; freighter would very likely revert
   to whatever hull its seed's default table entry resolves to once the
-  added entry is removed, but this is an ASSUMPTION until tested.
+  added entry is removed, but this is UNVERIFIED / NEEDS TESTING.
 - Fresh-save testing required?: a full save backup (4-file, mirroring the
   Falcon project's practice) is required before any write to the target
   save, regardless of which save is used.

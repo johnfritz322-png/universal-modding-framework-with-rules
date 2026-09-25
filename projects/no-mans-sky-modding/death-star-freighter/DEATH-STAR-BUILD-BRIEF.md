@@ -2,13 +2,16 @@
 
 ## Status
 **DESIGN / RESEARCH.** Nothing built, compiled, or installed. No game file or
-save touched. See `FREIGHTER-MODDING-FEASIBILITY.md` for the technical gate
+save touched. See `FEASIBILITY.md` for the technical gate
 list this brief depends on, and `PROJECT_MANIFEST.md` for the tracked state.
 
 A visual concept reference for this brief (silhouette schematic, the five
 non-negotiables, and how the sphere envelope has to fit around
-`Mothership`'s confirmed wedge hull) is published at
-<https://claude.ai/artifact/HXVQFaWVzMVHtzaxj68zEH>. It is a schematic, not
+`Mothership`'s confirmed wedge hull) is exported into this repository as
+`concept-reference.html` — open it directly in a browser, no account or
+network access needed. A private, interactively-hosted copy also exists at
+<https://claude.ai/artifact/HXVQFaWVzMVHtzaxj68zEH>, but the file in this
+repo is the durable, authoritative copy. Either way, it is a schematic, not
 a render — proportions and placement rules only, nothing traced from real
 game geometry.
 
@@ -92,7 +95,7 @@ rule.
 
 What's still open: the hangar's exact position *around* the trench ring
 (not which band it's in) depends on the real hull geometry — tracked as
-gate 5/6 in `FREIGHTER-MODDING-FEASIBILITY.md` and `TOOLCHAIN-CHECK.md`,
+gate 5/6 in `FEASIBILITY.md` and `TOOLCHAIN.md`,
 not assumed here.
 
 A visual reference for both the envelope rule and the trench-hangar
@@ -111,7 +114,7 @@ The Falcon Corvette project's prior failure mode — a shipped build that was
 never confirmed boardable — is the standard this project must not repeat.
 The first in-game test is not a flyover: summon or warp to the freighter,
 dock, walk its stock interior, exit, save, reload, and repeat before this is
-ever called usable. See `FREIGHTER-MODDING-FEASIBILITY.md` for why a
+ever called usable. See `FEASIBILITY.md` for why a
 freighter mod's risk surface is actually smaller than the Corvette's (an
 added hull entry plus one save field, not a full interior part injection).
 

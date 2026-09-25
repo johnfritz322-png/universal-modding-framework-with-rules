@@ -1,0 +1,412 @@
+<title>Death Star Freighter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg: #0a0b0e;
+    --surface: #14161b;
+    --surface-2: #1b1e25;
+    --line: #2a2e37;
+    --line-soft: #21242c;
+    --text: #e7e9ed;
+    --text-dim: #9399a6;
+    --text-faint: #5c6270;
+    --accent: #e8834a;
+    --accent-soft: #e8834a33;
+    --hull: #838a97;
+    --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+    --font-body: "IBM Plex Sans", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    padding-inline: 20px;
+    padding-block: 48px;
+  }
+  main{
+    max-width: 880px;
+    margin-inline: auto;
+  }
+
+  h1,h2,h3{
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-wrap: balance;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  header.hero{
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+  h1{
+    font-size: clamp(38px, 7vw, 58px);
+    letter-spacing: 0.01em;
+    line-height: 0.98;
+  }
+  .hero p.sub{
+    max-width: 62ch;
+    color: var(--text-dim);
+    font-size: 16px;
+    margin: 16px 0 20px;
+  }
+
+  .chiprow{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chip b{ color: var(--text); font-weight: 500; }
+  .chip .dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  section{ margin-block: 56px; }
+  section > h2{
+    font-size: 28px;
+    margin-bottom: 6px;
+  }
+  section > p.lede{
+    color: var(--text-dim);
+    max-width: 68ch;
+    margin: 0 0 22px;
+    font-size: 15px;
+  }
+
+  figure{
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 20px 16px;
+  }
+  figure svg{
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  figcaption{
+    font-size: 13px;
+    color: var(--text-faint);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .svg-label{ font-family: var(--font-mono); font-size: 11.5px; fill: var(--text-dim); }
+  .svg-label-strong{ font-family: var(--font-mono); font-size: 12px; fill: var(--text); }
+  .svg-accent{ fill: var(--accent); }
+  .svg-line{ stroke: var(--text-faint); }
+
+  ol.nonneg{
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  ol.nonneg li{
+    background: var(--surface);
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  ol.nonneg .num{
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    padding-top: 2px;
+  }
+  ol.nonneg h3{
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  ol.nonneg p{
+    margin: 0;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .swatchgrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .swatch{
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .swatch .fill{ height: 64px; }
+  .swatch .meta{ padding: 10px 12px 12px; }
+  .swatch .name{ font-size: 13.5px; font-weight: 500; }
+  .swatch .role{
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    margin-top: 2px;
+  }
+
+  .statusgrid{
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .statusrow{
+    background: var(--surface);
+    padding: 13px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+  .statusrow .claim{ font-size: 14px; }
+  .badge{
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .badge.designed{ color: #cfe8ff; background: #2b3f52; border-color: #3c5872; }
+  .badge.high-confidence{ color: #ffe0bd; background: #4a3521; border-color: #6b4c2c; }
+  .badge.unverified{ color: #d8d0ff; background: #3a3354; border-color: #4f4570; }
+
+  footer{
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    margin-top: 56px;
+    color: var(--text-faint);
+    font-size: 13px;
+  }
+  footer code{
+    font-family: var(--font-mono);
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 520px){
+    ol.nonneg li{ grid-template-columns: 24px 1fr; }
+  }
+</style>
+
+<main>
+  <header class="hero">
+    <p class="eyebrow">No Man's Sky — projects/no-mans-sky-modding/death-star-freighter</p>
+    <h1>Death Star Freighter</h1>
+    <p class="sub">Concept reference for reskinning <b style="color:var(--text)">Mothership</b> — the player's existing S-class capital freighter — as an original spherical battle-station hull. Design only: nothing built, nothing installed.</p>
+    <div class="chiprow">
+      <span class="chip"><span class="dot"></span>Target: <b>Mothership</b></span>
+      <span class="chip">Class: <b>S (already owned)</b></span>
+      <span class="chip">Donor hull: <b>Venator-family wedge</b></span>
+      <span class="chip">Stat/class edits: <b>none planned</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Silhouette concept</h2>
+    <p class="lede">The sphere is the whole silhouette — everything else is detail on top of it. Two placement rules keep the surface from reading as a plain ball: the dish sits off the pole and off the equator, and the trench runs full circumference at the midline.</p>
+    <figure>
+      <svg viewBox="0 0 640 460" role="img" aria-label="Side-profile schematic of the sphere hull, showing the offset concave superlaser dish in the upper hemisphere, the equatorial trench running the full width, and dense panel plating across the surface.">
+        <defs>
+          <clipPath id="sphereClip"><circle cx="320" cy="240" r="160"/></clipPath>
+          <pattern id="panelgrid" width="16" height="16" patternUnits="userSpaceOnUse">
+            <rect x="2" y="2" width="11" height="11" fill="none" stroke="currentColor" stroke-opacity="0.22" stroke-width="1"/>
+          </pattern>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <!-- sphere base -->
+        <circle cx="320" cy="240" r="160" fill="var(--hull)" fill-opacity="0.14" stroke="var(--text-dim)" stroke-width="1.5"/>
+        <circle cx="320" cy="240" r="160" fill="url(#panelgrid)" clip-path="url(#sphereClip)" color="var(--text)"/>
+
+        <!-- polar axis reference -->
+        <line x1="320" y1="80" x2="320" y2="400" stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="2 4"/>
+        <circle cx="320" cy="80" r="3" fill="var(--text-faint)"/>
+        <text x="330" y="76" class="svg-label">pole (reference axis)</text>
+
+        <!-- equatorial trench -->
+        <g clip-path="url(#sphereClip)">
+          <line x1="160" y1="240" x2="480" y2="240" stroke="var(--accent)" stroke-width="2"/>
+          <line x1="160" y1="234" x2="480" y2="234" stroke="var(--accent)" stroke-opacity="0.35" stroke-width="1"/>
+          <line x1="160" y1="246" x2="480" y2="246" stroke="var(--accent)" stroke-opacity="0.35" stroke-width="1"/>
+          <g stroke="var(--accent)" stroke-opacity="0.5" stroke-width="1">
+            <line x1="200" y1="234" x2="200" y2="246"/>
+            <line x1="240" y1="234" x2="240" y2="246"/>
+            <line x1="280" y1="234" x2="280" y2="246"/>
+            <line x1="360" y1="234" x2="360" y2="246"/>
+            <line x1="400" y1="234" x2="400" y2="246"/>
+            <line x1="440" y1="234" x2="440" y2="246"/>
+          </g>
+        </g>
+        <line x1="486" y1="240" x2="530" y2="240" stroke="var(--text-faint)" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="534" y="230" class="svg-label-strong">equatorial trench</text>
+        <text x="534" y="246" class="svg-label">full circumference, denser greebling</text>
+
+        <!-- hangar mouth, inside the trench ring -->
+        <g transform="translate(420,240)">
+          <rect x="-9" y="-9" width="18" height="18" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"/>
+          <path d="M -5 6 L 0 -6 L 5 6" fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+        </g>
+        <line x1="420" y1="256" x2="420" y2="300" stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="2 3" marker-end="url(#arrow)"/>
+        <text x="420" y="316" class="svg-label" text-anchor="middle">hangar mouth</text>
+        <text x="420" y="330" class="svg-label" text-anchor="middle">sits inside the trench ring</text>
+        <text x="420" y="344" class="svg-label" text-anchor="middle">(position around the ring: TBD)</text>
+
+        <!-- dish -->
+        <g transform="translate(250,150)">
+          <ellipse cx="0" cy="0" rx="58" ry="40" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"/>
+          <ellipse cx="0" cy="4" rx="42" ry="27" fill="none" stroke="var(--accent)" stroke-opacity="0.55" stroke-width="1"/>
+          <ellipse cx="0" cy="7" rx="24" ry="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.7" stroke-width="1"/>
+          <g stroke="var(--accent)" stroke-opacity="0.35" stroke-width="1">
+            <line x1="0" y1="-33" x2="0" y2="18"/>
+            <line x1="-46" y1="-14" x2="18" y2="10"/>
+            <line x1="46" y1="-14" x2="-18" y2="10"/>
+          </g>
+        </g>
+        <line x1="192" y1="120" x2="140" y2="95" stroke="var(--text-faint)" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="30" y="80" class="svg-label-strong" text-anchor="start">superlaser dish</text>
+        <text x="30" y="96" class="svg-label" text-anchor="start">⌀ ≈ 0.29 × hull diameter</text>
+        <text x="30" y="112" class="svg-label" text-anchor="start">concave, off pole and off equator</text>
+
+        <!-- exact angle callout -->
+        <text x="320" y="440" class="svg-label" text-anchor="middle">Exact offset angle is a design choice, finalized once the real hangar-mouth position is confirmed (see envelope diagram below).</text>
+      </svg>
+      <figcaption>Side-profile schematic, not a render. Panel grid represents density only. The dish placement rule (off-pole, off-equator, one hemisphere) is fixed, and the hangar's placement inside the trench ring is decided; the hangar's exact position around that ring is not, pending the toolchain check's Step 5/6.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>The non-negotiables</h2>
+    <p class="lede">Judged from a distance, before any surface detail is visible. If a build gets these five wrong, no amount of greebling fixes it.</p>
+    <ol class="nonneg">
+      <li><span class="num">01</span><div><h3>Near-perfect sphere</h3><p>Every stock NMS freighter hull is elongated. A sphere is the one silhouette break nothing else in the base game has — don't let it drift toward an ellipsoid or a flattened disc.</p></div></li>
+      <li><span class="num">02</span><div><h3>One offset dish, concave</h3><p>Crater-like, never domed. Off the equator, off the pole. A centered or convex dish is the single most common mistake in fan reproductions.</p></div></li>
+      <li><span class="num">03</span><div><h3>Continuous equatorial trench</h3><p>A shallow canyon at the full circumference, denser greebling inside it than on open plating. Splits the sphere into hemispheres without breaking the silhouette.</p></div></li>
+      <li><span class="num">04</span><div><h3>Dense, uniform paneling</h3><p>A fine grid across the whole sphere. This is what reads as "Death Star" instead of "moon" at range — avoid large blank stretches of hull.</p></div></li>
+      <li><span class="num">05</span><div><h3>No forward/aft asymmetry</h3><p>This is a station, not a ship with a nose. Orientation follows wherever <code style="font-family:var(--font-mono)">Mothership</code>'s stock hangar mouth already sits — the sphere doesn't get to impose one.</p></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Fitting it over Mothership</h2>
+    <p class="lede"><code style="font-family:var(--font-mono);color:var(--text-dim)">Mothership</code>'s confirmed hull is a long, flat, angular-bowed wedge — a Venator-family silhouette, not a rounder one. A sphere can't hug that shape; it has to fully enclose it. The envelope rule: <b style="color:var(--text)">sphere diameter = the hull's full length</b>, the largest dimension there is to work with. Capital freighters are commonly estimated around 200&ndash;400m long (community consensus, not an official spec) — so that's roughly the sphere's real-world scale, going by this rule.</p>
+    <p class="lede">The hangar sits <b style="color:var(--text)">inside the equatorial trench</b>, not centered under the dish. It's the more canonical placement — the trench, not the dish, is where the source material puts its landing bays — and the easier one to build safely: the trench is a full ring at one height, so only that one height has to line up with the real hangar mouth. Centering it under the dish would mean matching an exact point in two directions, and cutting a flight path through the middle of a concave crater risks the opening's edges brushing the crater's own geometry.</p>
+    <figure>
+      <svg viewBox="0 0 700 320" role="img" aria-label="Comparison diagram: the elongated wedge silhouette of Mothership's stock hull enclosed inside a dashed circle representing the Death Star envelope, with the hangar mouth position marked as unconfirmed.">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <!-- envelope circle -->
+        <circle cx="350" cy="170" r="128" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <text x="350" y="34" class="svg-label-strong" text-anchor="middle">sphere envelope · ⌀ = hull length</text>
+
+        <!-- stock wedge hull silhouette (simplified) -->
+        <polygon points="230,170 260,150 480,140 475,155 460,170 475,185 480,200 260,190"
+                 fill="var(--hull)" fill-opacity="0.35" stroke="var(--text-dim)" stroke-width="1.5"/>
+        <!-- bridge/mast detail -->
+        <line x1="300" y1="150" x2="300" y2="120" stroke="var(--text-dim)" stroke-width="1.5"/>
+        <line x1="330" y1="150" x2="330" y2="128" stroke="var(--text-dim)" stroke-width="1.5"/>
+        <rect x="278" y="152" width="34" height="10" fill="var(--surface-2)" stroke="var(--text-dim)" stroke-width="1"/>
+
+        <text x="355" y="215" class="svg-label" text-anchor="middle">Mothership — stock wedge hull, full length</text>
+
+        <!-- trench pass-through, at the sphere's equator -->
+        <line x1="222" y1="170" x2="478" y2="170" stroke="var(--accent)" stroke-width="1" stroke-opacity="0.6" stroke-dasharray="6 4"/>
+        <text x="596" y="166" class="svg-label" text-anchor="end">equatorial trench</text>
+        <text x="596" y="180" class="svg-label" text-anchor="end">hangar sits inside this ring</text>
+
+        <!-- hangar mouth: known to sit in the trench band, exact position around it unknown -->
+        <circle cx="330" cy="170" r="6" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="330" y="173" class="svg-accent" text-anchor="middle" font-family="var(--font-mono)" font-size="9">?</text>
+        <line x1="330" y1="178" x2="330" y2="250" stroke="var(--text-faint)" stroke-width="1" stroke-dasharray="2 3" marker-end="url(#arrow2)"/>
+        <text x="330" y="266" class="svg-label" text-anchor="middle">hangar mouth</text>
+        <text x="330" y="280" class="svg-label" text-anchor="middle">height band confirmed by design rule</text>
+        <text x="330" y="294" class="svg-label" text-anchor="middle">position around the ring: unconfirmed</text>
+      </svg>
+      <figcaption>Simplified silhouette, not traced from real geometry. The envelope rule and the open hangar-mouth question are the actual design constraint; the wedge shape shown is illustrative only.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Surface &amp; materials</h2>
+    <p class="lede">Cold gunmetal hull, darker trench and dish interior, warm accent reserved for the dish well only — the opposite of the sibling Falcon Corvette project's blue engine-strip glow.</p>
+    <div class="swatchgrid">
+      <div class="swatch"><div class="fill" style="background:#7c8391"></div><div class="meta"><div class="name">Hull base</div><div class="role">neutral gunmetal gray</div></div></div>
+      <div class="swatch"><div class="fill" style="background:#2b2e33"></div><div class="meta"><div class="name">Trench / dish interior</div><div class="role">dark charcoal, dense greebles</div></div></div>
+      <div class="swatch"><div class="fill" style="background:#e8834a"></div><div class="meta"><div class="name">Dish well accent</div><div class="role">sparse warm emission only</div></div></div>
+      <div class="swatch"><div class="fill" style="background:#3a4550"></div><div class="meta"><div class="name">Windows</div><div class="role">dark blue-gray, not neon</div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What's designed vs. what's still open</h2>
+    <p class="lede">Using this framework's own verification labels — nothing above is claimed more certain than it is.</p>
+    <div class="statusgrid">
+      <div class="statusrow"><span class="claim">Sphere silhouette + five non-negotiables</span><span class="badge designed">Designed</span></div>
+      <div class="statusrow"><span class="claim">Proportion ratios (dish ⌀, trench width)</span><span class="badge high-confidence">High confidence</span></div>
+      <div class="statusrow"><span class="claim">Envelope rule (sphere ⌀ = hull length)</span><span class="badge designed">Designed</span></div>
+      <div class="statusrow"><span class="claim">Hangar sits in the trench, not the dish</span><span class="badge designed">Designed</span></div>
+      <div class="statusrow"><span class="claim">Capital freighter scale (~200&ndash;400m)</span><span class="badge high-confidence">High confidence</span></div>
+      <div class="statusrow"><span class="claim">Hangar mouth's exact position on Mothership's hull</span><span class="badge unverified">Unverified</span></div>
+    </div>
+  </section>
+
+  <footer>
+    Design reference only — no game file, save, or mod package has been touched. Full detail in <code>DEATH-STAR-BUILD-BRIEF.md</code>, <code>FEASIBILITY.md</code>, and <code>TOOLCHAIN.md</code> under <code>projects/no-mans-sky-modding/death-star-freighter/</code>.
+  </footer>
+</main>

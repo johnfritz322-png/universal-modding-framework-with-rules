@@ -5,7 +5,21 @@
 that has No Man's Sky installed — this session has no game install, no
 Blender, and no unpacked game files, so none of it can be executed here.
 Report the results back and I'll fold them into `PROJECT_MANIFEST.md` and
-`FREIGHTER-MODDING-FEASIBILITY.md`.
+`FEASIBILITY.md`.
+
+## Environment (last known, NEEDS TESTING for this project)
+| Item | Last known value | Status |
+|---|---|---|
+| Game | No Man's Sky | — |
+| Platform | PC / Steam, app id `275850` | VERIFIED (Steam app id is public/static) |
+| Installed Steam build | `25351301` (2026-09-18, from the sibling Falcon Corvette project) | NEEDS TESTING — must be re-checked for this project, see Step 1 |
+| Blender | 4.5.14, hash-verified for the Falcon Corvette project | NEEDS TESTING — re-verify still present/working, see Step 2 |
+| NMSDK | cloned from `github.com/monkeyman192/NMSDK` | NEEDS TESTING — re-pull and re-check compatibility, see Step 2 |
+| MBINCompiler | `v7.03.2-pre1`, hash-verified for the Falcon Corvette project | NEEDS TESTING — re-verify or update, see Step 2 |
+| PAK unpack tool | none chosen yet for this project | UNVERIFIED — candidates only, see Step 3 |
+
+Nothing in this table is carried over as verified for this project. It is
+the starting point the checklist below re-checks.
 
 ## Safety — what this checklist does and does not touch
 - Nothing here overwrites a game file or a save. Every step either reads
@@ -84,7 +98,7 @@ required and never actually completed. Do this before Step 5:
 Report: pass/fail, and which file you tested with.
 
 ## Step 5 — locate the real freighter hull table and geometry files
-This is gate 2 from `FREIGHTER-MODDING-FEASIBILITY.md`: confirm or correct
+This is gate 2 from `FEASIBILITY.md`: confirm or correct
 the "hull selected by save seed, added via a new table entry" hypothesis
 against real files, rather than trusting the secondhand mod description it
 was built from.
