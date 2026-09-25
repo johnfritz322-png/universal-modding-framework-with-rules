@@ -43,6 +43,27 @@
 - Next milestone: re-verify toolchain/build match on the user's machine
   (gate 1 in `FREIGHTER-MODDING-FEASIBILITY.md`).
 
+## Target freighter
+**VERIFIED from an in-game screenshot supplied by the user (2026-09-25)** —
+the first directly-observed evidence in this project, as opposed to the web
+search material everywhere else in these docs:
+- Name: `Mothership`
+- Class: **S** (confirmed by the in-game class badge, not inferred)
+- Hyperdrive Range: 3306.1
+- Warp Efficiency: 1.0
+- Storage Space: 120
+- Fleet Coordination: 55.0
+- Hull silhouette in the screenshot: an elongated, flat, angular-bowed
+  wedge — visually matches the **Venator-family** description in
+  `FREIGHTER-MODDING-FEASIBILITY.md`, not the rounder Sentinel-Design
+  family. This confirms (rather than just assumes) that the Death Star hull
+  has to be a full custom exterior shell over this donor, not a retexture.
+
+Still needed before gate 3 in the feasibility doc: the save slot number
+this freighter occupies (the name alone may be enough to locate its record
+in the save JSON, but the slot is the same belt-and-suspenders identifier
+the sibling Falcon Corvette project records for its own ships).
+
 ## Owned files
 - `DEATH-STAR-BUILD-BRIEF.md`
 - `FREIGHTER-MODDING-FEASIBILITY.md`
@@ -110,13 +131,10 @@ Corvette project used for its Corvette core.
 None yet — nothing has been built.
 
 ## Test procedure
-- Test save/profile: target is the user's existing, already-owned S-class
-  freighter (decision recorded 2026-09-25 — see
-  `FREIGHTER-MODDING-FEASIBILITY.md`). The exact save slot/freighter name
-  is still needed from the user before any write, the same way the sibling
-  Falcon Corvette project names its exact slot (7) and its never-touch
-  freighter/ship (`Darth Fritz`, slot 8) — those Corvette slots are
-  unrelated to this freighter and must not be confused with it.
+- Test save/profile: target is `Mothership`, the user's existing S-class
+  freighter (see "Target freighter" above). Save slot number still needed.
+  Unrelated to, and must not be confused with, the sibling Falcon Corvette
+  project's own slot 7 / slot 8 (`Darth Fritz`).
 - Launch steps: TBD, pending toolchain re-verification.
 - Feature test steps: summon/warp to the freighter, dock, walk the stock
   interior, exit, save, reload, repeat — per the boardability rule in the

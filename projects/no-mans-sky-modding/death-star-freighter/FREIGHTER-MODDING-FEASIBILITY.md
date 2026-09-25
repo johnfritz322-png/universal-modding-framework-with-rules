@@ -28,7 +28,13 @@ found in research are:
 - **Sentinel-Design family**: rounder, segmented capital hulls, classed by
   midsection segment count (Sentinel / Battleship / Dreadnought).
 
-Neither is close enough to a sphere to reskin by texture alone. This
+**VERIFIED from the user's own screenshot (2026-09-25, see
+`PROJECT_MANIFEST.md` → "Target freighter")**: the actual donor, `Mothership`,
+is a Venator-family wedge hull — the harder-shaped one of the two to hide
+under a sphere, since it is long, flat, and has an angular bow rather than
+already being roundish. Confirms rather than assumes the point below.
+
+Neither family is close enough to a sphere to reskin by texture alone. This
 confirms the same conclusion the Falcon brief reached for the Corvette: the
 Death Star hull has to be a **fully custom NMSDK mesh**, built as an
 exterior shell, not a retexture of an existing part. The stock freighter's
