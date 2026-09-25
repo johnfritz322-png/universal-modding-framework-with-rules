@@ -7,19 +7,19 @@ Blender, and no unpacked game files, so none of it can be executed here.
 Report the results back and I'll fold them into `PROJECT_MANIFEST.md` and
 `FEASIBILITY.md`.
 
-## Environment (last known, NEEDS TESTING for this project)
-| Item | Last known value | Status |
+## Environment
+| Item | Value | Status |
 |---|---|---|
 | Game | No Man's Sky | — |
 | Platform | PC / Steam, app id `275850` | VERIFIED (Steam app id is public/static) |
-| Installed Steam build | `25351301` (2026-09-18, from the sibling Falcon Corvette project) | NEEDS TESTING — must be re-checked for this project, see Step 1 |
-| Blender | 4.5.14, hash-verified for the Falcon Corvette project | NEEDS TESTING — re-verify still present/working, see Step 2 |
-| NMSDK | cloned from `github.com/monkeyman192/NMSDK` | NEEDS TESTING — re-pull and re-check compatibility, see Step 2 |
-| MBINCompiler | `v7.03.2-pre1`, hash-verified for the Falcon Corvette project | NEEDS TESTING — re-verify or update, see Step 2 |
+| Installed Steam build | `25441199` — version **Cosmos 7.04**, dated 2026-09-21 | User-reported from a local check on 2026-09-25; not independently re-verified by this session (no game access here). Treated as current. |
+| Blender | 4.5.14, hash-verified for the Falcon Corvette project against the **older** build `25351301` (2026-09-18) | NEEDS TESTING against `25441199` / Cosmos 7.04 — see Step 2 |
+| NMSDK | cloned from `github.com/monkeyman192/NMSDK` | NEEDS TESTING — re-pull and re-check compatibility against Cosmos 7.04, see Step 2 |
+| MBINCompiler | `v7.03.2-pre1`, hash-verified for the Falcon Corvette project against the **older** build `25351301` | NEEDS TESTING against `25441199` / Cosmos 7.04 — see Step 2. A real patch (`25351301` → `25441199`) happened since that verification, so this cannot be assumed to still work. |
 | PAK unpack tool | none chosen yet for this project | UNVERIFIED — candidates only, see Step 3 |
 
-Nothing in this table is carried over as verified for this project. It is
-the starting point the checklist below re-checks.
+**Step 1 is complete.** The build moved since the Falcon project's last
+check, which is exactly why Step 2 re-verifies rather than assumes.
 
 ## Safety — what this checklist does and does not touch
 - Nothing here overwrites a game file or a save. Every step either reads
@@ -33,18 +33,11 @@ the starting point the checklist below re-checks.
   and report the discrepancy rather than pushing through — that's exactly
   the kind of thing this gate exists to catch.
 
-## Step 1 — confirm the installed game build
-Steam app id is `275850` (already known from the sibling Falcon Corvette
-project). Confirm the current build, since the Corvette project's last
-build check (`25351301`, 2026-09-18) is a week old and cannot be assumed
-current.
-
-In PowerShell, find your Steam library path, then:
-```powershell
-Get-Content "<SteamLibrary>\steamapps\appmanifest_275850.acf" | Select-String "buildid"
-(Get-Item "<SteamLibrary>\steamapps\common\No Man's Sky\Binaries\NMS.exe").LastWriteTime
-```
-Report: the `buildid` value and the exe's last-write timestamp.
+## Step 1 — confirm the installed game build — DONE (2026-09-25)
+Confirmed: **Cosmos 7.04**, Steam build `25441199`, dated 2026-09-21 — a
+real patch after the Falcon project's last check (`25351301`,
+2026-09-18). Reported by the user from a local check rather than run in
+this session (no game access here).
 
 ## Step 2 — re-verify (or set up) the portable toolchain
 "Portable" means: extracted only into a working folder, never touching the
