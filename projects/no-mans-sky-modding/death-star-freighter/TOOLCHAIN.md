@@ -89,11 +89,13 @@ required and never actually completed. Do this before Step 5:
 1. Extract any single small, harmless `.MBIN` from the unpacked PCBANKS
    copy (does not need to be freighter-related — this step is only
    proving the tool works on this build).
-2. Decompile it with MBINCompiler to `.EXML` and open it — confirm it's
+2. Decompile it with MBINCompiler to `.MXML` and open it — confirm it's
    readable, well-formed XML, not garbage.
-3. Recompile that `.EXML` back to `.MBIN` with no edits.
-4. Compare the recompiled file to the original (byte-identical, or at
-   minimum matching size/structure).
+3. Recompile that unchanged `.MXML` back to `.MBIN`.
+4. Decompile the rebuilt `.MBIN` again and compare its structure with the
+   first `.MXML`. Record any difference and do not treat file size alone as
+   proof of validity. Byte identity is useful when it occurs, but is not a
+   requirement unless the current MBINCompiler documents it as one.
 
 Report: pass/fail, and which file you tested with.
 

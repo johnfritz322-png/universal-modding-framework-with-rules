@@ -14,8 +14,10 @@
 
 ## Toolchain
 - Mod loader/framework: NMS `GAMEDATA\MODS` folder convention (unpack →
-  decompile → edit → recompile → place as `.EXML`/`.MBIN` in a mod folder;
-  no overwriting base `.pak` files).
+  decompile to `.MXML` → edit → recompile → place the required mod files in
+  a mod folder; if the loader requires `.EXML`, rename the finished `.MXML`
+  only after confirming that requirement for the current game build). No base
+  `.pak` files are overwritten.
 - SDK/toolkit: NMSDK (Blender add-on), `github.com/monkeyman192/NMSDK`.
 - Script extender: none used/needed for this project.
 - Compiler/runtime: MBINCompiler. Falcon Corvette project last verified
@@ -38,9 +40,7 @@
 - Project root: `projects/no-mans-sky-modding/death-star-freighter/`
 - Default branch: `main`
 - Current work branch: `claude/death-star-freighter-mod-iteration`
-  (this project's work started on `claude/death-star-freighter-mod-itel2i`
-  and was consolidated onto this branch on 2026-09-25 at the user's
-  request, so another agent has one canonical branch to inspect).
+  (canonical branch for this project's documentation as of 2026-09-25).
 - Rollback commit: `origin/main` at `abde3fbb925c263b31aa252e78aa80dc7b3aef7a`
   — since no game file, save, or mod package has been touched, "rollback"
   for this project only ever means discarding/not merging this branch;

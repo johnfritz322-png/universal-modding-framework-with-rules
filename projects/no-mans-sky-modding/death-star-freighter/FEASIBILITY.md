@@ -35,7 +35,7 @@ Every conclusion below is labelled one of:
 This is **not** the same problem as the Falcon Corvette. Corvettes can be
 assembled part-by-part directly in a save's `Objects[]` layout (in-game
 building, or a save-editor injection of that layout). Freighters cannot:
-there is no player-facing freighter hull editor. The 2026 Endurance update
+there is no player-facing freighter hull editor. The 2022 Endurance update
 added deeper freighter *base* (interior) building, exterior platforms, and
 capital-ship *engine recoloring* from the existing freighter paint UI — none
 of that reaches hull shape (**HIGH CONFIDENCE**, from web search of the
@@ -88,15 +88,18 @@ as the working hypothesis for the selection mechanism, to be confirmed
 against the user's own unpacked game files before anything is built on it,
 per Rule 1 (do not invent file schemas or fields).
 
-### Why this architecture is the right one to pursue
-It is the **smallest compatible change** available (Rule 6):
-- add one new hull entry to the freighter model table — no vanilla table
-  row is overwritten, matching gFreighter's own non-destructive precedent;
-- change exactly one field (the target freighter's seed) in the save, not a
-  full `Objects[]` layout injection like the Corvette build required;
-- the freighter's class (C/B/A/S), stats, name, and crew are unrelated save
-  fields — getting an S-class freighter and giving it the Death Star hull
-  are two independent changes that can be verified separately.
+### Candidate architecture — pending verification
+If gates 2 and 3 confirm the table and seed mechanism, this is the smallest
+compatible change available (Rule 6):
+- add one new hull entry to the confirmed freighter model table — no vanilla
+  table row is overwritten;
+- change only the confirmed hull-selection field in the target freighter's
+  save, rather than injecting a full `Objects[]` layout as the Corvette work
+  required;
+- leave class (C/B/A/S), stats, name, and crew untouched.
+
+Until those gates pass, this is a **HIGH CONFIDENCE candidate architecture**,
+not an established implementation path.
 
 ## Getting to S-class — resolved: reuse the existing freighter, touch nothing but the hull
 **Decision (2026-09-25): the target is the user's own already-owned S-class
@@ -122,11 +125,6 @@ Falcon Corvette project tracks its target as "slot 7" and its
 never-touch freighter as "Darth Fritz in slot 8". Nothing here assumes an
 identity for it yet.
 
-**Needs a decision from the user** before this step is executed: grind for
-a real S-class roll, or save-edit a specific already-owned freighter (and
-accept the extra work of verifying/fixing its stat block so the class isn't
-cosmetic-only).
-
 ## Toolchain reuse
 The Falcon Corvette project already hash-verified a working local toolchain
 on 2026-09-18 (Blender 4.5.14, NMSDK cloned from
@@ -148,20 +146,17 @@ minimal baseline → one testable feature):
    freighter hull/model table MBIN and the real seed-to-hull selection
    mechanism. The "seed" hypothesis above must be confirmed this way, not
    carried over from a secondhand mod description.
-3. Confirm the exact save-JSON field(s) for a freighter's seed and class,
-   and decide which save/slot is the mod's target — the same
+3. Confirm the exact save-data field for a freighter's hull selection and
+   identify the target save/slot — the same
    backup-before-touching discipline the Falcon handoff already established
    (see `../falcon-corvette/HANDOFF-2026-09-18.md`) applies here unchanged:
    never touch a save without a fresh four-file backup first.
-4. Decide the S-class path with the user (grind vs. save-edit) and, if
-   save-edit, verify the accompanying stat fields before claiming true
-   S-class.
-5. Build the sphere mesh in Blender/NMSDK and locally inspect it (geometry,
+4. Build the sphere mesh in Blender/NMSDK and locally inspect it (geometry,
    UVs at the poles, normals, materials) before any packaging step.
-6. Package as an **additive** mod (new table entry only, no vanilla file
+5. Package as an **additive** mod (new table entry only, no vanilla file
    overwrite), matching gFreighter's own precedent, and keep collision-free
    per NMSDK's own guidance unless a gate proves collision is required.
-7. Back up saves and the `MODS` folder, install only with the game closed,
+6. Back up saves and the `MODS` folder, install only with the game closed,
    then run the boardability test (summon/dock, walk the interior, exit,
    save, reload, repeat) before this is ever called usable.
 
