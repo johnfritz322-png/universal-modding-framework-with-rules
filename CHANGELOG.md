@@ -1,5 +1,38 @@
 # Changelog
 
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — real toolchain results against Cosmos 7.04
+
+Status: real, evidence-backed toolchain progress. **Still no game file or
+save modified.**
+
+Codex ran the toolchain checklist (`codex/death-star-toolchain-results`,
+merged in full) against the actual currently-installed game — Cosmos 7.04,
+Steam build `25441199` (a real patch since the Falcon Corvette project's
+last check, `25351301`/2026-09-18). Folded the raw results
+(`TOOLCHAIN-RESULTS-2026-09-25.md`) into `TOOLCHAIN.md` and
+`PROJECT_MANIFEST.md`'s tracked step/dependency state.
+
+### Verified
+- Blender 4.5.14 LTS launches; MBINCompiler (`7.03.2.1`) passed a no-edit
+  MBIN→MXML→MBIN→MXML round trip with SHA-256-identical MXML output;
+  HGPAKtool 1.1.3 extracted a real archive. All three hash- or
+  hash-comparison-backed, not just "it ran."
+- Freighter assets exist under `MODELS/COMMON/SPACECRAFT/` (`BIGGS`,
+  `COMMONPARTS/HANGARINTERIORPARTS`).
+
+### Blocked
+- **NMSDK does not load.** On its `cosmos_fixes` branch (commit `548bfe1`),
+  but its `hgpaktool` Python dependency fails to import in Blender. This
+  is now the project's single active blocker — nothing needing the Blender
+  add-on can proceed until it's fixed.
+
+### Still unverified
+- The seed→hull lookup table itself has not been found. The "additive
+  table entry, seed-selected" architecture stays HIGH CONFIDENCE, not
+  VERIFIED. `HANGARINTERIORPARTS` is a new, promising lead for the
+  hangar-in-trench design decision (possibly a modular socket-attached
+  piece rather than baked geometry) — not yet confirmed either.
+
 ## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — independent audit cross-check
 
 Codex opened `codex/death-star-doc-audit` directly against the

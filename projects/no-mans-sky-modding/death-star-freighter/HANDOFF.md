@@ -27,11 +27,24 @@
   Labelled **HIGH CONFIDENCE, not VERIFIED** — built from `WebSearch`
   summaries; the exact MBIN table and save field names have not been
   confirmed against real files.
-- **Toolchain re-verification checklist written** (`TOOLCHAIN.md`): six
-  steps (build check, portable Blender/NMSDK/MBINCompiler re-verification,
-  pick + confirm a PAK unpack tool, a compile/decompile round-trip proof,
-  locate the real freighter hull table, locate `Mothership`'s save
-  record/seed field). Not yet run.
+- **Toolchain re-verified against the real, current build** (Cosmos 7.04,
+  Steam build `25441199`) by Codex, 2026-09-25 — `TOOLCHAIN.md` and
+  `TOOLCHAIN-RESULTS-2026-09-25.md`:
+  - **VERIFIED, evidence-backed**: Blender 4.5.14 LTS launches (SHA-256
+    recorded); HGPAKtool 1.1.3 extracts real archives; MBINCompiler
+    `7.03.2.1` passed a no-edit MBIN→MXML→MBIN→MXML round trip with
+    identical MXML hashes.
+  - **BLOCKED**: NMSDK (`cosmos_fixes` branch, commit `548bfe1`) fails to
+    load in Blender — its `hgpaktool` Python dependency doesn't import.
+    Nothing needing the Blender add-on (building the sphere mesh) can
+    start until this is fixed.
+  - **Partial**: freighter assets confirmed present under
+    `MODELS/COMMON/SPACECRAFT/` (`BIGGS`, `COMMONPARTS/HANGARINTERIORPARTS`
+    — the latter hints the hangar may be a shared modular piece attached
+    to a socket, not baked into each hull). The seed→hull lookup table
+    itself is **still not found** — the core architecture hypothesis
+    remains HIGH CONFIDENCE, not VERIFIED.
+  - No game file or save was modified during any of this.
 - **Visual concept reference published**, both as a hosted Claude Artifact
   and exported into this repo as `concept-reference.html`, showing the
   silhouette schematic, the five non-negotiables, and the hull-envelope
@@ -39,14 +52,15 @@
 
 ## Remaining work
 In dependency order (later steps need earlier ones):
-1. Run `TOOLCHAIN.md` Steps 1-4 on the machine with the game installed:
-   confirm current Steam build, re-verify or update Blender/NMSDK/
-   MBINCompiler, pick a PAK unpack tool, prove a compile/decompile
-   round-trip on a harmless file.
-2. Run `TOOLCHAIN.md` Step 5: locate the real freighter hull/model table
-   and geometry file naming convention (only the *frigate* — small escort
-   ship — path is confirmed from research so far; the freighter path is
-   still unconfirmed and must not be assumed to mirror it).
+1. **Unblock NMSDK**: install its `hgpaktool` Python dependency into
+   Blender's own Python environment (not system Python) per whatever the
+   `cosmos_fixes` branch's own docs specify, then confirm the add-on
+   actually loads.
+2. Continue `TOOLCHAIN.md` Step 5: find the seed→hull lookup table itself,
+   now that the freighter asset folder is located — try names like
+   `GENERATIONTABLE`, `SPAWNTABLE`, or `PARTSTABLE` near `BIGGS`. Also
+   worth chasing: the `HANGARINTERIORPARTS` socket-attachment lead, since
+   it may change how hangar placement gets built.
 3. Run `TOOLCHAIN.md` Step 6: locate `Mothership`'s exact save slot and
    its hull-seed field, by name, without changing anything yet.
 4. Once 1-3 are confirmed: build the sphere mesh in Blender/NMSDK
@@ -65,25 +79,25 @@ In dependency order (later steps need earlier ones):
    building still works.
 
 ## Blockers
-- **This session has no No Man's Sky install, no Blender, and no unpacked
-  game files.** Every step above from Step 1 onward has to run on the
-  user's own machine; nothing here can build, compile, or test anything.
-- **The real freighter hull table/model path is unconfirmed.** Research
-  only confirmed the naming pattern for *frigates* (a different, smaller
-  object than the freighter itself); do not assume the freighter table
-  mirrors that pattern without checking.
+- **NMSDK does not load** — missing `hgpaktool` Python dependency inside
+  Blender. This is the active blocker; everything requiring the Blender
+  add-on waits on it.
+- **The seed→hull lookup table is still unconfirmed.** The freighter asset
+  folder is now known, but the actual table that would need a new entry
+  has not been found yet.
 - **`Mothership`'s save slot number is not yet known** (its name is known
   from the screenshot, which may be enough to locate the record, but the
-  slot has not been separately confirmed).
+  slot has not been separately confirmed — Step 6 not yet run).
 - **No fresh backup of the target save exists yet** — required before any
   future write step, not optional.
+- This cloud session still has no No Man's Sky install, no Blender, and no
+  unpacked game files — every remaining step has to run on the machine
+  that has the game (Codex has been doing this).
 
 ## Exact next verification step
-Run `TOOLCHAIN.md` **Step 1** (confirm the currently installed Steam
-build id and the game executable's timestamp) on the machine that has No
-Man's Sky installed, and report the result back into this project. Every
-later gate assumes this is current, not the week-old figure carried over
-from the sibling Falcon Corvette project.
+Install `hgpaktool` into Blender's own Python environment so NMSDK's
+`cosmos_fixes` add-on actually loads, then confirm it loads. Everything
+past that (sphere mesh, table search) is gated on this one fix.
 
 ## Honest status
 Highest verified state reached, per this framework's own scale (Designed

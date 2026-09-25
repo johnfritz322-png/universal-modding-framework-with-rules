@@ -31,10 +31,11 @@
 ## Dependencies
 | Dependency | Version / range | Required? | Verified source |
 |---|---|---|---|
-| Blender | 4.5.14 (matches NMSDK's stated 4.2+ support) | Yes | Reused from `../falcon-corvette/TOOLCHAIN-CHECK-2026-09-18.md`; not re-verified for this project |
-| NMSDK | latest from upstream repo | Yes | `github.com/monkeyman192/NMSDK` |
-| MBINCompiler | `v7.03.2-pre1` (last known) | Yes | Reused from `../falcon-corvette/TOOLCHAIN-CHECK-2026-09-18.md`; not re-verified for this project |
-| Save editor | goatfungus NMSSaveEditor (or equivalent) | Only for the seed/class step | web search, not independently confirmed against this game version |
+| Blender | 4.5.14 LTS | Yes | **VERIFIED 2026-09-25** — launches against Cosmos 7.04. SHA-256: `57FA1D294EA76448C3BEC84CA758CAF4629611330ABBA7DCF55BB0C56A0A15AB` |
+| HGPAKtool | 1.1.3 | Yes (unpack tool) | **VERIFIED 2026-09-25** — extracted a copied `NMSARC.globals.pak` from Cosmos 7.04 |
+| MBINCompiler | reports `7.03.2.1` | Yes | **VERIFIED 2026-09-25** — passed a no-edit MBIN→MXML→MBIN→MXML round trip on `gcscratchpadglobals.global.mbin`; both MXML outputs SHA-256-identical |
+| NMSDK | `cosmos_fixes` branch, commit `548bfe1` (2026-09-16) | Yes | **BLOCKED 2026-09-25** — add-on fails to load in Blender: its `hgpaktool` Python dependency does not import. See `TOOLCHAIN.md` Step 2. |
+| Save editor | goatfungus NMSSaveEditor (or equivalent) | Only for the seed step | web search, not independently confirmed against this game version |
 
 ## Repository state
 - Project root: `projects/no-mans-sky-modding/death-star-freighter/`
@@ -48,11 +49,14 @@
 - Last known-good commit/build: none — no game build/mod package exists
   yet, only documentation.
 - Current milestone: design brief + feasibility research complete;
-  `TOOLCHAIN.md` written and handed to the user to run; visual concept
+  toolchain re-verified against Cosmos 7.04 by Codex — Blender, HGPAKtool,
+  and MBINCompiler all VERIFIED working (Steps 1-4 of `TOOLCHAIN.md`);
+  freighter asset folder located (Step 5, partial); visual concept
   reference published as a Claude artifact and exported into this repo as
   `concept-reference.html` (see `README.md`).
-- Next milestone: results of `TOOLCHAIN.md` (build match, real
-  freighter model path, `Mothership`'s save slot/seed field).
+- Next milestone: unblock NMSDK (missing `hgpaktool` Python dependency),
+  then continue Step 5 (locate the seed→hull lookup table) and Step 6
+  (`Mothership`'s save slot/seed field) — see `HANDOFF.md`.
 
 ## Target freighter
 **VERIFIED from an in-game screenshot supplied by the user (2026-09-25)** —
@@ -80,6 +84,8 @@ the sibling Falcon Corvette project records for its own ships).
 - `DEATH-STAR-BUILD-BRIEF.md` — desired visual/design (kept separate from feasibility)
 - `FEASIBILITY.md` — verified/researched technical capability
 - `TOOLCHAIN.md` — environment, tools, and the re-verification checklist
+  (folds in Codex's real results)
+- `TOOLCHAIN-RESULTS-2026-09-25.md` — Codex's raw toolchain-check report
 - `HANDOFF.md` — completed work, remaining work, blockers, next step
 - `PROJECT_MANIFEST.md` (this file)
 - `concept-reference.html` — the visual concept page, exported as a repo
@@ -116,13 +122,15 @@ Corvette project used for its Corvette core.
 ## Verified features
 | Feature | Verification state | Evidence | Last tested |
 |---|---|---|---|
-| (none) | — | — | — |
+| Toolchain runs on Cosmos 7.04 (Blender launches, HGPAKtool extracts, MBINCompiler round-trips) | VERIFIED | Hashes + identical-SHA-256 round trip, see `TOOLCHAIN.md` Steps 2-4 | 2026-09-25 |
+| Freighter assets exist under `MODELS/COMMON/SPACECRAFT/` (`BIGGS`, `COMMONPARTS/HANGARINTERIORPARTS`) | VERIFIED (files present) | Read-only filtered extraction | 2026-09-25 |
 
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Spherical Death Star exterior mesh | Designed only | Not yet modeled | Build in Blender/NMSDK, inspect locally |
-| Additive freighter-hull table entry, seed-selected | HIGH CONFIDENCE architecture, UNVERIFIED specifics | Exact MBIN table + save field names unconfirmed | Inspect user's unpacked game files directly |
+| Spherical Death Star exterior mesh | Designed only | Not yet modeled | Blocked on NMSDK loading — see below |
+| NMSDK add-on | BLOCKED | `hgpaktool` Python dependency fails to import in Blender | Install the dependency into Blender's own Python env per NMSDK's `cosmos_fixes` docs, retry load |
+| Additive freighter-hull table entry, seed-selected | HIGH CONFIDENCE architecture, UNVERIFIED specifics | Seed→hull lookup table not yet located (freighter asset folder is, hangar-socket lead is new) | Continue Step 5's table search near `BIGGS`/the freighter path |
 
 ## Risks
 - **Save corruption / lost freighter or progress**: mitigated by never

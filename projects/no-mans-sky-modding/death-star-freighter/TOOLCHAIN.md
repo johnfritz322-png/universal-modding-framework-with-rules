@@ -1,25 +1,27 @@
 # Death Star freighter — toolchain check
 
 ## Status
-**Not yet run.** This is a checklist for the user to run on the machine
-that has No Man's Sky installed — this session has no game install, no
-Blender, and no unpacked game files, so none of it can be executed here.
-Report the results back and I'll fold them into `PROJECT_MANIFEST.md` and
-`FEASIBILITY.md`.
+**Steps 1-4 complete, Step 5 partial, Step 6 not started.** Run by Codex
+against the real, currently-installed game (see
+`TOOLCHAIN-RESULTS-2026-09-25.md` for its raw report; this section is that
+report folded into the tracked environment/step state). No game file or
+save has been modified.
 
 ## Environment
 | Item | Value | Status |
 |---|---|---|
 | Game | No Man's Sky | — |
 | Platform | PC / Steam, app id `275850` | VERIFIED (Steam app id is public/static) |
-| Installed Steam build | `25441199` — version **Cosmos 7.04**, dated 2026-09-21 | User-reported from a local check on 2026-09-25; not independently re-verified by this session (no game access here). Treated as current. |
-| Blender | 4.5.14, hash-verified for the Falcon Corvette project against the **older** build `25351301` (2026-09-18) | NEEDS TESTING against `25441199` / Cosmos 7.04 — see Step 2 |
-| NMSDK | cloned from `github.com/monkeyman192/NMSDK` | NEEDS TESTING — re-pull and re-check compatibility against Cosmos 7.04, see Step 2 |
-| MBINCompiler | `v7.03.2-pre1`, hash-verified for the Falcon Corvette project against the **older** build `25351301` | NEEDS TESTING against `25441199` / Cosmos 7.04 — see Step 2. A real patch (`25351301` → `25441199`) happened since that verification, so this cannot be assumed to still work. |
-| PAK unpack tool | none chosen yet for this project | UNVERIFIED — candidates only, see Step 3 |
+| Installed Steam build | `25441199` — version **Cosmos 7.04**, dated 2026-09-21 | VERIFIED (confirmed locally by Codex, 2026-09-25) |
+| Blender | 4.5.14 LTS | **VERIFIED** — launches successfully. Executable SHA-256: `57FA1D294EA76448C3BEC84CA758CAF4629611330ABBA7DCF55BB0C56A0A15AB` |
+| PAK unpack tool | HGPAKtool 1.1.3 | **VERIFIED** — extracted a copied `NMSARC.globals.pak` from the current build |
+| MBINCompiler | reports version `7.03.2.1` | **VERIFIED** — passed a no-edit round-trip (MBIN → MXML → MBIN → MXML) on `gcscratchpadglobals.global.mbin`; both MXML outputs had identical SHA-256 |
+| NMSDK | source on its `cosmos_fixes` branch, commit `548bfe1` (2026-09-16) | **BLOCKED, NOT VERIFIED** — the add-on did not load in Blender: Python could not import its `hgpaktool` dependency. Do not treat NMSDK as usable until this is resolved and the add-on actually loads. |
 
-**Step 1 is complete.** The build moved since the Falcon project's last
-check, which is exactly why Step 2 re-verifies rather than assumes.
+**Steps 1-4 are complete and evidence-backed** (real hashes, a real
+round-trip test — not just "it ran"). **NMSDK is the current blocker**:
+nothing that needs the Blender add-on (building the sphere mesh) can start
+until it loads.
 
 ## Safety — what this checklist does and does not touch
 - Nothing here overwrites a game file or a save. Every step either reads
@@ -39,84 +41,63 @@ real patch after the Falcon project's last check (`25351301`,
 2026-09-18). Reported by the user from a local check rather than run in
 this session (no game access here).
 
-## Step 2 — re-verify (or set up) the portable toolchain
-"Portable" means: extracted only into a working folder, never touching the
-game install itself.
+## Step 2 — re-verify (or set up) the portable toolchain — DONE for Blender/MBINCompiler, BLOCKED for NMSDK (2026-09-25)
+- **Blender**: VERIFIED. 4.5.14 LTS launches. Hash above.
+- **MBINCompiler**: VERIFIED. Reports `7.03.2.1` (note: this is the exact
+  version string reported now, distinct from the Falcon project's
+  `v7.03.2-pre1` label — record it as its own value, not the same build).
+  Round-trip proof passed (see Step 4).
+- **NMSDK**: **BLOCKED**. On its `cosmos_fixes` branch, commit `548bfe1`
+  (2026-09-16) — this branch name itself suggests the maintainer already
+  knows Cosmos needs fixes, which is a good sign the project is being kept
+  current, but the add-on still fails to load here: Python cannot import
+  its `hgpaktool` dependency. Next action: install `hgpaktool` into
+  Blender's own Python environment (not the system Python) and retry
+  loading the add-on. This exact remedy is UNVERIFIED — NMSDK's own docs
+  for the `cosmos_fixes` branch should be checked for the specific
+  dependency-install method it expects before assuming this works.
 
-- **Blender**: if you still have the 4.5.14 extraction from the Falcon
-  project, confirm it still launches and that NMSDK still loads as an
-  add-on. If not, download fresh from blender.org and verify its SHA-256
-  against the hash Blender publishes for that release before using it —
-  do not skip the hash check even on a re-download.
-- **NMSDK**: if already cloned (`github.com/monkeyman192/NMSDK`), `git pull`
-  to pick up any changes since 2026-09-18. Confirm its own compatibility
-  notes still list your Blender version as supported.
-- **MBINCompiler**: if you still have `v7.03.2-pre1` from the Falcon
-  project, confirm its executable still reports that version. If NMSDK's
-  current docs recommend a newer release for the build found in Step 1,
-  download that instead and verify its published SHA-256 before using it.
+## Step 3 — pick and confirm a PAK unpack tool — DONE (2026-09-25)
+**VERIFIED**: HGPAKtool 1.1.3, confirmed by successfully extracting a
+copied `NMSARC.globals.pak` from the current build. (Of the candidates
+research surfaced — PSARCTool, HGPAKTool, NMS Modding Station, AMUMSS's
+PCBanks Explorer — HGPAKTool is the one that was actually tried and works.)
 
-Report: confirmed versions (and hashes, if anything was freshly
-downloaded) for all three.
+## Step 4 — prove the toolchain round-trips before trusting it on anything real — DONE, PASS (2026-09-25)
+**VERIFIED**: tested on `gcscratchpadglobals.global.mbin`. MBIN → MXML →
+MBIN → MXML; the two MXML outputs had identical SHA-256 hashes. The
+toolchain (MBINCompiler `7.03.2.1` + HGPAKtool 1.1.3) is proven safe to use
+on real files for this build, independent of the still-blocked NMSDK.
 
-## Step 3 — pick and confirm a PAK unpack tool
-Web research surfaced several candidates (PSARCTool, HGPAKTool, NMS Modding
-Station, AMUMSS's PCBanks Explorer) — **HIGH CONFIDENCE, not VERIFIED**,
-since none of their pages were read directly in this session (Nexus Mods
-and the NMS modding wiki are both blocked by this sandbox's network egress
-proxy). Also flagged in research: modding changed with the "Worlds Part II"
-(v5.50) update, and tooling from before that update may not work against
-the current build. Before trusting any of these:
-1. Confirm whichever tool you pick states compatibility with the build
-   number from Step 1 (or a newer one), not just "No Man's Sky" generally.
-2. Use it only to **read/extract into a separate working folder** — never
-   to write back into `GAMEDATA\PCBANKS`.
-
-Report: which tool and version you're using, and its stated
-compatibility.
-
-## Step 4 — prove the toolchain round-trips before trusting it on anything real
-This is the framework's Rule 8 in practice ("AI output/tooling is untrusted
-until verified") — the same gate the Falcon project's toolchain check
-required and never actually completed. Do this before Step 5:
-1. Extract any single small, harmless `.MBIN` from the unpacked PCBANKS
-   copy (does not need to be freighter-related — this step is only
-   proving the tool works on this build).
-2. Decompile it with MBINCompiler to `.MXML` and open it — confirm it's
-   readable, well-formed XML, not garbage.
-3. Recompile that unchanged `.MXML` back to `.MBIN`.
-4. Decompile the rebuilt `.MBIN` again and compare its structure with the
-   first `.MXML`. Record any difference and do not treat file size alone as
-   proof of validity. Byte identity is useful when it occurs, but is not a
-   requirement unless the current MBINCompiler documents it as one.
-
-Report: pass/fail, and which file you tested with.
-
-## Step 5 — locate the real freighter hull table and geometry files
+## Step 5 — locate the real freighter hull table and geometry files — PARTIAL (2026-09-25)
 This is gate 2 from `FEASIBILITY.md`: confirm or correct
 the "hull selected by save seed, added via a new table entry" hypothesis
 against real files, rather than trusting the secondhand mod description it
 was built from.
 
-Useful confirmed lead: research found that **Frigates** (the small escort
-ships assigned to a freighter, not the freighter itself) live under
-`MODELS/COMMON/SPACECRAFT/FRIGATES/`, e.g.
-`COMBATFRIGATELOD4.SCENE.MBIN`, and that geometry files generally follow
-the pattern `NAME.GEOMETRY.MBIN.PC`. **This is a different object than the
-freighter hull `Mothership` itself uses** — do not assume the freighter
-path mirrors the frigate one; confirm it directly:
-1. List (don't need to fully extract yet) filenames under
-   `MODELS/COMMON/SPACECRAFT/` matching things like `*FREIGHT*` or
-   `*CAPITAL*` to find the real freighter folder name.
-2. Inside it, identify the geometry/scene files for individual hull
-   variants, and look for a higher-level table file that maps a
-   generation seed (or similar) to a hull variant — this is the file the
-   Death Star hull would need a new entry added to.
+**Found so far (VERIFIED present, from a read-only filtered extraction):**
+freighter-related assets do live under `MODELS/COMMON/SPACECRAFT/`,
+including a `BIGGS` path and `COMMONPARTS/HANGARINTERIORPARTS`. The
+`HANGARINTERIORPARTS` name is worth noting for the hangar-in-trench design
+decision: it suggests the hangar interior may be a shared, modular piece
+attached to a socket on the hull rather than baked uniquely into each
+hull's own mesh — if so, the thing to locate next is that attach socket's
+position, not a hand-measured point on the hull.
 
-Report: the real folder path, the naming pattern for hull
-geometry/scene files, and the name of the seed→hull lookup table if found
-(or what's still unclear, if it isn't found on the first pass — this is
-allowed to come back partial).
+**Still not found: the seed→hull lookup table itself.** The "hull selected
+by save seed, added via a new table entry" architecture in `FEASIBILITY.md`
+**remains HIGH CONFIDENCE, not VERIFIED** — this is the load-bearing gap.
+Next pass: search for a table-like file near `BIGGS`/the freighter path
+(names to try: anything with `GENERATIONTABLE`, `SPAWNTABLE`, `PARTSTABLE`,
+or similar, mirroring how frigate paths were named in earlier research) and
+open it to check whether it actually keys hull variants by a seed value.
+
+Original lead, still useful context: research found that **Frigates** (the
+small escort ships assigned to a freighter, not the freighter itself) live
+under `MODELS/COMMON/SPACECRAFT/FRIGATES/`, e.g.
+`COMBATFRIGATELOD4.SCENE.MBIN`, with geometry files generally following
+`NAME.GEOMETRY.MBIN.PC` — a different object than `Mothership`'s own hull,
+not assumed to mirror it.
 
 ## Step 6 — locate `Mothership`'s save record
 1. Identify which save file (`save.hg` / `save2.hg`, or their higher-index
