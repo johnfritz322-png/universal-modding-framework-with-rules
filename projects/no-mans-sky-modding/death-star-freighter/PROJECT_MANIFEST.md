@@ -39,9 +39,10 @@
 - Default branch: `main`
 - Current work branch: `claude/death-star-freighter-mod-itel2i`
 - Last known-good commit/build: none — no build exists yet.
-- Current milestone: design brief + feasibility research complete.
-- Next milestone: re-verify toolchain/build match on the user's machine
-  (gate 1 in `FREIGHTER-MODDING-FEASIBILITY.md`).
+- Current milestone: design brief + feasibility research complete;
+  `TOOLCHAIN-CHECK.md` written and handed to the user to run.
+- Next milestone: results of `TOOLCHAIN-CHECK.md` (build match, real
+  freighter model path, `Mothership`'s save slot/seed field).
 
 ## Target freighter
 **VERIFIED from an in-game screenshot supplied by the user (2026-09-25)** —
@@ -67,6 +68,7 @@ the sibling Falcon Corvette project records for its own ships).
 ## Owned files
 - `DEATH-STAR-BUILD-BRIEF.md`
 - `FREIGHTER-MODDING-FEASIBILITY.md`
+- `TOOLCHAIN-CHECK.md`
 - `PROJECT_MANIFEST.md` (this file)
 
 No game asset, save file, or mod package exists yet.
