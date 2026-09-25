@@ -5,6 +5,13 @@
 save touched. See `FREIGHTER-MODDING-FEASIBILITY.md` for the technical gate
 list this brief depends on, and `PROJECT_MANIFEST.md` for the tracked state.
 
+A visual concept reference for this brief (silhouette schematic, the five
+non-negotiables, and how the sphere envelope has to fit around
+`Mothership`'s confirmed wedge hull) is published at
+<https://claude.ai/artifact/HXVQFaWVzMVHtzaxj68zEH>. It is a schematic, not
+a render — proportions and placement rules only, nothing traced from real
+game geometry.
+
 ## Player-facing goal
 Replace the exterior of one capital freighter (target: an S-class freighter)
 with an original, Death-Star-styled spherical battle-station hull, while
@@ -58,6 +65,17 @@ not absolute size:
 - overall hull size matches the stock freighter's existing bounding volume
   so the hangar mouth, docking approach, and freighter base attach points
   line up without rescaling the functional core.
+
+### Hull envelope rule
+`Mothership`'s confirmed donor hull (see `PROJECT_MANIFEST.md` → "Target
+freighter") is an elongated Venator-family wedge, not a rounder shape — a
+sphere cannot hug it, only enclose it. The rule: **sphere diameter equals
+the stock hull's full length**, its largest dimension, so nothing pokes
+through the shell at bow or stern. Where the dish and trench land relative
+to the stock hangar mouth is a placement choice that still depends on
+knowing exactly where that hangar mouth sits on the real hull — an open
+item, tracked as gate 5/6 in `FREIGHTER-MODDING-FEASIBILITY.md` and
+`TOOLCHAIN-CHECK.md`, not assumed here.
 
 ## Boardability rule (same discipline as the Falcon Corvette project)
 

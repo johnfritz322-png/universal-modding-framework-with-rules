@@ -40,7 +40,9 @@
 - Current work branch: `claude/death-star-freighter-mod-itel2i`
 - Last known-good commit/build: none — no build exists yet.
 - Current milestone: design brief + feasibility research complete;
-  `TOOLCHAIN-CHECK.md` written and handed to the user to run.
+  `TOOLCHAIN-CHECK.md` written and handed to the user to run; visual
+  concept reference published (silhouette schematic + hull-envelope fit —
+  <https://claude.ai/artifact/HXVQFaWVzMVHtzaxj68zEH>).
 - Next milestone: results of `TOOLCHAIN-CHECK.md` (build match, real
   freighter model path, `Mothership`'s save slot/seed field).
 
