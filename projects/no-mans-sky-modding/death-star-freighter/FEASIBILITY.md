@@ -35,8 +35,12 @@ Every conclusion below is labelled one of:
 This is **not** the same problem as the Falcon Corvette. Corvettes can be
 assembled part-by-part directly in a save's `Objects[]` layout (in-game
 building, or a save-editor injection of that layout). Freighters cannot:
-there is no player-facing freighter hull editor. The 2022 Endurance update
-added deeper freighter *base* (interior) building, exterior platforms, and
+there is no player-facing freighter hull editor. The Endurance update
+(**VERIFIED, released 2022-07-20** — corrected 2026-09-25 after an
+independent audit caught this document's original text mis-dating it to
+2026; re-confirmed by cross-checking NME, PCGamesN, Dexerto, and
+HeyPoorPlayer, which all independently agree on the July 2022 date) added
+deeper freighter *base* (interior) building, exterior platforms, and
 capital-ship *engine recoloring* from the existing freighter paint UI — none
 of that reaches hull shape (**HIGH CONFIDENCE**, from web search of the
 Endurance update's own patch notes summary; not independently re-fetched,
@@ -169,6 +173,11 @@ in this document.
   update's own page and community discussion. Not independently re-fetched
   — `nomanssky.com`/`nomanssky.fandom.com`/`nomanssky.miraheze.org` are all
   blocked by this sandbox's egress proxy.
+- Endurance update release date, **VERIFIED 2022-07-20**: cross-checked
+  across NME, PCGamesN, Dexerto, and HeyPoorPlayer (all independently
+  report the same July 2022 date). Corrects this document's original
+  "2026 Endurance update" wording, an error caught by an independent
+  audit (`codex/death-star-doc-audit`) on 2026-09-25.
 - Capital freighter family/class naming (Venator vs. Sentinel-Design,
   segment-count classes): web search summary of community wiki content
   (same blocked domains as above), cross-checked against a second,

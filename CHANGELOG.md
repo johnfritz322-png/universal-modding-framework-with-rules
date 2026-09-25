@@ -1,5 +1,41 @@
 # Changelog
 
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — independent audit cross-check
+
+Codex opened `codex/death-star-doc-audit` directly against the
+consolidated Death Star freighter docs (commit `b7d4c60`) and found real
+issues. Reviewed and merged in full; one claim additionally re-verified
+independently rather than taken on trust.
+
+### Corrected (Codex's audit, merged)
+- **"2026 Endurance update" was a factual error** — the update shipped
+  2022-07-20. Re-verified independently in this session against four
+  sources (NME, PCGamesN, Dexerto, HeyPoorPlayer), all agreeing on the
+  July 2022 date, and upgraded in `FEASIBILITY.md` from a bare fix to a
+  **VERIFIED**, cited correction.
+- **A self-contradiction removed**: the "S-class — resolved" section still
+  carried a leftover "needs a decision from the user" paragraph from
+  before that decision was made. Gate numbering in the research-gates list
+  renumbered to match.
+- **Overclaimed architecture framing tightened**: "the right architecture
+  to pursue" downgraded to "candidate architecture — pending verification"
+  until gates 2/3 actually confirm the real freighter hull table and
+  save field, consistent with this framework's own rule against treating
+  a design goal as proof of technical feasibility.
+- **Toolchain round-trip test corrected**: MBINCompiler's direct decompile
+  output is `.MXML`, not `.EXML` (`.EXML` is a separate, hand-edited mod
+  delivery format, per this project's own earlier research) — the
+  round-trip proof in `TOOLCHAIN.md` now decompiles/recompiles/re-decompiles
+  `.MXML` and compares structure, rather than asserting byte-identical
+  recompilation as the pass bar.
+
+### Notes
+- All four corrections were reviewed against this session's own research
+  trail before merging, not merged blindly.
+- Highest verified status is unchanged: **Designed**. This audit corrected
+  documentation accuracy, not project progress — nothing has been
+  implemented, compiled, loaded, or tested in game.
+
 ## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — Death Star freighter consolidated for handoff
 
 Status: **Researched only.** No game file, save, or mod package touched.
