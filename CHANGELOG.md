@@ -1,6 +1,44 @@
 # Changelog
 
-## Unreleased
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-itel2i) — Death Star freighter design + feasibility
+
+Status: **Researched only.** No game file, save, or mod package touched.
+
+Adds `projects/no-mans-sky-modding/death-star-freighter/` for a new,
+separate project: an S-class capital freighter reskinned as an original
+Death-Star-styled spherical hull.
+
+### Added
+- `DEATH-STAR-BUILD-BRIEF.md`: visual non-negotiables (sphere silhouette,
+  offset concave superlaser dish, equatorial trench, dense surface
+  paneling), a proportion-based scale approach, the same boardability
+  discipline the sibling Falcon Corvette project uses, and a legal/scope
+  guardrail noting a prior "Death Star Capital Freighter" Nexus mod that was
+  deleted and is not a source for this project.
+- `FREIGHTER-MODDING-FEASIBILITY.md`: establishes that freighters have no
+  in-game hull editor (unlike Corvettes), so a new silhouette needs a fully
+  custom NMSDK exterior mesh over the stock freighter core. Records the
+  working architecture found via research — an **added** (non-overwriting)
+  freighter hull table entry selected by the target freighter's save seed
+  field, based on the documented behavior of the existing gFreighter mod —
+  and flags getting to S-class (legitimate rescue-event grind vs. save-edit,
+  with a stat-block caveat on the latter) as an open decision for the user.
+- `PROJECT_MANIFEST.md`: current state (design/research only), reused vs.
+  re-verify-needed toolchain notes, and the required research gates before
+  any implementation.
+
+### Notes
+- This sandbox's network egress proxy blocks every NMS-modding-relevant
+  domain reached during research (`nomanssky.fandom.com`,
+  `nomanssky.miraheze.org`, `nomansskyresources.com`, `nexusmods.com`,
+  `monkeyman192.github.io`, `starwars.com`), so all findings are labelled
+  **HIGH CONFIDENCE** from `WebSearch` summaries rather than **VERIFIED**
+  from a directly read primary source. Re-verification against the user's
+  own game files is the first required gate before implementation starts.
+- Technical implementation remains intentionally unverified until the exact
+  game build, the real freighter hull/model table, and the real save fields
+  are confirmed — the same standard already applied to the Falcon Corvette
+  and BG3 projects in this framework.
 
 - Added Dawnwalker Weapon Forge findings for the requested separate-inventory-item
   architecture. The feature remains unimplemented and untested.
