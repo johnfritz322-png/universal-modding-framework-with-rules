@@ -1,5 +1,12 @@
 # Toolchain results — 2026-09-25
 
+> **Historical checkpoint — superseded.** This is the pre-repair report.
+> The `hgpaktool` dependency blocker was resolved later the same day; use
+> `NMSDK-REPAIR-2026-09-25.md`, `FREIGHTER-SELECTION-FINDINGS.md`, and
+> `WHATS-NEXT.md` for the current state. The older seed-to-hull confidence
+> assessment below is superseded: personal-only custom-hull selection is
+> **UNVERIFIED**.
+
 ## VERIFIED
 
 - Installed game: Cosmos 7.04, Steam build `25441199`.

@@ -12,6 +12,13 @@ This is a **design/research project only** as of 2026-09-25. Nothing has
 been built, compiled, installed, or tested in game.
 
 ## Current status
+**Latest checkpoint:** start with [WHATS-NEXT.md](WHATS-NEXT.md).
+NMSDK's missing dependency is fixed; Blender 5.0.1 with the dedicated
+profile starts with the extension enabled. The actual capital scene and
+descriptor have been located. Evidence and limits are in
+[NMSDK-REPAIR-2026-09-25.md](NMSDK-REPAIR-2026-09-25.md) and
+[FREIGHTER-SELECTION-FINDINGS.md](FREIGHTER-SELECTION-FINDINGS.md).
+
 **Designed / Researched.** No game file, save, or mod package has been
 touched. See `HANDOFF.md` for the precise breakdown of what's done, what's
 open, and the exact next step. In short:
@@ -23,22 +30,21 @@ open, and the exact next step. In short:
   freighter hull table entry, selected via the target freighter's save
   seed field — no class/stat edits at all) is researched and recorded, but
   built on `WebSearch` summaries rather than primary sources or the user's
-  own game files, so it is labelled HIGH CONFIDENCE, not VERIFIED —
+  own game files. Personal-only seed selection remains UNVERIFIED —
   `FEASIBILITY.md`.
 - The target freighter is confirmed from the user's own screenshot:
   `Mothership`, S-class, a Venator-family wedge hull — `PROJECT_MANIFEST.md`
   → "Target freighter".
-- A toolchain re-verification checklist is written but not yet run —
-  `TOOLCHAIN.md`.
+- Toolchain loading and specific file round trips have passed —
+  `TOOLCHAIN.md`. Custom mesh export and in-game behavior still need testing.
 
 ## How to continue
-1. Read `HANDOFF.md` first — it has the exact next verification step.
+1. Read `WHATS-NEXT.md` first — it has the ordered resume steps.
 2. Run the checklist in `TOOLCHAIN.md` on the machine that has No Man's Sky
-   installed (this repo's own sessions do not have game access). Report
+   installed. Completed local checks are linked above; report new
    results back into this project's docs.
-3. Once the real freighter hull table and `Mothership`'s save slot/seed
-   field are confirmed (gates 2, 3, 5, 6 in `FEASIBILITY.md` /
-   `TOOLCHAIN.md`), move to building the sphere mesh in Blender/NMSDK.
+3. Verify how `Mothership`'s resource/seed selects its model, then prove a
+   minimal current-build mesh import/export before building the sphere.
 4. Keep every claim honestly labelled — VERIFIED, HIGH CONFIDENCE,
    UNVERIFIED, or NEEDS TESTING — and never call a design "implemented" or
    "tested" without direct evidence, per this framework's `AGENTS.md`.

@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased — 2026-09-25 — NMSDK loading repaired and freighter evidence corrected
+
+- Installed the SDK's bundled HGPAKtool 1.1.3 wheel and required lz4 into
+  portable Blender 4.5.14's own Python. Registration and archive payload
+  checks pass; pip reports no broken requirements.
+- Recorded the SDK manifest's Blender >=5.0.0 requirement and created a
+  dedicated Blender 5.0.1 profile with the native extension enabled.
+  Fresh-process startup and a deliberately invalid archive control pass.
+- Identified the capital hull in INDUSTRIAL and its descriptor and AI
+  mapping in Precache; BIGGS is explicitly Corvette. Two relevant files
+  passed no-edit MBIN/MXML round trips. Personal-only seed selection remains
+  unverified.
+- Added repair/research reports, a reusable verification script, and
+  WHATS-NEXT.md. No game/save installation; mod status remains Designed.
+
 ## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — real toolchain results against Cosmos 7.04
 
 Status: real, evidence-backed toolchain progress. **Still no game file or

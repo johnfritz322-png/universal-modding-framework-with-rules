@@ -1,12 +1,20 @@
 # Death Star freighter — feasibility and architecture
 
 ## Status
-**Researched only.** Nothing installed, injected, compiled, or run. This
-session has no No Man's Sky install, no Blender, and no unpacked game files
-— it is a documentation/planning environment. Every hands-on step below
-(unpacking, NMSDK, MBINCompiler, save editing) has to happen on the user's
-own machine, the same way the Falcon Corvette project's toolchain work did
-(see `../falcon-corvette/TOOLCHAIN-CHECK-2026-09-18.md`).
+**Local follow-up, 2026-09-25:** NMSDK loading is now verified; see
+`NMSDK-REPAIR-2026-09-25.md`. Current-build scene, descriptor and AI model
+mapping evidence is in `FREIGHTER-SELECTION-FINDINGS.md`. `BIGGS` is
+Corvette; the capital hull is `INDUSTRIAL/CAPITALFREIGHTER_PROC`.
+These files establish a descriptor-based model structure, but do not prove
+the proposed one-row/one-seed personal-only architecture. That mechanism
+is **UNVERIFIED**. The original research below is historical context and
+must not be used to override these narrower observed results.
+
+> **Historical snapshot begins here.** The following original feasibility
+> research was written before the local toolchain repair and current-build
+> archive inspection. Its statements about the session having no installed
+> game, Blender, or unpacked files describe that earlier environment only;
+> the current state is recorded above and in the linked 2026-09-25 reports.
 
 ## Scope of this document
 This document covers **verified/researched technical capability only** —

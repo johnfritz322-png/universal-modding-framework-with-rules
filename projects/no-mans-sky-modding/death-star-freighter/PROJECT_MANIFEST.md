@@ -3,9 +3,8 @@
 ## Identity
 - Project name: Death Star S-Class Freighter
 - Game: No Man's Sky
-- Exact game version/build: UNVERIFIED for this project. Last known Steam
-  build from the sibling Falcon Corvette project was `25351301`
-  (2026-09-18) — must be re-checked, not assumed current.
+- Exact installed Steam build: `25441199`, reread locally 2026-09-25 UTC.
+  Project release label: Cosmos 7.04. Recheck after any game update.
 - Platform: PC / Steam (app `275850`), per the Falcon Corvette project's
   toolchain check.
 - Engine: NMS's own engine; modding surface is `.MBIN`/`.EXML` assets via
@@ -20,21 +19,22 @@
   `.pak` files are overwritten.
 - SDK/toolkit: NMSDK (Blender add-on), `github.com/monkeyman192/NMSDK`.
 - Script extender: none used/needed for this project.
-- Compiler/runtime: MBINCompiler. Falcon Corvette project last verified
-  `v7.03.2-pre1`, hash-checked, against build `25351301` — needs
-  re-verification for this project, not carried over as-is.
+- Compiler/runtime: existing `v7.03.2-pre1` executable, generated MXML
+  version `7.03.2.1`; same SHA-256 as the prior check. No-edit round trips
+  pass for the three files listed in `TOOLCHAIN.md`.
 - Packaging tool: none beyond the mod-folder convention above.
 - Other required tools: NMS save editor (e.g. goatfungus NMSSaveEditor) for
-  the freighter seed/class fields, per
+  any eventual verified hull-selection fields, per
   `FEASIBILITY.md`.
 
 ## Dependencies
 | Dependency | Version / range | Required? | Verified source |
 |---|---|---|---|
-| Blender | 4.5.14 LTS | Yes | **VERIFIED 2026-09-25** — launches against Cosmos 7.04. SHA-256: `57FA1D294EA76448C3BEC84CA758CAF4629611330ABBA7DCF55BB0C56A0A15AB` |
+| Blender | 5.0.1 for native extension; 4.5.14 registration also passes | Yes | **VERIFIED 2026-09-25** — fresh-process extension enable in dedicated 5.0.1 profile; matches SDK manifest >=5.0.0. See repair report for hashes. |
 | HGPAKtool | 1.1.3 | Yes (unpack tool) | **VERIFIED 2026-09-25** — extracted a copied `NMSARC.globals.pak` from Cosmos 7.04 |
 | MBINCompiler | reports `7.03.2.1` | Yes | **VERIFIED 2026-09-25** — passed a no-edit MBIN→MXML→MBIN→MXML round trip on `gcscratchpadglobals.global.mbin`; both MXML outputs SHA-256-identical |
-| NMSDK | `cosmos_fixes` branch, commit `548bfe1` (2026-09-16) | Yes | **BLOCKED 2026-09-25** — add-on fails to load in Blender: its `hgpaktool` Python dependency does not import. See `TOOLCHAIN.md` Step 2. |
+| NMSDK | `cosmos_fixes`, commit `548bfe1`; manifest `0.10.0-alpha14` | Yes | **VERIFIED for loading** — hgpaktool import repaired; enable/preferences/operators/unregister and archive access pass. Geometry export remains NEEDS TESTING. |
+| Python archive dependencies | hgpaktool 1.1.3; zstandard 0.23.0; lz4 4.4.5 in Blender 4.5 | Yes | See `NMSDK-REPAIR-2026-09-25.md` for installation scope and hashes; native 5.0.1 uses its extension wheel environment. |
 | Save editor | goatfungus NMSSaveEditor (or equivalent) | Only for the seed step | web search, not independently confirmed against this game version |
 
 ## Repository state
@@ -45,7 +45,8 @@
 - Rollback commit: `origin/main` at `abde3fbb925c263b31aa252e78aa80dc7b3aef7a`
   — since no game file, save, or mod package has been touched, "rollback"
   for this project only ever means discarding/not merging this branch;
-  nothing outside git needs to be undone.
+  no game/save rollback is needed. Local dependency/profile rollback for
+  the new tooling setup is described in `NMSDK-REPAIR-2026-09-25.md`.
 - Last known-good commit/build: none — no game build/mod package exists
   yet, only documentation.
 - Current milestone: design brief + feasibility research complete;
@@ -54,9 +55,13 @@
   freighter asset folder located (Step 5, partial); visual concept
   reference published as a Claude artifact and exported into this repo as
   `concept-reference.html` (see `README.md`).
-- Next milestone: unblock NMSDK (missing `hgpaktool` Python dependency),
-  then continue Step 5 (locate the seed→hull lookup table) and Step 6
-  (`Mothership`'s save slot/seed field) — see `HANDOFF.md`.
+- Current follow-up: NMSDK dependency repair and fresh-process load checks
+  pass. Actual capital scene, descriptor and AI mapping found; see
+  `FREIGHTER-SELECTION-FINDINGS.md`.
+- Next milestone: establish owned-freighter resource/seed behavior and
+  minimal scene/geometry import/export — see `WHATS-NEXT.md`.
+- Review checkpoint branch: `codex/death-star-nmsdk-fix`, based on canonical
+  commit `2a57866`; preserve newer canonical work during incorporation.
 
 ## Target freighter
 **VERIFIED from an in-game screenshot supplied by the user (2026-09-25)** —
@@ -86,6 +91,10 @@ the sibling Falcon Corvette project records for its own ships).
 - `TOOLCHAIN.md` — environment, tools, and the re-verification checklist
   (folds in Codex's real results)
 - `TOOLCHAIN-RESULTS-2026-09-25.md` — Codex's raw toolchain-check report
+- `NMSDK-REPAIR-2026-09-25.md` — dependency repair and startup evidence
+- `FREIGHTER-SELECTION-FINDINGS.md` — current game model/descriptor evidence
+- `WHATS-NEXT.md` — resume order and local paths
+- `tools/verify_nmsdk_load.py` — repeatable load and archive check
 - `HANDOFF.md` — completed work, remaining work, blockers, next step
 - `PROJECT_MANIFEST.md` (this file)
 - `concept-reference.html` — the visual concept page, exported as a repo
@@ -112,6 +121,7 @@ the non-destructive precedent found in the gFreighter mod.
 
 ## Architecture
 See `FEASIBILITY.md` in full. Summary: a fully custom
+**candidate, still UNVERIFIED for personal-only selection**, consisting of an
 NMSDK-built spherical exterior mesh, added as a new freighter hull table
 entry (not a replacement of any stock entry), selected on the target save
 by setting that freighter's seed field. The stock freighter core (hangar,
@@ -123,14 +133,15 @@ Corvette project used for its Corvette core.
 | Feature | Verification state | Evidence | Last tested |
 |---|---|---|---|
 | Toolchain runs on Cosmos 7.04 (Blender launches, HGPAKtool extracts, MBINCompiler round-trips) | VERIFIED | Hashes + identical-SHA-256 round trip, see `TOOLCHAIN.md` Steps 2-4 | 2026-09-25 |
-| Freighter assets exist under `MODELS/COMMON/SPACECRAFT/` (`BIGGS`, `COMMONPARTS/HANGARINTERIORPARTS`) | VERIFIED (files present) | Read-only filtered extraction | 2026-09-25 |
+| Capital scene/descriptor under `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/`; AI mapping distinguishes BIGGS as Corvette | VERIFIED for inspected data | `FREIGHTER-SELECTION-FINDINGS.md` | 2026-09-25 |
+| NMSDK starts enabled in dedicated Blender 5.0.1 profile | VERIFIED for loading/archive access | `NMSDK-REPAIR-2026-09-25.md` | 2026-09-25 |
 
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Spherical Death Star exterior mesh | Designed only | Not yet modeled | Blocked on NMSDK loading — see below |
-| NMSDK add-on | BLOCKED | `hgpaktool` Python dependency fails to import in Blender | Install the dependency into Blender's own Python env per NMSDK's `cosmos_fixes` docs, retry load |
-| Additive freighter-hull table entry, seed-selected | HIGH CONFIDENCE architecture, UNVERIFIED specifics | Seed→hull lookup table not yet located (freighter asset folder is, hangar-socket lead is new) | Continue Step 5's table search near `BIGGS`/the freighter path |
+| Spherical Death Star exterior mesh | Designed only | Not yet modeled | Verify donor bounds and model import/export |
+| NMSDK current-game geometry import/export | NEEDS TESTING | Loading tests do not exercise geometry | Minimal scene/geometry baseline in 5.0.1 profile |
+| Personal-only additive hull selection | UNVERIFIED | Observed descriptor/model mapping does not establish custom seed registration | Trace target resource/seed and a verified working implementation |
 
 ## Risks
 - **Save corruption / lost freighter or progress**: mitigated by never
@@ -138,11 +149,10 @@ Corvette project used for its Corvette core.
   (framework rule 14); no write has happened yet.
 - **Wrong freighter/slot edited**: mitigated by confirming `Mothership`'s
   exact save slot before any write (open item, see `HANDOFF.md`).
-- **Toolchain mismatch with the current game build**: the Falcon Corvette
-  project's toolchain versions are a week old and not re-verified for this
-  project; using them unverified risks a build that doesn't load. Mitigated
-  by `TOOLCHAIN.md`'s Step 1/2/4 (build check + round-trip proof) before
-  anything is built for real.
+- **Toolchain mismatch with current geometry**: tested loading and sample
+  conversions pass, but geometry export is unverified. Use the manifest-
+  compatible Blender 5.0.1 profile and verify a minimal exported scene
+  before building the custom hull.
 - **Mod conflicts with other freighter-hull mods**: unknown until the real
   hull table is located (gate 2); any other mod editing the same table is a
   likely conflict.
