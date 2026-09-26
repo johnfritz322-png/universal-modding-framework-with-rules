@@ -19,6 +19,11 @@ steps in dependency order. Canonical branch: `claude/death-star-freighter-mod-it
   and seed, verified without editing either current save.
 - `BLENDER-ROUNDTRIP-2026-09-25.md`: passing root-scene import/export control
   for the actual capital freighter, plus its precise evidence boundary.
+- `EXISTING-MOD-PRECEDENT-2026-09-26.md`: HIGH CONFIDENCE, `WebSearch`-only
+  lead on a shipped mod (Nexus 2200) claiming the same additive hull-table
+  mechanism on the exact same `CAPITALFREIGHTER_PROC.SCENE.MBIN` file, plus
+  a separate `HANGARA_EXTERIOR.SCENE.MBIN` that may mean the hangar is an
+  attached, not carved, feature. Not checked against the actual mod files.
 - Dedicated local Blender 5.0.1 profile with NMSDK enabled:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-blender-profile`.
 - Existing Blender 4.5.14's Python now imports HGPAKtool and registers
@@ -42,7 +47,10 @@ steps in dependency order. Canonical branch: `claude/death-star-freighter-mod-it
    The descriptor and `METADATA/SIMULATION/SPACE/AISPACESHIPMANAGER.MBIN`
    are in `NMSARC.Precache.pak`; preserve the literal model ID
    `FREIGHTER_CAPTIAL`. See `FREIGHTER-SELECTION-FINDINGS.md` for exact
-   `_HULL_` choices and local `HANGARROOTA/B` transforms.
+   `_HULL_` choices and local `HANGARROOTA/B` transforms. Before
+   reverse-engineering this further, check `EXISTING-MOD-PRECEDENT-2026-09-26.md`
+   — a shipped mod claims an additive table on this exact file; inspecting
+   its real MBIN contents may answer this directly instead of guessing.
 4. **Complete:** Mothership's live resource and seed were read-only verified;
    see `SAVE-READONLY-FINDINGS-2026-09-25.md`. The current record references
    `CAPITALFREIGHTER_PROC.SCENE.MBIN`, but that does not prove custom
@@ -54,8 +62,11 @@ steps in dependency order. Canonical branch: `claude/death-star-freighter-mod-it
 6. **Original-mesh path verified:** a scratch sphere based on the donor's
    measured full-length envelope exports and re-imports. Stage 1 adds the
    dish and trench; Stage 2 adds uniform panel relief. Next establish the
-   actual docking approach and use it to design a clear trench opening. The
-   selection architecture is still unverified, so do not package or install.
+   actual docking approach and use it to design a clear trench opening.
+   Before assuming the hangar must be cut into the new shell, check whether
+   `HANGARA_EXTERIOR.SCENE.MBIN` (named in `EXISTING-MOD-PRECEDENT-2026-09-26.md`)
+   attaches at the existing locators instead. The selection architecture is
+   still unverified, so do not package or install.
 7. Before any game/save installation, make and verify a fresh backup and
    define rollback. Test docking, walking, exit, reload, summon/warp,
    freighter base behavior, and unchanged class/stats/crew. Keep each

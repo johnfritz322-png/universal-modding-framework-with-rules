@@ -97,6 +97,9 @@ the sibling Falcon Corvette project records for its own ships).
   evidence, read-only
 - `BLENDER-ROUNDTRIP-2026-09-25.md` — reproducible current-build scene
   import/export blocker
+- `EXISTING-MOD-PRECEDENT-2026-09-26.md` — HIGH CONFIDENCE `WebSearch` lead
+  on a shipped mod using the same hull-table mechanism; not yet checked
+  against the mod's real files
 - `WHATS-NEXT.md` — resume order and local paths
 - `tools/verify_nmsdk_load.py` — repeatable load and archive check
 - `HANDOFF.md` — completed work, remaining work, blockers, next step
@@ -147,7 +150,7 @@ Corvette project used for its Corvette core.
 |---|---|---|---|
 | Spherical Death Star exterior mesh | Scratch-only stage 2 passes export/re-import: sphere, concave off-axis dish, equatorial trench, and shallow panel relief | Hangar clearance and in-game behavior are absent | Establish docking approach, build a clear opening, then verify selection architecture before packaging |
 | Full recursive capital component import/export | NEEDS TESTING | Root control intentionally did not recursively import component scenes | Re-run against a complete recursive dependency closure before relying on component fidelity |
-| Personal-only additive hull selection | UNVERIFIED | Observed descriptor/model mapping does not establish custom seed registration | Trace target resource/seed and a verified working implementation |
+| Personal-only additive hull selection | UNVERIFIED | Observed descriptor/model mapping does not establish custom seed registration | Trace target resource/seed and a verified working implementation. A shipped-mod precedent (Nexus 2200) is a HIGH CONFIDENCE, unchecked lead — see `EXISTING-MOD-PRECEDENT-2026-09-26.md` |
 
 ## Risks
 - **Save corruption / lost freighter or progress**: mitigated by never
