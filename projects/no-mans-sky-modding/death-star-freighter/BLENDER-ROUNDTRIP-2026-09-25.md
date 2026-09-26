@@ -160,8 +160,9 @@ small centred aperture; it is retained as scratch QA evidence only.
 The generator is tracked as `tools/build_death_star_silhouette_stage3.py`.
 It was rerun from that tracked copy with the dedicated Blender 5.0.1 profile
 and produced the same geometry counts, both QA renders, and a passing direct
-NMSDK mesh-load check. Its output directory is intentionally an external
-scratch directory; do not commit its generated MBIN or render outputs.
+NMSDK mesh-load check via the tracked `tools/verify_exported_scene_mesh.py`.
+Its output directory is intentionally an external scratch directory; do not
+commit its generated MBIN or render outputs.
 
 This is a **visual alignment prototype only**. It uses the verified local
 approach grid to avoid a wholly arbitrary placement, but neither the active
