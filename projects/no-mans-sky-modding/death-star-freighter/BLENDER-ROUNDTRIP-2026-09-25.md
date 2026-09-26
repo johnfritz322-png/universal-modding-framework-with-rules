@@ -168,11 +168,11 @@ commit its generated MBIN or render outputs.
 
 `tools/pack_asset_only_archive.py` packages only the three generated Stage-3
 `CUSTOMMODELS` files with HGPAKtool's Windows compressor, then reopens the
-result to verify the expected entry count. The latest scratch run passed at
-118,096 bytes. This validates the local archive-writing path, **not** mod
-functionality: the archive contains no selection mapping, stock-scene
-override, collision, or runtime hangar integration and must not be installed
-as a Death Star mod.
+result, extracts its entries, and compares every extracted byte to its source
+with SHA-256. The latest scratch run passed at 118,096 bytes. This validates
+the local archive-writing path, **not** mod functionality: the archive
+contains no selection mapping, stock-scene override, collision, or runtime
+hangar integration and must not be installed as a Death Star mod.
 
 This is a **visual alignment prototype only**. It uses the verified local
 approach grid to avoid a wholly arbitrary placement, but neither the active
