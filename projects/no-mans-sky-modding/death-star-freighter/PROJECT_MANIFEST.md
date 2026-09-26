@@ -33,7 +33,7 @@
 | Blender | 5.0.1 for native extension; 4.5.14 registration also passes | Yes | **VERIFIED 2026-09-25** — fresh-process extension enable in dedicated 5.0.1 profile; matches SDK manifest >=5.0.0. See repair report for hashes. |
 | HGPAKtool | 1.1.3 | Yes (unpack tool) | **VERIFIED 2026-09-25** — extracted a copied `NMSARC.globals.pak` from Cosmos 7.04 |
 | MBINCompiler | reports `7.03.2.1` | Yes | **VERIFIED 2026-09-25** — passed a no-edit MBIN→MXML→MBIN→MXML round trip on `gcscratchpadglobals.global.mbin`; both MXML outputs SHA-256-identical |
-| NMSDK | `cosmos_fixes`, commit `548bfe1`; manifest `0.10.0-alpha14` | Yes | **VERIFIED for loading** — hgpaktool import repaired; enable/preferences/operators/unregister and archive access pass. Geometry export remains NEEDS TESTING. |
+| NMSDK | `cosmos_fixes` + local compatibility commit `2d8c239`; manifest `0.10.0-alpha14` | Yes | **VERIFIED for capital-root import/export** — isolated Blender 5.0.1 profile, current-game dependency closure, 113 imported objects, and scene/geometry export all pass. |
 | Python archive dependencies | hgpaktool 1.1.3; zstandard 0.23.0; lz4 4.4.5 in Blender 4.5 | Yes | See `NMSDK-REPAIR-2026-09-25.md` for installation scope and hashes; native 5.0.1 uses its extension wheel environment. |
 | Save editor | goatfungus NMSSaveEditor (or equivalent) | Only for the seed step | web search, not independently confirmed against this game version |
 
@@ -55,11 +55,11 @@
   freighter asset folder located (Step 5, partial); visual concept
   reference published as a Claude artifact and exported into this repo as
   `concept-reference.html` (see `README.md`).
-- Current follow-up: NMSDK dependency repair and fresh-process load checks
-  pass. Actual capital scene, descriptor and AI mapping found; see
-  `FREIGHTER-SELECTION-FINDINGS.md`.
-- Next milestone: establish owned-freighter resource/seed behavior and
-  minimal scene/geometry import/export — see `WHATS-NEXT.md`.
+- Current follow-up: NMSDK dependency repair and capital-root scene
+  import/export pass. Actual capital scene, descriptor and AI mapping found;
+  see `FREIGHTER-SELECTION-FINDINGS.md`.
+- Next milestone: measure the donor root and make one minimal original
+  exterior-shell probe — see `WHATS-NEXT.md`.
 - Review checkpoint branch: `codex/death-star-nmsdk-fix`, based on canonical
   commit `2a57866`; preserve newer canonical work during incorporation.
 
@@ -139,14 +139,14 @@ Corvette project used for its Corvette core.
 | Toolchain runs on Cosmos 7.04 (Blender launches, HGPAKtool extracts, MBINCompiler round-trips) | VERIFIED | Hashes + identical-SHA-256 round trip, see `TOOLCHAIN.md` Steps 2-4 | 2026-09-25 |
 | Capital scene/descriptor under `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/`; AI mapping distinguishes BIGGS as Corvette | VERIFIED for inspected data | `FREIGHTER-SELECTION-FINDINGS.md` | 2026-09-25 |
 | Mothership uses the capital-freighter scene and its current seed is known | VERIFIED — Primary, read-only | `SAVE-READONLY-FINDINGS-2026-09-25.md` | 2026-09-25 |
-| NMSDK current-build scene import/export baseline | VERIFIED for a complete toy-cube control after isolated `InstanceTransforms` compatibility patch; capital dependency closure remains untested | `BLENDER-ROUNDTRIP-2026-09-25.md` | 2026-09-25 |
+| NMSDK current-build capital-root scene import/export | VERIFIED for the actual capital root after isolated `InstanceTransforms` compatibility patch and read-only dependency closure; recursive referenced components remain untested | `BLENDER-ROUNDTRIP-2026-09-25.md` | 2026-09-25 |
 | NMSDK starts enabled in dedicated Blender 5.0.1 profile | VERIFIED for loading/archive access | `NMSDK-REPAIR-2026-09-25.md` | 2026-09-25 |
 
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
 | Spherical Death Star exterior mesh | Designed only | Not yet modeled | Verify donor bounds and model import/export |
-| NMSDK current-game geometry import/export | NEEDS TESTING | Loading tests do not exercise geometry | Minimal scene/geometry baseline in 5.0.1 profile |
+| Full recursive capital component import/export | NEEDS TESTING | Root control intentionally did not recursively import component scenes | Re-run against a complete recursive dependency closure before relying on component fidelity |
 | Personal-only additive hull selection | UNVERIFIED | Observed descriptor/model mapping does not establish custom seed registration | Trace target resource/seed and a verified working implementation |
 
 ## Risks

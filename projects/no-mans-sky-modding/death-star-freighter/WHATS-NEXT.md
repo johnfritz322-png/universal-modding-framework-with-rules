@@ -15,8 +15,8 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
   no-edit MBIN round trips.
 - `SAVE-READONLY-FINDINGS-2026-09-25.md`: the live owned-freighter resource
   and seed, verified without editing either current save.
-- `BLENDER-ROUNDTRIP-2026-09-25.md`: reproducible current-build import/export
-  failure; add-on loading is not yet geometry-toolchain validation.
+- `BLENDER-ROUNDTRIP-2026-09-25.md`: passing root-scene import/export control
+  for the actual capital freighter, plus its precise evidence boundary.
 - Dedicated local Blender 5.0.1 profile with NMSDK enabled:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-blender-profile`.
 - Existing Blender 4.5.14's Python now imports HGPAKtool and registers
@@ -45,13 +45,14 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    see `SAVE-READONLY-FINDINGS-2026-09-25.md`. The current record references
    `CAPITALFREIGHTER_PROC.SCENE.MBIN`, but that does not prove custom
    registration or personal-only selection.
-5. **Baseline verified:** a complete current-build toy-cube control now
-   imports and exports using the dedicated-profile NMSDK patch. Before
-   retrying the capital scene, extract its full referenced scene/material/
-   texture/geometry dependency closure; see `BLENDER-ROUNDTRIP-2026-09-25.md`.
-6. After selection and geometry gates pass, create the spherical exterior
-   with the specified dish, trench, and clear hangar approach. Measure the
-   donor's transformed bounds and docking route before final dimensions.
+5. **Capital root control verified:** the actual capital-freighter root scene
+   imports and exports with the dedicated-profile NMSDK patch and a read-only
+   current-game dependency closure. Its referenced component tree was not
+   recursively imported; see `BLENDER-ROUNDTRIP-2026-09-25.md`.
+6. Measure the donor root's transformed bounds and hangar/approach location,
+   then create one minimal original exterior-shell probe. Only after that
+   geometry gate and the still-unverified selection architecture pass, build
+   the specified sphere, dish, trench, and clear hangar approach.
 7. Before any game/save installation, make and verify a fresh backup and
    define rollback. Test docking, walking, exit, reload, summon/warp,
    freighter base behavior, and unchanged class/stats/crew. Keep each
@@ -73,4 +74,5 @@ game assets or saves. The user does not need to repeat setup when resuming.
 ## Highest verified state
 
 Tooling: add-on enables after restart and reads a current-build archive.
-Death Star mod: **Designed**. No Death Star mesh/package or in-game test yet.
+Death Star mod: **Designed; capital root geometry path verified.** No Death
+Star mesh/package or in-game test yet.

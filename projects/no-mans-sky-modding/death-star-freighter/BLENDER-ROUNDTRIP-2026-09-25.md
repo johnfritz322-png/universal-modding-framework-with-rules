@@ -62,10 +62,37 @@ This is **VERIFIED for the minimal current-build control**, not proof that the
 capital freighter imports or exports intact. The capital scene has a large
 referenced component tree that must be extracted as a dependency closure.
 
-## Next bounded investigation
+## Capital-freighter root control: PASSED
 
-Build a complete, read-only extracted dependency closure for the capital
-scene, including its referenced scenes, materials, textures, and geometry.
-Then repeat the same import/export control before modeling any Death Star
-geometry. Do not treat the small toy-cube pass as freighter boardability or
-full-capital compatibility proof.
+The same dedicated Blender 5.0.1 profile and rebuilt local extension were
+used against the actual owned-freighter resource:
+
+`MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN`.
+
+A read-only scratch closure was built from the installed Cosmos 7.04 archives:
+all `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/` files, plus the three DDS files
+referenced by the root `FREIGHTERPROC_MAT.MATERIAL.MBIN`. No game asset was
+copied into the repository or modified. With that closure, NMSDK imported 113
+objects and exported a scene, descriptor MXML, geometry MBIN, and geometry-data
+MBIN with exit code 0. The export log recorded the root geometry and 16 mesh
+objects; it did not report a missing material, missing reference, or exporter
+exception.
+
+The existing MBINCompiler `7.03.2.1` can emit an MXML representation of the
+exported scene but warns that its binary version is unrecognized. That warning
+does not invalidate the successful NMSDK export, but it means this older
+compiler is not a second binary-format validator for NMSDK's generated scene.
+
+## Evidence boundary and next work
+
+This is **VERIFIED for the actual capital-freighter root scene**, using a
+read-only dependency closure and the isolated compatibility patch. It is not
+proof of an installed mod, full recursive component-tree fidelity, collision,
+docking, or boardability. The importer was intentionally run without recursive
+reference importing.
+
+Geometry work may now begin against the build brief. First measure the donor
+root's transformed bounds and the hangar/approach location, then make one
+minimal original exterior-shell probe. Keep the stock core untouched and do
+not package or install it until the required backup and one-variable in-game
+test plan exists.
