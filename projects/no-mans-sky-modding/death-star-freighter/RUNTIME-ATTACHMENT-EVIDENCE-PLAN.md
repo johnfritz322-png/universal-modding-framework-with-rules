@@ -58,12 +58,18 @@ not clear this gate.
 
 ## Current status
 
-Two runtime exterior screenshots were captured on 2026-09-25 with Mothership
-summoned. Together they visibly confirm the expected stock dorsal spine,
+Three runtime screenshots were captured on 2026-09-25 with Mothership
+summoned. The exterior frames visibly confirm the expected stock dorsal spine,
 bridge area, tall fin structures, long wedge envelope, and stern engine bank,
-consistent with the verified industrial capital donor. The hangar mouth is not
-visible in either frame, and the screenshots have no transform, module-name,
-collision, or docking data. They therefore do not clear the attachment gate.
+consistent with the verified industrial capital donor. A third, head-on frame
+shows the game displaying **“Initiating landing sequence”** while the player
+ship is aligned with the visible forward bay. This verifies that this visible
+bay lies on a live docking approach and is the correct visual target for a
+future shell opening.
+
+The screenshots still provide no root transform, active module name, collision
+shape, or approach-point coordinates. They therefore do not clear the exact
+attachment/clearance gate.
 
 Consequently, selection mapping, docking, collision, interior transition, and
 an installable hangar opening remain unverified.
