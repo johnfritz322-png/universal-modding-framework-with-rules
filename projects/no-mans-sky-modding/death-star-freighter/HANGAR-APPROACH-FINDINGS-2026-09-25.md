@@ -22,6 +22,12 @@ assets. No mod asset, package, game file, or save was changed.
   `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/ACCESSORIES/HANGARA.SCENE.MBIN`.
   This verifies that `HANGARA` is an engine-configured freighter hangar
   module, rather than an unused similarly named asset.
+- The same current-build globals file declares `HangarFilename` as
+  `MODELS/COMMON/SPACECRAFT/COMMONPARTS/HANGARINTERIORPARTS/HANGAR.SCENE.MBIN`.
+  That separately extracted scene contains `Approach1a` through `Approach3c`,
+  nine `Dock*` references, three animated hangar-door references, and explicit
+  collision nodes. It is therefore the current configured hangar scene, with
+  a larger runtime/collision surface than the legacy module.
 
 ## Unresolved attachment boundary
 
@@ -31,7 +37,7 @@ found the `HANGARROOT*` names only in capital root scenes, while the approach
 names occur inside the engine-configured hangar module. The bridge between
 those roots and the runtime-selected hangar module is therefore **UNVERIFIED**.
 
-The module's local approach/docking data is useful evidence that a hangar
+The modules' local approach/docking data is useful evidence that a hangar
 opening has a nontrivial orientation and clearance requirement. It is not
 enough to derive a world-space opening in the Death Star shell.
 
