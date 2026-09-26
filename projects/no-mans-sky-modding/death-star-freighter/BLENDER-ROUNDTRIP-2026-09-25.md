@@ -152,7 +152,10 @@ The stage-3 shell rotates the trench plane so the measured accumulated
 `HANGARROOTA` direction lies on its equator, then removes four local shell
 quads around that projected direction. The direction is
 `(-0.000600, -0.977042, 0.213045)` from the measured donor bounding-box centre.
-The generated 4,604-face mesh exported and loaded back through NMSDK.
+The generated 4,604-face / 4,703-vertex mesh exported without disconnected
+vertex warnings and loaded back through NMSDK. A neutral Blender workbench
+render of the generated mesh also confirms the visible sphere, trench, and
+small centred aperture; it is retained as scratch QA evidence only.
 
 This is a **visual alignment prototype only**. It uses the verified local
 approach grid to avoid a wholly arbitrary placement, but neither the active
