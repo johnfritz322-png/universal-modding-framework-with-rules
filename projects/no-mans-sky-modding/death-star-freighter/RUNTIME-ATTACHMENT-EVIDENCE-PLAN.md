@@ -71,5 +71,12 @@ The screenshots still provide no root transform, active module name, collision
 shape, or approach-point coordinates. They therefore do not clear the exact
 attachment/clearance gate.
 
+A fourth runtime frame was captured from inside the docked freighter. It
+visibly confirms the stock hangar interior is active and intact: a centered
+landing pad, symmetric side structures, and the expected multi-bay interior.
+This verifies the functional interior that any exterior shell must preserve;
+it does not provide an exterior doorway transform or a safe shell-clearance
+measurement.
+
 Consequently, selection mapping, docking, collision, interior transition, and
 an installable hangar opening remain unverified.
