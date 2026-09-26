@@ -17,14 +17,19 @@ assets. No mod asset, package, game file, or save was changed.
   latter has local transform `(0, 0.821991, -127.452271)` in the hangar scene.
 - `REFHangarDoorway` is locally translated `(0, 0, -39.636480)` with a
   `180°` Y rotation.
+- Freshly extracted `GCAISPACESHIPGLOBALS.GLOBAL.MBIN` explicitly declares
+  `LegacyHangarFilename` as
+  `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/ACCESSORIES/HANGARA.SCENE.MBIN`.
+  This verifies that `HANGARA` is an engine-configured freighter hangar
+  module, rather than an unused similarly named asset.
 
 ## Unresolved attachment boundary
 
 The inspected capital root scene and descriptor do not directly contain a
 `HANGARA` reference path. A binary search of the extracted industrial assets
 found the `HANGARROOT*` names only in capital root scenes, while the approach
-names occur inside the hangar module. The bridge between those roots and the
-runtime-selected hangar module is therefore **UNVERIFIED**.
+names occur inside the engine-configured hangar module. The bridge between
+those roots and the runtime-selected hangar module is therefore **UNVERIFIED**.
 
 The module's local approach/docking data is useful evidence that a hangar
 opening has a nontrivial orientation and clearance requirement. It is not
