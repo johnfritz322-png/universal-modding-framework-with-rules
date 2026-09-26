@@ -145,7 +145,7 @@ Corvette project used for its Corvette core.
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Spherical Death Star exterior mesh | Scratch-only low-poly envelope probe passes export/re-import | Dish, trench, hangar clearance, and in-game behavior are absent | Build those features as separate geometry steps, then verify selection architecture before packaging |
+| Spherical Death Star exterior mesh | Scratch-only stage 1 passes export/re-import: sphere, concave off-axis dish, and equatorial trench | Paneling, hangar clearance, and in-game behavior are absent | Build those features as separate geometry steps, then verify selection architecture before packaging |
 | Full recursive capital component import/export | NEEDS TESTING | Root control intentionally did not recursively import component scenes | Re-run against a complete recursive dependency closure before relying on component fidelity |
 | Personal-only additive hull selection | UNVERIFIED | Observed descriptor/model mapping does not establish custom seed registration | Trace target resource/seed and a verified working implementation |
 

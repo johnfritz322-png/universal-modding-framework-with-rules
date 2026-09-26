@@ -120,3 +120,16 @@ NMSDK successfully. This validates the original-mesh export/re-import path.
 The probe has no dish, trench, hangar opening, collision, package, or game
 installation; it remains scratch-only. The local NMSDK commits have not been
 pushed upstream.
+
+## Silhouette stage 1: PASSED, scratch-only
+
+The first designed exterior stage is now an original `48 × 24` sphere at the
+measured `4262.402039`-unit diameter. It has a `96`-unit continuous equatorial
+recess and a `330`-unit concave dish whose normal is `(-0.359336, -0.788543,
+0.499078)`: deliberately off-axis and outside the equatorial band. The export
+contains 1,152 faces and 6,912 triangle indices. Its generated scene was
+loaded back through NMSDK successfully, including the mesh stream metadata.
+
+This establishes only the first two visual forms (sphere, dish, trench). It
+does not yet provide surface paneling, a safe hangar opening, collision,
+selection-table registration, a package, or an in-game test.
