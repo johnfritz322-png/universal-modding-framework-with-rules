@@ -58,12 +58,12 @@ not clear this gate.
 
 ## Current status
 
-One runtime exterior screenshot was captured on 2026-09-25 with Mothership
-summoned. It visibly confirms the expected stock dorsal spine, bridge area,
-and tall fin structures, consistent with the verified industrial capital
-donor. The hangar mouth is not visible in that frame, and the screenshot has
-no transform, module-name, collision, or docking data. It therefore does not
-clear the attachment gate.
+Two runtime exterior screenshots were captured on 2026-09-25 with Mothership
+summoned. Together they visibly confirm the expected stock dorsal spine,
+bridge area, tall fin structures, long wedge envelope, and stern engine bank,
+consistent with the verified industrial capital donor. The hangar mouth is not
+visible in either frame, and the screenshots have no transform, module-name,
+collision, or docking data. They therefore do not clear the attachment gate.
 
 Consequently, selection mapping, docking, collision, interior transition, and
 an installable hangar opening remain unverified.
