@@ -97,6 +97,9 @@ projects/no-mans-sky-modding/death-star-freighter/
 ├── TOOLCHAIN.md               (environment + re-verification checklist)
 ├── HANDOFF.md                 (done / remaining / blockers / next step)
 ├── PROJECT_MANIFEST.md        (environment, dependencies, risks, tests, rollback)
+├── tools/
+│   ├── build_death_star_silhouette_stage3.py (scratch geometry + QA renders)
+│   └── verify_exported_scene_mesh.py (direct NMSDK mesh-stream verifier)
 └── concept-reference.html     (exported visual concept page)
 ```
 
