@@ -52,8 +52,8 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
 6. **Original-mesh path verified:** a scratch sphere based on the donor's
    measured full-length envelope exports and re-imports. Stage 1 adds the
    dish and trench; Stage 2 adds uniform panel relief. Next establish the
-   actual docking approach and use it to design a clear trench opening; see
-   `HANGAR-APPROACH-FINDINGS-2026-09-25.md`. The selection architecture is
+   live root-to-hangar transform. Stage 3 is a visual-only aperture prototype;
+   see `HANGAR-APPROACH-FINDINGS-2026-09-25.md`. The selection architecture is
    still unverified, so do not package or install.
 7. Before any game/save installation, make and verify a fresh backup and
    define rollback. Test docking, walking, exit, reload, summon/warp,

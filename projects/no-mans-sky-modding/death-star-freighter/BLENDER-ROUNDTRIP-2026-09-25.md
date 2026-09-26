@@ -145,3 +145,16 @@ greebling or a substitute for a proper material/detail pass.
 The remaining geometry gate is the hangar opening. Locator coordinates alone
 do not establish a safe docking approach, so no opening has been guessed into
 the shell.
+
+## Silhouette stage 3: visual aperture prototype, scratch-only
+
+The stage-3 shell rotates the trench plane so the measured accumulated
+`HANGARROOTA` direction lies on its equator, then removes four local shell
+quads around that projected direction. The direction is
+`(-0.000600, -0.977042, 0.213045)` from the measured donor bounding-box centre.
+The generated 4,604-face mesh exported and loaded back through NMSDK.
+
+This is a **visual alignment prototype only**. It uses the verified local
+approach grid to avoid a wholly arbitrary placement, but neither the active
+capital root nor the module's live attachment transform has been verified.
+It must not be packaged, installed, or represented as dockable.
