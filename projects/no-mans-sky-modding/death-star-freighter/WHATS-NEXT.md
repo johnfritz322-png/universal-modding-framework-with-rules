@@ -15,6 +15,8 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
   no-edit MBIN round trips.
 - `SAVE-READONLY-FINDINGS-2026-09-25.md`: the live owned-freighter resource
   and seed, verified without editing either current save.
+- `BLENDER-ROUNDTRIP-2026-09-25.md`: reproducible current-build import/export
+  failure; add-on loading is not yet geometry-toolchain validation.
 - Dedicated local Blender 5.0.1 profile with NMSDK enabled:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-blender-profile`.
 - Existing Blender 4.5.14's Python now imports HGPAKtool and registers
@@ -43,9 +45,10 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    see `SAVE-READONLY-FINDINGS-2026-09-25.md`. The current record references
    `CAPITALFREIGHTER_PROC.SCENE.MBIN`, but that does not prove custom
    registration or personal-only selection.
-5. Prove a minimal current-build scene import/export in Blender, preserving
-   stock functional nodes and transforms. Add-on loading and one globals
-   round-trip do not establish working geometry export or boardability.
+5. **BLOCKED:** a minimal current-build scene import/export fails in NMSDK's
+   material-sampler path. Investigate and validate a focused correction using
+   the toy-cube control before retrying the capital scene; see
+   `BLENDER-ROUNDTRIP-2026-09-25.md`.
 6. After selection and geometry gates pass, create the spherical exterior
    with the specified dish, trench, and clear hangar approach. Measure the
    donor's transformed bounds and docking route before final dimensions.

@@ -95,6 +95,8 @@ the sibling Falcon Corvette project records for its own ships).
 - `FREIGHTER-SELECTION-FINDINGS.md` — current game model/descriptor evidence
 - `SAVE-READONLY-FINDINGS-2026-09-25.md` — live Mothership resource and seed
   evidence, read-only
+- `BLENDER-ROUNDTRIP-2026-09-25.md` — reproducible current-build scene
+  import/export blocker
 - `WHATS-NEXT.md` — resume order and local paths
 - `tools/verify_nmsdk_load.py` — repeatable load and archive check
 - `HANDOFF.md` — completed work, remaining work, blockers, next step
@@ -137,6 +139,7 @@ Corvette project used for its Corvette core.
 | Toolchain runs on Cosmos 7.04 (Blender launches, HGPAKtool extracts, MBINCompiler round-trips) | VERIFIED | Hashes + identical-SHA-256 round trip, see `TOOLCHAIN.md` Steps 2-4 | 2026-09-25 |
 | Capital scene/descriptor under `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/`; AI mapping distinguishes BIGGS as Corvette | VERIFIED for inspected data | `FREIGHTER-SELECTION-FINDINGS.md` | 2026-09-25 |
 | Mothership uses the capital-freighter scene and its current seed is known | VERIFIED — Primary, read-only | `SAVE-READONLY-FINDINGS-2026-09-25.md` | 2026-09-25 |
+| NMSDK current-build scene import/export | BLOCKED — material sampler import fails, then exporter finds no material slot | `BLENDER-ROUNDTRIP-2026-09-25.md` | 2026-09-25 |
 | NMSDK starts enabled in dedicated Blender 5.0.1 profile | VERIFIED for loading/archive access | `NMSDK-REPAIR-2026-09-25.md` | 2026-09-25 |
 
 ## Experimental / unverified features
