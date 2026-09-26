@@ -99,7 +99,8 @@ projects/no-mans-sky-modding/death-star-freighter/
 ├── PROJECT_MANIFEST.md        (environment, dependencies, risks, tests, rollback)
 ├── tools/
 │   ├── build_death_star_silhouette_stage3.py (scratch geometry + QA renders)
-│   └── verify_exported_scene_mesh.py (direct NMSDK mesh-stream verifier)
+│   ├── verify_exported_scene_mesh.py (direct NMSDK mesh-stream verifier)
+│   └── pack_asset_only_archive.py (byte-verified asset archive validator)
 └── concept-reference.html     (exported visual concept page)
 ```
 
