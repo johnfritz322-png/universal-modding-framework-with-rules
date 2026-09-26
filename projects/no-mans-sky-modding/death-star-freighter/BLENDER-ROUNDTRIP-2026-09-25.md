@@ -96,3 +96,27 @@ root's transformed bounds and the hangar/approach location, then make one
 minimal original exterior-shell probe. Keep the stock core untouched and do
 not package or install it until the required backup and one-variable in-game
 test plan exists.
+
+## Original shell probe: PASSED, scratch-only
+
+The donor root was measured at `1999.885254 × 4262.402039 × 1765.985352`
+units. Its largest dimension establishes the first shell-probe diameter:
+`4262.402039` units. The root also exposes `HANGARROOTA` at
+`(0, 295.910309, 226.413742)` and `HANGARROOTB` at
+`(0, 184.549149, 553.673706)`; those are measurement anchors, not proof of a
+flight-safe opening.
+
+An original 32-segment, 512-face spherical shell was exported beneath a new
+top-level NMSDK Reference root using the stock capital material path. The
+first generated asset failed to re-import because two exporter errors were
+found and repaired locally in the NMSDK checkout:
+
+- `19f467a` retains regular mesh index streams instead of discarding them.
+- `390ef27` records the post-triangulation index list in stream metadata.
+
+After rebuilding only the dedicated profile extension, the shell exported as
+a scene plus geometry files and its generated scene's mesh loaded back through
+NMSDK successfully. This validates the original-mesh export/re-import path.
+The probe has no dish, trench, hangar opening, collision, package, or game
+installation; it remains scratch-only. The local NMSDK commits have not been
+pushed upstream.

@@ -33,7 +33,7 @@
 | Blender | 5.0.1 for native extension; 4.5.14 registration also passes | Yes | **VERIFIED 2026-09-25** — fresh-process extension enable in dedicated 5.0.1 profile; matches SDK manifest >=5.0.0. See repair report for hashes. |
 | HGPAKtool | 1.1.3 | Yes (unpack tool) | **VERIFIED 2026-09-25** — extracted a copied `NMSARC.globals.pak` from Cosmos 7.04 |
 | MBINCompiler | reports `7.03.2.1` | Yes | **VERIFIED 2026-09-25** — passed a no-edit MBIN→MXML→MBIN→MXML round trip on `gcscratchpadglobals.global.mbin`; both MXML outputs SHA-256-identical |
-| NMSDK | `cosmos_fixes` + local compatibility commit `2d8c239`; manifest `0.10.0-alpha14` | Yes | **VERIFIED for capital-root import/export** — isolated Blender 5.0.1 profile, current-game dependency closure, 113 imported objects, and scene/geometry export all pass. |
+| NMSDK | `cosmos_fixes` + local compatibility commits `2d8c239`, `19f467a`, `390ef27`; manifest `0.10.0-alpha14` | Yes | **VERIFIED for capital-root and original-shell import/export** — isolated Blender 5.0.1 profile, current-game dependency closure, and a generated mesh re-import all pass. |
 | Python archive dependencies | hgpaktool 1.1.3; zstandard 0.23.0; lz4 4.4.5 in Blender 4.5 | Yes | See `NMSDK-REPAIR-2026-09-25.md` for installation scope and hashes; native 5.0.1 uses its extension wheel environment. |
 | Save editor | goatfungus NMSSaveEditor (or equivalent) | Only for the seed step | web search, not independently confirmed against this game version |
 
@@ -145,7 +145,7 @@ Corvette project used for its Corvette core.
 ## Experimental / unverified features
 | Feature | Status | Main uncertainty | Next verification step |
 |---|---|---|---|
-| Spherical Death Star exterior mesh | Designed only | Not yet modeled | Verify donor bounds and model import/export |
+| Spherical Death Star exterior mesh | Scratch-only low-poly envelope probe passes export/re-import | Dish, trench, hangar clearance, and in-game behavior are absent | Build those features as separate geometry steps, then verify selection architecture before packaging |
 | Full recursive capital component import/export | NEEDS TESTING | Root control intentionally did not recursively import component scenes | Re-run against a complete recursive dependency closure before relying on component fidelity |
 | Personal-only additive hull selection | UNVERIFIED | Observed descriptor/model mapping does not establish custom seed registration | Trace target resource/seed and a verified working implementation |
 

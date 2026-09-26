@@ -49,10 +49,11 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    imports and exports with the dedicated-profile NMSDK patch and a read-only
    current-game dependency closure. Its referenced component tree was not
    recursively imported; see `BLENDER-ROUNDTRIP-2026-09-25.md`.
-6. Measure the donor root's transformed bounds and hangar/approach location,
-   then create one minimal original exterior-shell probe. Only after that
-   geometry gate and the still-unverified selection architecture pass, build
-   the specified sphere, dish, trench, and clear hangar approach.
+6. **Original-mesh path verified:** a scratch sphere based on the donor's
+   measured full-length envelope exports and re-imports. Use the recorded
+   hangar anchors to design a clear trench opening, then build the specified
+   sphere, dish, and trench as separate, reversible geometry steps. The
+   selection architecture is still unverified, so do not package or install.
 7. Before any game/save installation, make and verify a fresh backup and
    define rollback. Test docking, walking, exit, reload, summon/warp,
    freighter base behavior, and unchanged class/stats/crew. Keep each
