@@ -34,6 +34,11 @@ assets. No mod asset, package, game file, or save was changed.
   `DockingAttractRange=3003`, `DockingAttractConeAngle=90`, and
   `DockingAttractFacingAngle=10`. It also declares `HANGARDOOR` and
   `RotateToDock=true`.
+- The current hangar's approach nodes form a local three-column grid:
+  `Approach1*` at X `-45.3307762`, `Approach2*` at X `0`, and `Approach3*` at
+  X `45.3307762`; all are at Y `0.302928` and Z between `-74.875460` and
+  `-77.136600`. This confirms a minimum local doorway/approach span of
+  `90.6615524` units before adding clearance.
 
 ## Unresolved attachment boundary
 
