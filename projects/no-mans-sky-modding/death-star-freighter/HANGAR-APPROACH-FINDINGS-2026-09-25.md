@@ -28,6 +28,12 @@ assets. No mod asset, package, game file, or save was changed.
   nine `Dock*` references, three animated hangar-door references, and explicit
   collision nodes. It is therefore the current configured hangar scene, with
   a larger runtime/collision surface than the legacy module.
+- The freshly extracted `HANGARA.ENTITY.MBIN` supplies an actual
+  `GcOutpostComponentData` docking configuration: `ApproachRange=45`,
+  `ApproachAngle=80`, `PlayerAutoLandRange=280`,
+  `DockingAttractRange=3003`, `DockingAttractConeAngle=90`, and
+  `DockingAttractFacingAngle=10`. It also declares `HANGARDOOR` and
+  `RotateToDock=true`.
 
 ## Unresolved attachment boundary
 
@@ -38,8 +44,9 @@ names occur inside the engine-configured hangar module. The bridge between
 those roots and the runtime-selected hangar module is therefore **UNVERIFIED**.
 
 The modules' local approach/docking data is useful evidence that a hangar
-opening has a nontrivial orientation and clearance requirement. It is not
-enough to derive a world-space opening in the Death Star shell.
+opening has a nontrivial orientation and clearance requirement. The entity
+values establish approach/docking tolerances, but they are not enough to derive
+a world-space opening in the Death Star shell.
 
 ## Consequence
 
