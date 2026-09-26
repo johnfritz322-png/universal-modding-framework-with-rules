@@ -1,8 +1,9 @@
 # Resume here — Death Star Freighter
 
 Checkpoint: 2026-09-25 UTC. NMSDK dependency repair is complete.
-Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
-`claude/death-star-freighter-mod-iteration` at `2a57866`.
+Review branch: `codex/death-star-freighter-progress-20260925`, preserving the
+canonical checkpoint `2a57866` plus subsequent verified progress. Do not
+force-push or reset the concurrently changing canonical branch.
 
 ## What is saved
 
@@ -17,6 +18,11 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
   and seed, verified without editing either current save.
 - `BLENDER-ROUNDTRIP-2026-09-25.md`: passing root-scene import/export control
   for the actual capital freighter, plus its precise evidence boundary.
+- `HANGAR-APPROACH-FINDINGS-2026-09-25.md`: verified current and legacy
+  hangar assets, approach-grid dimensions, and the unresolved attachment
+  boundary.
+- `RUNTIME-ATTACHMENT-EVIDENCE-PLAN.md`: safe, one-variable runtime evidence
+  procedure for clearing that boundary without modifying the save.
 - Dedicated local Blender 5.0.1 profile with NMSDK enabled:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-blender-profile`.
 - Existing Blender 4.5.14's Python now imports HGPAKtool and registers
@@ -26,9 +32,9 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
 
 ## Next actions, in order
 
-1. Fetch this review branch and incorporate it into the canonical branch
-   after reviewing the diff. It includes all canonical work through `2a57866`;
-   preserve any newer Claude commits. Do not reset to an older audit branch.
+1. Fetch the review branch and reconcile it with the canonical branch only
+   after reviewing both histories. It preserves the `2a57866` checkpoint;
+   preserve any newer concurrent work and do not reset either branch.
 2. Use the dedicated Blender 5.0.1 profile and the startup check documented
    in `NMSDK-REPAIR-2026-09-25.md`. No further dependency repair is currently
    required for the tested loading/archive operations.
@@ -51,9 +57,10 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    recursively imported; see `BLENDER-ROUNDTRIP-2026-09-25.md`.
 6. **Original-mesh path verified:** a scratch sphere based on the donor's
    measured full-length envelope exports and re-imports. Stage 1 adds the
-   dish and trench; Stage 2 adds uniform panel relief. Next establish the
-   live root-to-hangar transform. Stage 3 is a visual-only aperture prototype;
-   see `HANGAR-APPROACH-FINDINGS-2026-09-25.md`. The selection architecture is
+   dish and trench; Stage 2 adds uniform panel relief; Stage 3 adds a
+   measured-direction visual aperture. Next establish the live root-to-hangar
+   transform using `RUNTIME-ATTACHMENT-EVIDENCE-PLAN.md`; also see
+   `HANGAR-APPROACH-FINDINGS-2026-09-25.md`. The selection architecture is
    still unverified, so do not package or install.
 7. Before any game/save installation, make and verify a fresh backup and
    define rollback. Test docking, walking, exit, reload, summon/warp,
