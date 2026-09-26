@@ -5,7 +5,7 @@ Recorded 2026-09-25, America/Denver. This test used the dedicated Blender
 `NMSDK-REPAIR-2026-09-25.md`. It wrote only to scratch output directories;
 no game archive, mod package, save, or repository source was modified.
 
-## Result: BLOCKED — reproducible importer/exporter failure
+## Initial result: BLOCKED — reproducible importer/exporter failure
 
 Two current-build controls were attempted with `NMSDK 0.10.0-alpha14` from
 the `cosmos_fixes` checkout:
@@ -42,9 +42,30 @@ The extension loads, registers, and reads a current-build archive; that is
 still VERIFIED. Scene import/export is **BLOCKED**. No partially generated
 output was treated as a pass, and no Death Star geometry work may begin.
 
+## Root cause and recovery
+
+The initial toy-cube extraction omitted the material-referenced DDS textures.
+With the complete current-build toy-cube scene, geometry, material, entity,
+and texture closure extracted into a scratch `MODELS`/`TEXTURES` tree, import
+completed. Export then reached a separate NMSDK source mismatch:
+`TkSceneNodeData` now requires `InstanceTransforms`, but the exporter did not
+provide it.
+
+Dedicated local NMSDK branch `codex/cosmos-instance-transforms`, commit
+`2d8c239`, supplies an empty `InstanceTransforms` list for non-instanced
+exported nodes. The rebuilt extension was installed only in the dedicated
+Blender profile. The toy-cube control then passed current-build
+scene → Blender → scene/geometry export, producing a scene plus both geometry
+files with exit code 0.
+
+This is **VERIFIED for the minimal current-build control**, not proof that the
+capital freighter imports or exports intact. The capital scene has a large
+referenced component tree that must be extracted as a dependency closure.
+
 ## Next bounded investigation
 
-Inspect the current NMSDK material-sampler handling and compare it with a
-known passing bundled fixture before any source patch or workaround. A fix
-must be validated with both the toy-cube control and the capital scene's full
-dependency tree. Do not lower this gate merely because operators register.
+Build a complete, read-only extracted dependency closure for the capital
+scene, including its referenced scenes, materials, textures, and geometry.
+Then repeat the same import/export control before modeling any Death Star
+geometry. Do not treat the small toy-cube pass as freighter boardability or
+full-capital compatibility proof.

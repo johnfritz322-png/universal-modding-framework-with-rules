@@ -45,10 +45,10 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    see `SAVE-READONLY-FINDINGS-2026-09-25.md`. The current record references
    `CAPITALFREIGHTER_PROC.SCENE.MBIN`, but that does not prove custom
    registration or personal-only selection.
-5. **BLOCKED:** a minimal current-build scene import/export fails in NMSDK's
-   material-sampler path. Investigate and validate a focused correction using
-   the toy-cube control before retrying the capital scene; see
-   `BLENDER-ROUNDTRIP-2026-09-25.md`.
+5. **Baseline verified:** a complete current-build toy-cube control now
+   imports and exports using the dedicated-profile NMSDK patch. Before
+   retrying the capital scene, extract its full referenced scene/material/
+   texture/geometry dependency closure; see `BLENDER-ROUNDTRIP-2026-09-25.md`.
 6. After selection and geometry gates pass, create the spherical exterior
    with the specified dish, trench, and clear hangar approach. Measure the
    donor's transformed bounds and docking route before final dimensions.

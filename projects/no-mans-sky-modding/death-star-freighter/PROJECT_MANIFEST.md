@@ -139,7 +139,7 @@ Corvette project used for its Corvette core.
 | Toolchain runs on Cosmos 7.04 (Blender launches, HGPAKtool extracts, MBINCompiler round-trips) | VERIFIED | Hashes + identical-SHA-256 round trip, see `TOOLCHAIN.md` Steps 2-4 | 2026-09-25 |
 | Capital scene/descriptor under `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/`; AI mapping distinguishes BIGGS as Corvette | VERIFIED for inspected data | `FREIGHTER-SELECTION-FINDINGS.md` | 2026-09-25 |
 | Mothership uses the capital-freighter scene and its current seed is known | VERIFIED — Primary, read-only | `SAVE-READONLY-FINDINGS-2026-09-25.md` | 2026-09-25 |
-| NMSDK current-build scene import/export | BLOCKED — material sampler import fails, then exporter finds no material slot | `BLENDER-ROUNDTRIP-2026-09-25.md` | 2026-09-25 |
+| NMSDK current-build scene import/export baseline | VERIFIED for a complete toy-cube control after isolated `InstanceTransforms` compatibility patch; capital dependency closure remains untested | `BLENDER-ROUNDTRIP-2026-09-25.md` | 2026-09-25 |
 | NMSDK starts enabled in dedicated Blender 5.0.1 profile | VERIFIED for loading/archive access | `NMSDK-REPAIR-2026-09-25.md` | 2026-09-25 |
 
 ## Experimental / unverified features
