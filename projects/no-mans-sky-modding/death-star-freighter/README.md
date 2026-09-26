@@ -8,8 +8,10 @@ equatorial trench (the stock hangar mouth lives inside this trench, not
 under the dish), and dense surface paneling — while leaving the freighter's
 class, stats, name, crew, hangar, bridge, and interior completely untouched.
 
-This is a **design/research project only** as of 2026-09-25. Nothing has
-been built, compiled, installed, or tested in game.
+This is a **design/research and scratch-geometry project** as of 2026-09-25.
+An original spherical exterior prototype has exported and re-imported through
+NMSDK, but no mod package has been built or installed and nothing has been
+tested in game.
 
 ## Current status
 **Latest checkpoint:** start with [WHATS-NEXT.md](WHATS-NEXT.md).
@@ -19,9 +21,9 @@ descriptor have been located. Evidence and limits are in
 [NMSDK-REPAIR-2026-09-25.md](NMSDK-REPAIR-2026-09-25.md) and
 [FREIGHTER-SELECTION-FINDINGS.md](FREIGHTER-SELECTION-FINDINGS.md).
 
-**Designed / Researched.** No game file, save, or mod package has been
-touched. See `HANDOFF.md` for the precise breakdown of what's done, what's
-open, and the exact next step. In short:
+**Designed / scratch geometry verified.** No game file, save, or mod package
+has been touched. See `WHATS-NEXT.md` for the precise breakdown of what's
+done, what's open, and the exact next step. In short:
 
 - Visual design (the sphere, dish, trench, paneling, hangar-in-trench
   placement, hull-envelope scaling rule) is fully worked out —
@@ -36,15 +38,20 @@ open, and the exact next step. In short:
   `Mothership`, S-class, a Venator-family wedge hull — `PROJECT_MANIFEST.md`
   → "Target freighter".
 - Toolchain loading and specific file round trips have passed —
-  `TOOLCHAIN.md`. Custom mesh export and in-game behavior still need testing.
+  `TOOLCHAIN.md`. An original stage-3 sphere/dish/trench/aperture prototype
+  exports and re-imports; its aperture is visual-only because the live
+  root-to-hangar transform remains unverified. See
+  `BLENDER-ROUNDTRIP-2026-09-25.md` and
+  `RUNTIME-ATTACHMENT-EVIDENCE-PLAN.md`.
 
 ## How to continue
 1. Read `WHATS-NEXT.md` first — it has the ordered resume steps.
 2. Run the checklist in `TOOLCHAIN.md` on the machine that has No Man's Sky
    installed. Completed local checks are linked above; report new
    results back into this project's docs.
-3. Verify how `Mothership`'s resource/seed selects its model, then prove a
-   minimal current-build mesh import/export before building the sphere.
+3. Verify how `Mothership`'s resource/seed selects its model, then establish
+   the active root-to-hangar runtime transform before packaging the already
+   passing scratch sphere.
 4. Keep every claim honestly labelled — VERIFIED, HIGH CONFIDENCE,
    UNVERIFIED, or NEEDS TESTING — and never call a design "implemented" or
    "tested" without direct evidence, per this framework's `AGENTS.md`.

@@ -1,9 +1,12 @@
 # S-Class Death Star Freighter — build brief
 
 ## Status
-**DESIGN / RESEARCH.** Nothing built, compiled, or installed. No game file or
-save touched. See `FEASIBILITY.md` for the technical gate
-list this brief depends on, and `PROJECT_MANIFEST.md` for the tracked state.
+**DESIGN / RESEARCH; scratch geometry prototype verified.** An original
+sphere/dish/trench/aperture mesh has exported and re-imported through NMSDK,
+but nothing has been packaged, installed, or tested in game. No game file or
+save has been touched. See `FEASIBILITY.md` for the technical gates this brief
+depends on, `PROJECT_MANIFEST.md` for tracked state, and
+`RUNTIME-ATTACHMENT-EVIDENCE-PLAN.md` for the remaining hangar gate.
 
 A visual concept reference for this brief (silhouette schematic, the five
 non-negotiables, and how the sphere envelope has to fit around
