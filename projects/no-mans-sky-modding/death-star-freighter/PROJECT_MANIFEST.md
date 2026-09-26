@@ -93,6 +93,8 @@ the sibling Falcon Corvette project records for its own ships).
 - `TOOLCHAIN-RESULTS-2026-09-25.md` — Codex's raw toolchain-check report
 - `NMSDK-REPAIR-2026-09-25.md` — dependency repair and startup evidence
 - `FREIGHTER-SELECTION-FINDINGS.md` — current game model/descriptor evidence
+- `HANGAR-APPROACH-FINDINGS-2026-09-25.md` — stock hangar-module and approach
+  evidence; runtime attachment remains unverified
 - `SAVE-READONLY-FINDINGS-2026-09-25.md` — live Mothership resource and seed
   evidence, read-only
 - `BLENDER-ROUNDTRIP-2026-09-25.md` — reproducible current-build scene
