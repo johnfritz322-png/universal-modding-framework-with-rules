@@ -13,6 +13,8 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
 - `FREIGHTER-SELECTION-FINDINGS.md`: confirmed capital scene/descriptor,
   AI model mapping, hangar locators, file hashes and two additional passing
   no-edit MBIN round trips.
+- `SAVE-READONLY-FINDINGS-2026-09-25.md`: the live owned-freighter resource
+  and seed, verified without editing either current save.
 - Dedicated local Blender 5.0.1 profile with NMSDK enabled:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-blender-profile`.
 - Existing Blender 4.5.14's Python now imports HGPAKtool and registers
@@ -37,9 +39,10 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    are in `NMSARC.Precache.pak`; preserve the literal model ID
    `FREIGHTER_CAPTIAL`. See `FREIGHTER-SELECTION-FINDINGS.md` for exact
    `_HULL_` choices and local `HANGARROOTA/B` transforms.
-4. Identify `Mothership`'s save/profile and actual resource/seed fields
-   read-only. A same-name ship or a file path alone does not establish the
-   correct target. Do not copy the Corvette project's ship-slot assumptions.
+4. **Complete:** Mothership's live resource and seed were read-only verified;
+   see `SAVE-READONLY-FINDINGS-2026-09-25.md`. The current record references
+   `CAPITALFREIGHTER_PROC.SCENE.MBIN`, but that does not prove custom
+   registration or personal-only selection.
 5. Prove a minimal current-build scene import/export in Blender, preserving
    stock functional nodes and transforms. Add-on loading and one globals
    round-trip do not establish working geometry export or boardability.
