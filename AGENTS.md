@@ -61,3 +61,8 @@ Designed -> Implemented -> Compiles -> Validates -> Loads -> Tested In-Game -> R
 
 ## Change policy
 Prefer branches and pull requests for meaningful changes. Keep `main` as the stable source of truth. Update `CHANGELOG.md` when behavior, architecture, dependencies, compatibility, or framework rules materially change.
+
+## Conversation conventions
+- When the user says "path" in a message (as opposed to invoking the `/path` slash command), treat it as a request to audit every instruction currently active in that conversation — system instructions, developer instructions, tool/skill instructions, and the user's own instructions — and apply them immediately in that priority order: system > developer > tool/skill > user. Then give a concise compliance summary covering: the rules that materially affect the current work, any conflicts or ambiguities that matter, any deviations noticed, and the corrective action already taken.
+- This is distinct from the `/path` slash command (`.claude/commands/path.md`), which audits this repository's own rule files rather than live conversation instructions.
+- Do not claim a conversation-specific instruction persists into a future conversation unless it has been explicitly saved to a persistent file (such as this one) or a memory feature.
