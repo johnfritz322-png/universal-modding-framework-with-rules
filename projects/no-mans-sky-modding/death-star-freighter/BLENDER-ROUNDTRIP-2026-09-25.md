@@ -133,3 +133,15 @@ loaded back through NMSDK successfully, including the mesh stream metadata.
 This establishes only the first two visual forms (sphere, dish, trench). It
 does not yet provide surface paneling, a safe hangar opening, collision,
 selection-table registration, a package, or an in-game test.
+
+## Silhouette stage 2: PASSED, scratch-only
+
+Stage 2 increases the shell to a `64 × 32` grid and adds uniform, shallow
+radial panel relief outside the dish and trench. It exported as 2,048 faces
+and 12,288 triangle indices, then loaded back through NMSDK successfully.
+This is deliberately restrained geometric breakup, not a claim of finished
+greebling or a substitute for a proper material/detail pass.
+
+The remaining geometry gate is the hangar opening. Locator coordinates alone
+do not establish a safe docking approach, so no opening has been guessed into
+the shell.

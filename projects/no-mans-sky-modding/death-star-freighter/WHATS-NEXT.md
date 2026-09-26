@@ -51,9 +51,9 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
    recursively imported; see `BLENDER-ROUNDTRIP-2026-09-25.md`.
 6. **Original-mesh path verified:** a scratch sphere based on the donor's
    measured full-length envelope exports and re-imports. Stage 1 adds the
-   dish and trench. Next add uniform surface-panel treatment, then use the
-   recorded hangar anchors to design a clear trench opening. The selection
-   architecture is still unverified, so do not package or install.
+   dish and trench; Stage 2 adds uniform panel relief. Next establish the
+   actual docking approach and use it to design a clear trench opening. The
+   selection architecture is still unverified, so do not package or install.
 7. Before any game/save installation, make and verify a fresh backup and
    define rollback. Test docking, walking, exit, reload, summon/warp,
    freighter base behavior, and unchanged class/stats/crew. Keep each
