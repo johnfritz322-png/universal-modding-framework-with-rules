@@ -192,7 +192,10 @@ Corvette project used for its Corvette core.
   save, regardless of which save is used.
 
 ## Known bugs and limitations
-None yet — nothing has been built.
+The scratch-only shell has no disconnected-vertex export warning and passes a
+direct NMSDK re-import, but it has no verified runtime attachment, collision,
+docking, selection mapping, package, or in-game test. These are limitations,
+not resolved behavior.
 
 ## Test procedure
 - Test save/profile: target is `Mothership`, the user's existing S-class

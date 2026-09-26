@@ -11,9 +11,11 @@ registers its preferences, scene properties, and import/export operators in
 Blender 4.5.14. A native extension installation also starts enabled in a new
 Blender 5.0.1 process, using a dedicated local profile.
 
-This establishes add-on loading and archive access. No custom model export,
-freighter installation, save edit, or in-game test was performed. The Death
-Star mod itself remains **Designed**.
+This repair record establishes add-on loading and archive access. Subsequent
+work has also verified scratch-only custom-model export and re-import; see
+`BLENDER-ROUNDTRIP-2026-09-25.md`. No freighter installation, save edit, or
+in-game test was performed. The Death Star mod itself remains **Designed /
+scratch geometry verified**, not packaged or tested.
 
 ## Cause and exact fix
 

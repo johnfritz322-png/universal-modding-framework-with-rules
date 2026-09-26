@@ -59,6 +59,7 @@ has been read or edited in this checkpoint. The broad claim that one globals
 round trip proves the entire toolchain safe was too strong; checks establish
 only the tested operations and files.
 
-Highest state for the Death Star mod: **Designed**. Tooling checks have
-progressed, but no Death Star mesh, mod package, installation or in-game
-test has been completed. The user's game files and saves were unchanged.
+Highest state for the Death Star mod: **Designed / scratch geometry verified**.
+An original sphere/dish/trench/aperture mesh exports and re-imports through
+NMSDK, but no mod package, installation, or in-game test has been completed.
+The user's game files and saves were unchanged.
