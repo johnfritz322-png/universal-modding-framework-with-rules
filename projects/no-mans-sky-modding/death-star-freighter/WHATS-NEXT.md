@@ -1,8 +1,10 @@
 # Resume here — Death Star Freighter
 
-Checkpoint: 2026-09-25 UTC. NMSDK dependency repair is complete.
-Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
-`claude/death-star-freighter-mod-iteration` at `2a57866`.
+Checkpoint: 2026-09-25 UTC. NMSDK dependency repair, the owned-freighter
+save read, and the capital-root scene import/export are all verified.
+See `CLAUDE-REVIEW-HANDOFF-2026-09-25.md` for the current review map,
+local checkout paths, and evidence boundary — this file lists resume
+steps in dependency order. Canonical branch: `claude/death-star-freighter-mod-iteration`.
 
 ## What is saved
 
@@ -26,9 +28,9 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
 
 ## Next actions, in order
 
-1. Fetch this review branch and incorporate it into the canonical branch
-   after reviewing the diff. It includes all canonical work through `2a57866`;
-   preserve any newer Claude commits. Do not reset to an older audit branch.
+1. **Complete:** `codex/death-star-nmsdk-fix` was reviewed and fast-forwarded
+   into the canonical branch (now at `d3c04d3`); no newer canonical commits
+   were lost.
 2. Use the dedicated Blender 5.0.1 profile and the startup check documented
    in `NMSDK-REPAIR-2026-09-25.md`. No further dependency repair is currently
    required for the tested loading/archive operations.
@@ -61,12 +63,18 @@ Review branch: `codex/death-star-nmsdk-fix`, based on canonical branch
 
 ## Where to resume locally
 
-- Review checkout:
+- Primary project checkout:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-nmsdk-fix`
 - Previous extracted data and round-trip artifacts:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\death-star-toolchain`
 - Follow-up asset investigation:
   `C:\Users\johnf\Documents\Codex\2026-09-24\why\work\freighter-selection-followup`
+- Local NMSDK compatibility-patch checkout (not pushed upstream):
+  `C:\Users\johnf\Documents\Codex\2026-09-07\referenced-chatgpt-conversation-this-is-an\work\NMSDK`
+  — branch `codex/cosmos-instance-transforms` at `390ef27`.
+
+See `CLAUDE-REVIEW-HANDOFF-2026-09-25.md` for the newer scratch-evidence
+paths (dependency closure, round-trip exports, measurement scripts).
 
 Source game data and local runtime packages remain on this computer. GitHub
 contains documentation, findings, and our verification script, not proprietary
