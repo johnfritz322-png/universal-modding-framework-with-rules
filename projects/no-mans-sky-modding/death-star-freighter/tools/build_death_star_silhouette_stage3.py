@@ -17,7 +17,10 @@ assert output_dir.is_dir(), f"Missing output directory: {output_dir}"
 reverse_winding = "--reverse-winding" in sys.argv
 double_sided = "--double-sided" in sys.argv
 expanded_shell = "--expanded-shell" in sys.argv
+direct_capital = "--direct-capital" in sys.argv
 stage_name = (
+    "capitalfreighter_proc" if direct_capital
+    else
     "death_star_silhouette_stage6" if expanded_shell
     else
     "death_star_silhouette_stage5" if double_sided
@@ -183,7 +186,8 @@ for object_ in list(bpy.data.objects):
         bpy.data.objects.remove(object_, do_unlink=True)
 
 result = bpy.ops.nmsdk.export_scene(
-    output_directory=str(output_dir), export_directory="CUSTOMMODELS",
+    output_directory=str(output_dir),
+    export_directory="MODELS/COMMON/SPACECRAFT/INDUSTRIAL" if direct_capital else "CUSTOMMODELS",
     group_name=stage_name,
     scene_name=stage_name, preserve_node_info=False,
     AT_only=False, no_vert_colours=False, no_convert=True, idle_anim="",
