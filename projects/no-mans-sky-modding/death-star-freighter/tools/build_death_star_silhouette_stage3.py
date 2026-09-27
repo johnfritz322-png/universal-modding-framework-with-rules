@@ -14,6 +14,8 @@ from mathutils import Vector
 
 output_dir = Path(sys.argv[sys.argv.index("--") + 1]).resolve()
 assert output_dir.is_dir(), f"Missing output directory: {output_dir}"
+reverse_winding = "--reverse-winding" in sys.argv
+stage_name = "death_star_silhouette_stage4" if reverse_winding else "death_star_silhouette_stage3"
 
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
@@ -33,7 +35,7 @@ bpy.ops.object.empty_add(type="PLAIN_AXES", location=donor_center)
 root = bpy.context.active_object
 root.name = "DeathStarSilhouetteStage3Root"
 root.NMSNode_props.node_types = "Reference"
-root.NMSReference_props.scene_name = "death_star_silhouette_stage3"
+root.NMSReference_props.scene_name = stage_name
 
 radius = 2131.2010195
 segments = 96
@@ -81,7 +83,10 @@ for ring in range(rings):
         vertical = abs(math.asin(max(-1.0, min(1.0, face_direction.dot(trench_axis)))))
         if forward > 0.99 and lateral < aperture_half_width and vertical < aperture_half_height:
             continue
-        faces.append((a, b, c, d))
+        # NMS culls the winding that Blender's default quad order produces
+        # here.  A reversed export makes the exterior, rather than only the
+        # far interior hemisphere, visible in game.
+        faces.append((d, c, b, a) if reverse_winding else (a, b, c, d))
 
 # Compact after face removal so exporter validation has no orphaned vertices.
 used_indices = sorted({index for face in faces for index in face})
@@ -161,8 +166,8 @@ for object_ in list(bpy.data.objects):
 
 result = bpy.ops.nmsdk.export_scene(
     output_directory=str(output_dir), export_directory="CUSTOMMODELS",
-    group_name="death_star_silhouette_stage3",
-    scene_name="death_star_silhouette_stage3", preserve_node_info=False,
+    group_name=stage_name,
+    scene_name=stage_name, preserve_node_info=False,
     AT_only=False, no_vert_colours=False, no_convert=True, idle_anim="",
 )
 assert result == {"FINISHED"}, result
@@ -173,6 +178,7 @@ print("DEATH_STAR_SILHOUETTE_STAGE3=" + json.dumps({
     "aperture_direction": [round(value, 6) for value in aperture_direction],
     "aperture_face_removals": rings * segments - len(faces),
     "donor_center": [round(value, 6) for value in donor_center],
+    "reverse_winding": reverse_winding,
     "faces": len(mesh.polygons), "vertices": len(mesh.vertices),
     "exported_files": files,
 }, sort_keys=True))
