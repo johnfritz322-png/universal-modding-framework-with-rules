@@ -13,22 +13,22 @@ from pathlib import Path
 from hgpaktool.api import HGPAKFile
 
 
-REQUIRED = {
-    "MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN",
-    "CUSTOMMODELS/DEATH_STAR_SILHOUETTE_STAGE3/DEATH_STAR_SILHOUETTE_STAGE3.SCENE.MBIN",
-    "CUSTOMMODELS/DEATH_STAR_SILHOUETTE_STAGE3/DEATH_STAR_SILHOUETTE_STAGE3.GEOMETRY.MBIN.PC",
-    "CUSTOMMODELS/DEATH_STAR_SILHOUETTE_STAGE3/DEATH_STAR_SILHOUETTE_STAGE3.GEOMETRY.DATA.MBIN.PC",
-}
-
-
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--staging", type=Path, required=True)
     parser.add_argument("--archive", type=Path, required=True)
+    parser.add_argument("--shell-name", default="DEATH_STAR_SILHOUETTE_STAGE3")
     assert "--" in sys.argv, "Pass script arguments after Blender's -- separator"
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:])
     staging = args.staging.resolve()
     archive = args.archive.resolve()
+    shell_name = args.shell_name.upper()
+    required = {
+        "MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN",
+        f"CUSTOMMODELS/{shell_name}/{shell_name}.SCENE.MBIN",
+        f"CUSTOMMODELS/{shell_name}/{shell_name}.GEOMETRY.MBIN.PC",
+        f"CUSTOMMODELS/{shell_name}/{shell_name}.GEOMETRY.DATA.MBIN.PC",
+    }
     assert staging.is_dir(), staging
     assert not archive.exists(), f"Refusing to overwrite archive: {archive}"
 
@@ -37,7 +37,7 @@ def main() -> None:
         for path in staging.rglob("*")
         if path.is_file() and path.suffix.lower() not in {".mxml", ".manifest"}
     )
-    assert set(files) == REQUIRED, (set(files), REQUIRED)
+    assert set(files) == required, (set(files), required)
     archive.parent.mkdir(parents=True, exist_ok=True)
     # HGPAKtool resolves manifest entries relative to the manifest itself.
     manifest = staging / "DEATH_STAR_FREIGHTER_OVERLAY.manifest"

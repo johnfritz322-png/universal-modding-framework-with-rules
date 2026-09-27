@@ -14,7 +14,6 @@ from pathlib import Path
 
 
 # NMSDK emits an absolute game-data reference with this required prefix.
-SHELL_SCENE = "//CUSTOMMODELS\\DEATH_STAR_SILHOUETTE_STAGE3\\DEATH_STAR_SILHOUETTE_STAGE3.SCENE.MBIN"
 CAPITAL_SCENE_RELATIVE = Path("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MXML")
 
 
@@ -36,13 +35,16 @@ def main() -> None:
     parser.add_argument("--capital-scene", type=Path, required=True)
     parser.add_argument("--shell-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--shell-name", default="DEATH_STAR_SILHOUETTE_STAGE3")
     args = parser.parse_args()
 
     source = args.capital_scene.resolve()
     shell_root = args.shell_root.resolve()
     output = args.output.resolve()
+    shell_name = args.shell_name.upper()
+    shell_scene = f"//CUSTOMMODELS\\{shell_name}\\{shell_name}.SCENE.MBIN"
     assert source.is_file(), source
-    assert (shell_root / "CUSTOMMODELS").is_dir(), shell_root
+    assert (shell_root / "CUSTOMMODELS" / shell_name).is_dir(), shell_root
     assert not output.exists(), f"Refusing to overwrite existing staging tree: {output}"
 
     text = source.read_text(encoding="utf-8")
@@ -75,7 +77,7 @@ def main() -> None:
 \t\t\t<Property name="Attributes">
 \t\t\t\t<Property name="Attributes" value="TkSceneNodeAttributeData" _index="0">
 \t\t\t\t\t<Property name="Name" value="SCENEGRAPH" />
-\t\t\t\t\t<Property name="Value" value="{SHELL_SCENE}" />
+\t\t\t\t\t<Property name="Value" value="{shell_scene}" />
 \t\t\t\t</Property>
 \t\t\t</Property>
 \t\t\t<Property name="InstanceTransforms" />
@@ -86,9 +88,9 @@ def main() -> None:
     destination = output / CAPITAL_SCENE_RELATIVE
     destination.parent.mkdir(parents=True)
     destination.write_text(updated, encoding="utf-8", newline="\r\n")
-    shutil.copytree(shell_root / "CUSTOMMODELS", output / "CUSTOMMODELS")
+    shutil.copytree(shell_root / "CUSTOMMODELS" / shell_name, output / "CUSTOMMODELS" / shell_name)
     print(f"OVERLAY_STAGING=created root_children_before={len(root_indices)} added_index={next_index}")
-    print(f"OVERLAY_SCENEGRAPH={SHELL_SCENE}")
+    print(f"OVERLAY_SCENEGRAPH={shell_scene}")
 
 
 if __name__ == "__main__":
