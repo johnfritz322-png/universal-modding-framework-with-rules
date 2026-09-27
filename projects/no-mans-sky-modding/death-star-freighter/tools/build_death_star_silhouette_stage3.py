@@ -15,7 +15,12 @@ from mathutils import Vector
 output_dir = Path(sys.argv[sys.argv.index("--") + 1]).resolve()
 assert output_dir.is_dir(), f"Missing output directory: {output_dir}"
 reverse_winding = "--reverse-winding" in sys.argv
-stage_name = "death_star_silhouette_stage4" if reverse_winding else "death_star_silhouette_stage3"
+double_sided = "--double-sided" in sys.argv
+stage_name = (
+    "death_star_silhouette_stage5" if double_sided
+    else "death_star_silhouette_stage4" if reverse_winding
+    else "death_star_silhouette_stage3"
+)
 
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
@@ -86,7 +91,14 @@ for ring in range(rings):
         # NMS culls the winding that Blender's default quad order produces
         # here.  A reversed export makes the exterior, rather than only the
         # far interior hemisphere, visible in game.
-        faces.append((d, c, b, a) if reverse_winding else (a, b, c, d))
+        normal_face = (a, b, c, d)
+        reverse_face = (d, c, b, a)
+        if double_sided:
+            # NMSDK's mesh conversion can normalize one winding.  Keeping
+            # both face directions is an explicit, portable exterior shell.
+            faces.extend((normal_face, reverse_face))
+        else:
+            faces.append(reverse_face if reverse_winding else normal_face)
 
 # Compact after face removal so exporter validation has no orphaned vertices.
 used_indices = sorted({index for face in faces for index in face})
@@ -179,6 +191,7 @@ print("DEATH_STAR_SILHOUETTE_STAGE3=" + json.dumps({
     "aperture_face_removals": rings * segments - len(faces),
     "donor_center": [round(value, 6) for value in donor_center],
     "reverse_winding": reverse_winding,
+    "double_sided": double_sided,
     "faces": len(mesh.polygons), "vertices": len(mesh.vertices),
     "exported_files": files,
 }, sort_keys=True))
