@@ -13,7 +13,6 @@ import shutil
 from pathlib import Path
 
 
-# NMSDK emits an absolute game-data reference with this required prefix.
 CAPITAL_SCENE_RELATIVE = Path("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MXML")
 
 
@@ -36,6 +35,9 @@ def main() -> None:
     parser.add_argument("--shell-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--shell-name", default="DEATH_STAR_SILHOUETTE_STAGE3")
+    parser.add_argument("--trans-x", type=float, default=0.0)
+    parser.add_argument("--trans-y", type=float, default=0.0)
+    parser.add_argument("--trans-z", type=float, default=0.0)
     args = parser.parse_args()
 
     source = args.capital_scene.resolve()
@@ -63,9 +65,9 @@ def main() -> None:
 \t\t\t<Property name="NameHash" value="{jenkins_one_at_a_time(name)}" />
 \t\t\t<Property name="Type" value="REFERENCE" />
 \t\t\t<Property name="Transform" value="TkTransformData">
-\t\t\t\t<Property name="TransX" value="0.000000" />
-\t\t\t\t<Property name="TransY" value="0.000000" />
-\t\t\t\t<Property name="TransZ" value="0.000000" />
+\t\t\t\t<Property name="TransX" value="{args.trans_x:.6f}" />
+\t\t\t\t<Property name="TransY" value="{args.trans_y:.6f}" />
+\t\t\t\t<Property name="TransZ" value="{args.trans_z:.6f}" />
 \t\t\t\t<Property name="RotX" value="0.000000" />
 \t\t\t\t<Property name="RotY" value="0.000000" />
 \t\t\t\t<Property name="RotZ" value="0.000000" />
@@ -91,6 +93,7 @@ def main() -> None:
     shutil.copytree(shell_root / "CUSTOMMODELS" / shell_name, output / "CUSTOMMODELS" / shell_name)
     print(f"OVERLAY_STAGING=created root_children_before={len(root_indices)} added_index={next_index}")
     print(f"OVERLAY_SCENEGRAPH={shell_scene}")
+    print(f"OVERLAY_TRANSLATION=({args.trans_x:.6f}, {args.trans_y:.6f}, {args.trans_z:.6f})")
 
 
 if __name__ == "__main__":
