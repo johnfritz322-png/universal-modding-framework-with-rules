@@ -12,7 +12,6 @@ from pathlib import Path
 
 
 CAPITAL_MXML = Path("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MXML")
-CAPITAL_EXML = CAPITAL_MXML.with_suffix(".EXML")
 SHELL_TEMPLATE_DIR = Path("CUSTOMMODELS/DEATH_STAR_SILHOUETTE_STAGE3")
 SHELL_TEMPLATE_MXML = SHELL_TEMPLATE_DIR / "DEATH_STAR_SILHOUETTE_STAGE3.SCENE.MXML"
 
@@ -30,18 +29,19 @@ def main() -> None:
     shell_name = args.shell_name.upper()
     shell_dir = Path("CUSTOMMODELS") / shell_name
     shell_mxml = shell_dir / f"{shell_name}.SCENE.MXML"
-    shell_exml = shell_mxml.with_suffix(".EXML")
     assert (overlay / CAPITAL_MXML).is_file(), overlay / CAPITAL_MXML
     assert (shell_root / SHELL_TEMPLATE_MXML).is_file(), shell_root / SHELL_TEMPLATE_MXML
     assert not output.exists(), f"Refusing to overwrite {output}"
 
-    target = output / CAPITAL_EXML
+    # Scene files are critical full replacements in the current loose-file
+    # loader.  They must remain MXML, not EXML patch files.
+    target = output / CAPITAL_MXML
     target.parent.mkdir(parents=True)
     capital_text = (overlay / CAPITAL_MXML).read_text(encoding="utf-8")
     target.write_text(
         capital_text.replace("DEATH_STAR_SILHOUETTE_STAGE3", shell_name), encoding="utf-8"
     )
-    shell_target = output / shell_exml
+    shell_target = output / shell_mxml
     shell_target.parent.mkdir(parents=True)
     shell_text = (shell_root / SHELL_TEMPLATE_MXML).read_text(encoding="utf-8")
     shell_target.write_text(
