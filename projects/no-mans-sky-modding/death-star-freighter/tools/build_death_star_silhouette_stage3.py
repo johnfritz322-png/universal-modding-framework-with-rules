@@ -16,7 +16,10 @@ output_dir = Path(sys.argv[sys.argv.index("--") + 1]).resolve()
 assert output_dir.is_dir(), f"Missing output directory: {output_dir}"
 reverse_winding = "--reverse-winding" in sys.argv
 double_sided = "--double-sided" in sys.argv
+expanded_shell = "--expanded-shell" in sys.argv
 stage_name = (
+    "death_star_silhouette_stage6" if expanded_shell
+    else
     "death_star_silhouette_stage5" if double_sided
     else "death_star_silhouette_stage4" if reverse_winding
     else "death_star_silhouette_stage3"
@@ -42,7 +45,10 @@ root.name = "DeathStarSilhouetteStage3Root"
 root.NMSNode_props.node_types = "Reference"
 root.NMSReference_props.scene_name = stage_name
 
-radius = 2131.2010195
+# Stage 6 preserves the measured parent centre but adds clearance around the
+# donor's outer bounds, preventing the exterior surface from cutting through
+# the camera and remaining stock hull.
+radius = 2131.2010195 * (1.25 if expanded_shell else 1.0)
 segments = 96
 rings = 48
 trench_depth = 96.0
@@ -192,6 +198,7 @@ print("DEATH_STAR_SILHOUETTE_STAGE3=" + json.dumps({
     "donor_center": [round(value, 6) for value in donor_center],
     "reverse_winding": reverse_winding,
     "double_sided": double_sided,
+    "expanded_shell": expanded_shell,
     "faces": len(mesh.polygons), "vertices": len(mesh.vertices),
     "exported_files": files,
 }, sort_keys=True))
