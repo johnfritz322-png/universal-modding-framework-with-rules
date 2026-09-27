@@ -12,8 +12,6 @@ from pathlib import Path
 
 
 CAPITAL_MXML = Path("MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MXML")
-SHELL_TEMPLATE_DIR = Path("CUSTOMMODELS/DEATH_STAR_SILHOUETTE_STAGE3")
-SHELL_TEMPLATE_MXML = SHELL_TEMPLATE_DIR / "DEATH_STAR_SILHOUETTE_STAGE3.SCENE.MXML"
 
 
 def main() -> None:
@@ -30,7 +28,9 @@ def main() -> None:
     shell_dir = Path("CUSTOMMODELS") / shell_name
     shell_mxml = shell_dir / f"{shell_name}.SCENE.MXML"
     assert (overlay / CAPITAL_MXML).is_file(), overlay / CAPITAL_MXML
-    assert (shell_root / SHELL_TEMPLATE_MXML).is_file(), shell_root / SHELL_TEMPLATE_MXML
+    # This must be decompiled from the matching exported scene binary.  A
+    # copied Stage 3 template has stale name hashes and mesh index counts.
+    assert (shell_root / shell_mxml).is_file(), shell_root / shell_mxml
     assert not output.exists(), f"Refusing to overwrite {output}"
 
     # Scene files are critical full replacements in the current loose-file
@@ -43,10 +43,7 @@ def main() -> None:
     )
     shell_target = output / shell_mxml
     shell_target.parent.mkdir(parents=True)
-    shell_text = (shell_root / SHELL_TEMPLATE_MXML).read_text(encoding="utf-8")
-    shell_target.write_text(
-        shell_text.replace("DEATH_STAR_SILHOUETTE_STAGE3", shell_name), encoding="utf-8"
-    )
+    shutil.copy2(shell_root / shell_mxml, shell_target)
     for suffix in (".GEOMETRY.MBIN.PC", ".GEOMETRY.DATA.MBIN.PC"):
         filename = shell_name + suffix
         shutil.copy2(shell_root / shell_dir / filename, output / shell_dir / filename)
