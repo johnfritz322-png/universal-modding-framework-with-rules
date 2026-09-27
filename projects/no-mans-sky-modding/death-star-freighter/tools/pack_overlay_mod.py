@@ -28,6 +28,7 @@ def main() -> None:
         f"CUSTOMMODELS/{shell_name}/{shell_name}.SCENE.MBIN",
         f"CUSTOMMODELS/{shell_name}/{shell_name}.GEOMETRY.MBIN.PC",
         f"CUSTOMMODELS/{shell_name}/{shell_name}.GEOMETRY.DATA.MBIN.PC",
+        f"CUSTOMMODELS/{shell_name}/DEATHSTARHULLMAT.MATERIAL.MBIN",
     }
     assert staging.is_dir(), staging
     assert not archive.exists(), f"Refusing to overwrite archive: {archive}"

@@ -124,14 +124,17 @@ shell.parent = root
 shell.NMSNode_props.node_types = "Mesh"
 # CAPITALFREIGHTER_PROC's own material is a "_PROC" substance material that
 # expects per-instance texture/tint data from the freighter's own
-# procedural generation; a static NMSDK reference mesh never supplies that,
-# which is the confirmed cause of a washed-out/see-through render. HullPanels_Mat
-# is a plain static Opaque material (no metamaterial graph, a real baked
-# diffuse texture) used on the freightship01 wreck model, so it always
-# resolves the same way regardless of context.
+# procedural generation; a static NMSDK reference mesh never supplies that.
+# freightship01's HullPanels_Mat is a plain static Opaque material (no
+# metamaterial graph, a real baked diffuse texture) that renders correctly
+# up close, but it ships with EnableLodFade=true -- a distance-based fade
+# tuned for small ship parts, confirmed to make this ~2100-unit shell fade
+# out both close up and far away instead of staying solid. This mod carries
+# its own copy of that same material (built from a decompile of the
+# original, same textures/shader/flags, only EnableLodFade flipped to
+# false) rather than editing the shared stock file.
 shell.NMSMesh_props.material_path = (
-    "MODELS/COMMON/SPACECRAFT/INDUSTRIAL/FREIGHTSHIP01/"
-    "HULLPANELS_MAT.MATERIAL.MBIN"
+    f"CUSTOMMODELS/{stage_name.upper()}/DEATHSTARHULLMAT.MATERIAL.MBIN"
 )
 uv_layer = mesh.uv_layers.new(name="UVMap")
 for polygon in mesh.polygons:
