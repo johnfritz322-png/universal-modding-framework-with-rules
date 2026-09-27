@@ -1,6 +1,163 @@
 # Changelog
 
-## Unreleased
+## Unreleased — 2026-09-25 — NMSDK loading repaired and freighter evidence corrected
+
+- Installed the SDK's bundled HGPAKtool 1.1.3 wheel and required lz4 into
+  portable Blender 4.5.14's own Python. Registration and archive payload
+  checks pass; pip reports no broken requirements.
+- Recorded the SDK manifest's Blender >=5.0.0 requirement and created a
+  dedicated Blender 5.0.1 profile with the native extension enabled.
+  Fresh-process startup and a deliberately invalid archive control pass.
+- Identified the capital hull in INDUSTRIAL and its descriptor and AI
+  mapping in Precache; BIGGS is explicitly Corvette. Two relevant files
+  passed no-edit MBIN/MXML round trips. Personal-only seed selection remains
+  unverified.
+- Added repair/research reports, a reusable verification script, and
+  WHATS-NEXT.md. No game/save installation; mod status remains Designed.
+
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — real toolchain results against Cosmos 7.04
+
+Status: real, evidence-backed toolchain progress. **Still no game file or
+save modified.**
+
+Codex ran the toolchain checklist (`codex/death-star-toolchain-results`,
+merged in full) against the actual currently-installed game — Cosmos 7.04,
+Steam build `25441199` (a real patch since the Falcon Corvette project's
+last check, `25351301`/2026-09-18). Folded the raw results
+(`TOOLCHAIN-RESULTS-2026-09-25.md`) into `TOOLCHAIN.md` and
+`PROJECT_MANIFEST.md`'s tracked step/dependency state.
+
+### Verified
+- Blender 4.5.14 LTS launches; MBINCompiler (`7.03.2.1`) passed a no-edit
+  MBIN→MXML→MBIN→MXML round trip with SHA-256-identical MXML output;
+  HGPAKtool 1.1.3 extracted a real archive. All three hash- or
+  hash-comparison-backed, not just "it ran."
+- Freighter assets exist under `MODELS/COMMON/SPACECRAFT/` (`BIGGS`,
+  `COMMONPARTS/HANGARINTERIORPARTS`).
+
+### Blocked
+- **NMSDK does not load.** On its `cosmos_fixes` branch (commit `548bfe1`),
+  but its `hgpaktool` Python dependency fails to import in Blender. This
+  is now the project's single active blocker — nothing needing the Blender
+  add-on can proceed until it's fixed.
+
+### Still unverified
+- The seed→hull lookup table itself has not been found. The "additive
+  table entry, seed-selected" architecture stays HIGH CONFIDENCE, not
+  VERIFIED. `HANGARINTERIORPARTS` is a new, promising lead for the
+  hangar-in-trench design decision (possibly a modular socket-attached
+  piece rather than baked geometry) — not yet confirmed either.
+
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — independent audit cross-check
+
+Codex opened `codex/death-star-doc-audit` directly against the
+consolidated Death Star freighter docs (commit `b7d4c60`) and found real
+issues. Reviewed and merged in full; one claim additionally re-verified
+independently rather than taken on trust.
+
+### Corrected (Codex's audit, merged)
+- **"2026 Endurance update" was a factual error** — the update shipped
+  2022-07-20. Re-verified independently in this session against four
+  sources (NME, PCGamesN, Dexerto, HeyPoorPlayer), all agreeing on the
+  July 2022 date, and upgraded in `FEASIBILITY.md` from a bare fix to a
+  **VERIFIED**, cited correction.
+- **A self-contradiction removed**: the "S-class — resolved" section still
+  carried a leftover "needs a decision from the user" paragraph from
+  before that decision was made. Gate numbering in the research-gates list
+  renumbered to match.
+- **Overclaimed architecture framing tightened**: "the right architecture
+  to pursue" downgraded to "candidate architecture — pending verification"
+  until gates 2/3 actually confirm the real freighter hull table and
+  save field, consistent with this framework's own rule against treating
+  a design goal as proof of technical feasibility.
+- **Toolchain round-trip test corrected**: MBINCompiler's direct decompile
+  output is `.MXML`, not `.EXML` (`.EXML` is a separate, hand-edited mod
+  delivery format, per this project's own earlier research) — the
+  round-trip proof in `TOOLCHAIN.md` now decompiles/recompiles/re-decompiles
+  `.MXML` and compares structure, rather than asserting byte-identical
+  recompilation as the pass bar.
+
+### Notes
+- All four corrections were reviewed against this session's own research
+  trail before merging, not merged blindly.
+- Highest verified status is unchanged: **Designed**. This audit corrected
+  documentation accuracy, not project progress — nothing has been
+  implemented, compiled, loaded, or tested in game.
+
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-iteration) — Death Star freighter consolidated for handoff
+
+Status: **Researched only.** No game file, save, or mod package touched.
+
+Consolidates the Death Star freighter work from `claude/death-star-freighter-mod-itel2i`
+onto this new branch, at the user's explicit request, into a fixed set of
+files another agent can inspect without private links: `README.md`,
+`PROJECT_MANIFEST.md`, `FEASIBILITY.md` (renamed from
+`FREIGHTER-MODDING-FEASIBILITY.md`), `TOOLCHAIN.md` (renamed from
+`TOOLCHAIN-CHECK.md`), `HANDOFF.md`, and `concept-reference.html` (the
+visual concept page, exported as a real repo file instead of only a
+private Claude artifact link). `DEATH-STAR-BUILD-BRIEF.md` is unchanged in
+substance, kept explicitly separate from `FEASIBILITY.md` as this
+project's design-vs-capability split.
+
+### Notes
+- `PROJECT_MANIFEST.md` gained an explicit rollback commit
+  (`origin/main` at `abde3fbb925c263b31aa252e78aa80dc7b3aef7a`) and a
+  `Risks` section.
+- `FEASIBILITY.md` now states its labelling convention up front
+  (VERIFIED / HIGH CONFIDENCE / UNVERIFIED / NEEDS TESTING) and explicitly
+  scopes itself to technical capability only, pointing design intent at
+  `DEATH-STAR-BUILD-BRIEF.md`.
+- Highest verified status remains **Designed** — nothing implemented,
+  compiled, loaded, or tested in game.
+
+## Unreleased — 2026-09-25 (claude/death-star-freighter-mod-itel2i) — Death Star freighter design + feasibility
+
+Status: **Researched only.** No game file, save, or mod package touched.
+
+Adds `projects/no-mans-sky-modding/death-star-freighter/` for a new,
+separate project: an S-class capital freighter reskinned as an original
+Death-Star-styled spherical hull.
+
+### Added
+- `DEATH-STAR-BUILD-BRIEF.md`: visual non-negotiables (sphere silhouette,
+  offset concave superlaser dish, equatorial trench, dense surface
+  paneling), a proportion-based scale approach, the same boardability
+  discipline the sibling Falcon Corvette project uses, and a legal/scope
+  guardrail noting a prior "Death Star Capital Freighter" Nexus mod that was
+  deleted and is not a source for this project.
+- `FREIGHTER-MODDING-FEASIBILITY.md`: establishes that freighters have no
+  in-game hull editor (unlike Corvettes), so a new silhouette needs a fully
+  custom NMSDK exterior mesh over the stock freighter core. Records the
+  working architecture found via research — an **added** (non-overwriting)
+  freighter hull table entry selected by the target freighter's save seed
+  field, based on the documented behavior of the existing gFreighter mod —
+  and flags getting to S-class (legitimate rescue-event grind vs. save-edit,
+  with a stat-block caveat on the latter) as an open decision for the user.
+- `PROJECT_MANIFEST.md`: current state (design/research only), reused vs.
+  re-verify-needed toolchain notes, and the required research gates before
+  any implementation.
+
+### Notes
+- This sandbox's network egress proxy blocks every NMS-modding-relevant
+  domain reached during research (`nomanssky.fandom.com`,
+  `nomanssky.miraheze.org`, `nomansskyresources.com`, `nexusmods.com`,
+  `monkeyman192.github.io`, `starwars.com`), so all findings are labelled
+  **HIGH CONFIDENCE** from `WebSearch` summaries rather than **VERIFIED**
+  from a directly read primary source. Re-verification against the user's
+  own game files is the first required gate before implementation starts.
+- Technical implementation remains intentionally unverified until the exact
+  game build, the real freighter hull/model table, and the real save fields
+  are confirmed — the same standard already applied to the Falcon Corvette
+  and BG3 projects in this framework.
+
+### Resolved same day
+- User decision: the mod targets the **existing, already-owned S-class
+  freighter**, not a newly-grinded or save-edited-to-S-class one. This
+  removes the S-class question from the project entirely — the only
+  planned save write stays the single hull-seed field; class, stats, name,
+  and crew on that freighter are untouched. `FREIGHTER-MODDING-FEASIBILITY.md`
+  and `PROJECT_MANIFEST.md` updated accordingly. Still needed from the user:
+  which save slot/freighter this is.
 
 - Added Dawnwalker Weapon Forge findings for the requested separate-inventory-item
   architecture. The feature remains unimplemented and untested.

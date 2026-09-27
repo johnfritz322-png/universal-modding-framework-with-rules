@@ -1,0 +1,180 @@
+# Blender/NMSDK scene round-trip gate
+
+Recorded 2026-09-25, America/Denver. This test used the dedicated Blender
+5.0.1 profile and NMSDK extension documented in
+`NMSDK-REPAIR-2026-09-25.md`. It wrote only to scratch output directories;
+no game archive, mod package, save, or repository source was modified.
+
+## Initial result: BLOCKED — reproducible importer/exporter failure
+
+Two current-build controls were attempted with `NMSDK 0.10.0-alpha14` from
+the `cosmos_fixes` checkout:
+
+1. The copied capital-freighter scene, including its extracted geometry.
+2. A separate current-build `TOY_CUBE` control with its scene, geometry,
+   material, and entity files freshly extracted from the installed game.
+
+Both imports reached NMSDK rendering but raised the same error while creating
+a material:
+
+```text
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+  material_node.py:96, realize_path(tex_path, local_root_directory)
+```
+
+NMSDK then left at least one imported mesh without a material slot. Export of
+both controls failed reproducibly with:
+
+```text
+IndexError: bpy_prop_collection[index]: index 0 out of range, size 0
+  ModelExporter/addon_script.py:1060, ob.material_slots[0].material
+```
+
+The capital test also correctly reported missing referenced component scenes
+because the prior extraction intentionally contained only the capital scene
+and geometry. The toy-cube control removes that incomplete-capital-tree
+explanation: it has a self-contained scene/geometry/material/entity set and
+still produces the same material-path and material-slot failure.
+
+## Evidence boundary
+
+The extension loads, registers, and reads a current-build archive; that is
+still VERIFIED. Scene import/export is **BLOCKED**. No partially generated
+output was treated as a pass, and no Death Star geometry work may begin.
+
+## Root cause and recovery
+
+The initial toy-cube extraction omitted the material-referenced DDS textures.
+With the complete current-build toy-cube scene, geometry, material, entity,
+and texture closure extracted into a scratch `MODELS`/`TEXTURES` tree, import
+completed. Export then reached a separate NMSDK source mismatch:
+`TkSceneNodeData` now requires `InstanceTransforms`, but the exporter did not
+provide it.
+
+Dedicated local NMSDK branch `codex/cosmos-instance-transforms`, commit
+`2d8c239`, supplies an empty `InstanceTransforms` list for non-instanced
+exported nodes. The rebuilt extension was installed only in the dedicated
+Blender profile. The toy-cube control then passed current-build
+scene → Blender → scene/geometry export, producing a scene plus both geometry
+files with exit code 0.
+
+This is **VERIFIED for the minimal current-build control**, not proof that the
+capital freighter imports or exports intact. The capital scene has a large
+referenced component tree that must be extracted as a dependency closure.
+
+## Capital-freighter root control: PASSED
+
+The same dedicated Blender 5.0.1 profile and rebuilt local extension were
+used against the actual owned-freighter resource:
+
+`MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC.SCENE.MBIN`.
+
+A read-only scratch closure was built from the installed Cosmos 7.04 archives:
+all `MODELS/COMMON/SPACECRAFT/INDUSTRIAL/` files, plus the three DDS files
+referenced by the root `FREIGHTERPROC_MAT.MATERIAL.MBIN`. No game asset was
+copied into the repository or modified. With that closure, NMSDK imported 113
+objects and exported a scene, descriptor MXML, geometry MBIN, and geometry-data
+MBIN with exit code 0. The export log recorded the root geometry and 16 mesh
+objects; it did not report a missing material, missing reference, or exporter
+exception.
+
+The existing MBINCompiler `7.03.2.1` can emit an MXML representation of the
+exported scene but warns that its binary version is unrecognized. That warning
+does not invalidate the successful NMSDK export, but it means this older
+compiler is not a second binary-format validator for NMSDK's generated scene.
+
+## Evidence boundary and next work
+
+This is **VERIFIED for the actual capital-freighter root scene**, using a
+read-only dependency closure and the isolated compatibility patch. It is not
+proof of an installed mod, full recursive component-tree fidelity, collision,
+docking, or boardability. The importer was intentionally run without recursive
+reference importing.
+
+Geometry work may now begin against the build brief. First measure the donor
+root's transformed bounds and the hangar/approach location, then make one
+minimal original exterior-shell probe. Keep the stock core untouched and do
+not package or install it until the required backup and one-variable in-game
+test plan exists.
+
+## Original shell probe: PASSED, scratch-only
+
+The donor root was measured at `1999.885254 × 4262.402039 × 1765.985352`
+units. Its largest dimension establishes the first shell-probe diameter:
+`4262.402039` units. The root also exposes `HANGARROOTA` at
+`(0, 295.910309, 226.413742)` and `HANGARROOTB` at
+`(0, 184.549149, 553.673706)`; those are measurement anchors, not proof of a
+flight-safe opening.
+
+An original 32-segment, 512-face spherical shell was exported beneath a new
+top-level NMSDK Reference root using the stock capital material path. The
+first generated asset failed to re-import because two exporter errors were
+found and repaired locally in the NMSDK checkout:
+
+- `19f467a` retains regular mesh index streams instead of discarding them.
+- `390ef27` records the post-triangulation index list in stream metadata.
+
+After rebuilding only the dedicated profile extension, the shell exported as
+a scene plus geometry files and its generated scene's mesh loaded back through
+NMSDK successfully. This validates the original-mesh export/re-import path.
+The probe has no dish, trench, hangar opening, collision, package, or game
+installation; it remains scratch-only. The local NMSDK commits have not been
+pushed upstream.
+
+## Silhouette stage 1: PASSED, scratch-only
+
+The first designed exterior stage is now an original `48 × 24` sphere at the
+measured `4262.402039`-unit diameter. It has a `96`-unit continuous equatorial
+recess and a `330`-unit concave dish whose normal is `(-0.359336, -0.788543,
+0.499078)`: deliberately off-axis and outside the equatorial band. The export
+contains 1,152 faces and 6,912 triangle indices. Its generated scene was
+loaded back through NMSDK successfully, including the mesh stream metadata.
+
+This establishes only the first two visual forms (sphere, dish, trench). It
+does not yet provide surface paneling, a safe hangar opening, collision,
+selection-table registration, a package, or an in-game test.
+
+## Silhouette stage 2: PASSED, scratch-only
+
+Stage 2 increases the shell to a `64 × 32` grid and adds uniform, shallow
+radial panel relief outside the dish and trench. It exported as 2,048 faces
+and 12,288 triangle indices, then loaded back through NMSDK successfully.
+This is deliberately restrained geometric breakup, not a claim of finished
+greebling or a substitute for a proper material/detail pass.
+
+The remaining geometry gate is the hangar opening. Locator coordinates alone
+do not establish a safe docking approach, so no opening has been guessed into
+the shell.
+
+## Silhouette stage 3: visual aperture prototype, scratch-only
+
+The stage-3 shell rotates the trench plane so the measured accumulated
+`HANGARROOTA` direction lies on its equator, then removes four local shell
+quads around that projected direction. The direction is
+`(-0.000600, -0.977042, 0.213045)` from the measured donor bounding-box centre.
+The generated 4,604-face / 4,703-vertex mesh exported without disconnected
+vertex warnings and loaded back through NMSDK. A neutral Blender workbench
+render of the generated mesh also confirms the visible sphere, trench, and
+small centred aperture; it is retained as scratch QA evidence only.
+
+The generator is tracked as `tools/build_death_star_silhouette_stage3.py`.
+It was rerun from that tracked copy with the dedicated Blender 5.0.1 profile
+and produced the same geometry counts, both QA renders, and a passing direct
+NMSDK mesh-load check via the tracked `tools/verify_exported_scene_mesh.py`.
+Its output directory is intentionally an external scratch directory; do not
+commit its generated MBIN or render outputs.
+
+## Asset-only archive pipeline: PASSED, non-installable
+
+`tools/pack_asset_only_archive.py` packages only the three generated Stage-3
+`CUSTOMMODELS` files with HGPAKtool's Windows compressor, then reopens the
+result, extracts its entries, and compares every extracted byte to its source
+with SHA-256. The latest scratch run passed at 118,096 bytes. This validates
+the local archive-writing path, **not** mod functionality: the archive
+contains no selection mapping, stock-scene override, collision, or runtime
+hangar integration and must not be installed as a Death Star mod.
+
+This is a **visual alignment prototype only**. It uses the verified local
+approach grid to avoid a wholly arbitrary placement, but neither the active
+capital root nor the module's live attachment transform has been verified.
+It must not be packaged, installed, or represented as dockable.
