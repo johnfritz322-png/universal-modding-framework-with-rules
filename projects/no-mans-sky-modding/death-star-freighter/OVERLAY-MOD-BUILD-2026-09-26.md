@@ -2,7 +2,7 @@
 
 ## Result
 
-**VALIDATED PACKAGE — not yet installed or tested in game.**
+**VALIDATED PACKAGE — installed for test; not yet confirmed in game.**
 
 `DeathStar-Freighter-Overlay-Cosmos-7.04.pak` was built for the locally
 observed Cosmos 7.04 Steam build (`25441199`). It is a reversible overlay of
@@ -25,6 +25,14 @@ The stock capital scene was compiled from MXML and decompiled again. The
 result retains the injected `SCENEGRAPH` value exactly. The finished archive
 was reopened and each of its four extracted files matched its staged source
 byte-for-byte by SHA-256.
+
+The first in-game launch showed only the stock freighter. Investigation found
+the added reference was missing NMSDK's required `//` game-data prefix. The
+package was rebuilt with
+`//CUSTOMMODELS\DEATH_STAR_SILHOUETTE_STAGE3\DEATH_STAR_SILHOUETTE_STAGE3.SCENE.MBIN`,
+compiled and byte-verified again, then replaced in `PCBANKS/MODS` while the
+game was closed. The corrected package is awaiting its next in-game visual
+test.
 
 ## Behavior and limits
 
