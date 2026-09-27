@@ -122,9 +122,16 @@ shell = bpy.data.objects.new("DeathStarSilhouetteStage3", mesh)
 bpy.context.collection.objects.link(shell)
 shell.parent = root
 shell.NMSNode_props.node_types = "Mesh"
+# CAPITALFREIGHTER_PROC's own material is a "_PROC" substance material that
+# expects per-instance texture/tint data from the freighter's own
+# procedural generation; a static NMSDK reference mesh never supplies that,
+# which is the confirmed cause of a washed-out/see-through render. HullPanels_Mat
+# is a plain static Opaque material (no metamaterial graph, a real baked
+# diffuse texture) used on the freightship01 wreck model, so it always
+# resolves the same way regardless of context.
 shell.NMSMesh_props.material_path = (
-    "MODELS/COMMON/SPACECRAFT/INDUSTRIAL/CAPITALFREIGHTER_PROC/"
-    "FREIGHTERPROC_MAT.MATERIAL.MBIN"
+    "MODELS/COMMON/SPACECRAFT/INDUSTRIAL/FREIGHTSHIP01/"
+    "HULLPANELS_MAT.MATERIAL.MBIN"
 )
 uv_layer = mesh.uv_layers.new(name="UVMap")
 for polygon in mesh.polygons:
